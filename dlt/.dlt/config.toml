@@ -1,0 +1,11 @@
+# put your configuration values here
+
+[runtime]
+log_level="WARNING"  # the system log level of dlt
+# use the dlthub_telemetry setting to enable/disable anonymous usage data reporting, see https://dlthub.com/docs/reference/telemetry
+dlthub_telemetry = true
+
+[sources.rest_api]
+resources = ["a", "b", "c"] # please set me up!
+[sources.rest_api.client] # please set me up!
+key = "value"
