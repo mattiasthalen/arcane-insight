@@ -11,12 +11,14 @@ python = ">=3.12,<3.13"
 pyspark = "^3.5.3"
 dlt = "^1.3.0"
 sqlmesh = "^0.130.2"
+duckdb = "^1.1.3"
 
 
 [tool.poetry.group.dev.dependencies]
 pyspark = "^3.5.3"
 sqlmesh = "^0.130.2"
 dlt = "^1.3.0"
+duckdb = "^1.1.3"
 
 [build-system]
 requires = ["poetry-core"]
