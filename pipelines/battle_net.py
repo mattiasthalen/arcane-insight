@@ -39,15 +39,61 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                         "base_page": 1,
                         "total_path": None,
                     },
-                    "params": {
-                        "pageSize": 500,
-                    }
                 },
             },
             {
                 "name": "raw__hearthstone__metadata",
                 "endpoint": {
                     "path": "hearthstone/metadata",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__sets",
+                "endpoint": {
+                    "path": "hearthstone/metadata/sets",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__set_groups",
+                "endpoint": {
+                    "path": "hearthstone/metadata/setGroups",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__types",
+                "endpoint": {
+                    "path": "hearthstone/metadata/types",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__rarities",
+                "endpoint": {
+                    "path": "hearthstone/metadata/rarities",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__classes",
+                "endpoint": {
+                    "path": "hearthstone/metadata/classes",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__minion_types",
+                "endpoint": {
+                    "path": "hearthstone/metadata/minionTypes",
+                    "paginator": "single_page",
+                },
+            },
+            {
+                "name": "raw__hearthstone__metadata__keywords",
+                "endpoint": {
+                    "path": "hearthstone/metadata/keywords",
                     "paginator": "single_page",
                 },
             },
