@@ -181,6 +181,25 @@ files = [
 ]
 
 [[package]]
+name = "cli-helpers"
+version = "2.3.1"
+description = "Helpers for building command-line apps"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "cli_helpers-2.3.1-py3-none-any.whl", hash = "sha256:208a24a44f41a8289b742867197450a002967a5a67c779911c0b8487b1c16b83"},
+    {file = "cli_helpers-2.3.1.tar.gz", hash = "sha256:b82a8983ceee21f180e6fd0ddb7ca8dae43c40e920951e3817f996ab204dae6a"},
+]
+
+[package.dependencies]
+configobj = ">=5.0.5"
+Pygments = {version = ">=1.6", optional = true, markers = "extra == \"styles\""}
+tabulate = {version = ">=0.9.0", extras = ["widechars"]}
+
+[package.extras]
+styles = ["Pygments (>=1.6)"]
+
+[[package]]
 name = "click"
 version = "8.1.7"
 description = "Composable command line interface toolkit"
@@ -221,6 +240,16 @@ traitlets = ">=4"
 
 [package.extras]
 test = ["pytest"]
+
+[[package]]
+name = "configobj"
+version = "5.0.9"
+description = "Config file reading, writing and validation."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "configobj-5.0.9.tar.gz", hash = "sha256:03c881bbf23aa07bccf1b837005975993c4ab4427ba57f959afdd9d1a2386848"},
+]
 
 [[package]]
 name = "croniter"
@@ -284,6 +313,7 @@ files = [
 [package.dependencies]
 astunparse = ">=1.6.3"
 click = ">=7.1"
+duckdb = {version = ">=0.9", optional = true, markers = "extra == \"duckdb\" or extra == \"motherduck\""}
 fsspec = ">=2022.4.0"
 gitpython = ">=3.1.29"
 giturlparse = ">=0.10.0"
@@ -336,6 +366,26 @@ sql-database = ["sqlalchemy (>=1.4)"]
 sqlalchemy = ["alembic (>1.10.0)", "sqlalchemy (>=1.4)"]
 synapse = ["adlfs (>=2022.4.0)", "pyarrow (>=12.0.0)", "pyodbc (>=4.0.39)"]
 weaviate = ["weaviate-client (>=3.22)"]
+
+[[package]]
+name = "duckcli"
+version = "0.2.1"
+description = "CLI for DuckDB with auto-completion and syntax highlighting."
+optional = false
+python-versions = "*"
+files = [
+    {file = "duckcli-0.2.1-py2.py3-none-any.whl", hash = "sha256:1e09132a483bbac1fe89f3f2d0781ce0bb7c8a3e217b21e34a1ace91c68b6bbf"},
+    {file = "duckcli-0.2.1.tar.gz", hash = "sha256:16ef54525936c0eecb1eb01123ba6d8e661dc0c291b4e13b2fd3025ec3182ad4"},
+]
+
+[package.dependencies]
+cli-helpers = {version = ">=2.2.1", extras = ["styles"]}
+click = ">=4.1"
+configobj = ">=5.0.5"
+duckdb = ">=0.4.0"
+prompt-toolkit = ">=3.0.3,<4.0.0"
+Pygments = ">=1.6"
+sqlparse = "*"
 
 [[package]]
 name = "duckdb"
@@ -2037,6 +2087,21 @@ trino = ["trino"]
 web = ["fastapi (==0.110.2)", "pyarrow", "sse-starlette (>=0.2.2)", "uvicorn[standard] (==0.22.0)", "watchfiles (>=0.19.0)"]
 
 [[package]]
+name = "sqlparse"
+version = "0.5.1"
+description = "A non-validating SQL parser."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "sqlparse-0.5.1-py3-none-any.whl", hash = "sha256:773dcbf9a5ab44a090f3441e2180efe2560220203dc2f8c0b0fa141e18b505e4"},
+    {file = "sqlparse-0.5.1.tar.gz", hash = "sha256:bb6b4df465655ef332548e24f08e205afc81b9ab86cb1c45657a7ff173a3a00e"},
+]
+
+[package.extras]
+dev = ["build", "hatch"]
+doc = ["sphinx"]
+
+[[package]]
 name = "stack-data"
 version = "0.6.3"
 description = "Extract data from python stack frames and tracebacks for informative displays"
@@ -2054,6 +2119,23 @@ pure-eval = "*"
 
 [package.extras]
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
+
+[[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
+    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
+]
+
+[package.dependencies]
+wcwidth = {version = "*", optional = true, markers = "extra == \"widechars\""}
+
+[package.extras]
+widechars = ["wcwidth"]
 
 [[package]]
 name = "tenacity"
@@ -2224,4 +2306,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<3.13"
-content-hash = "8063ecf2d9131d17d574a63599697f28360542cd8d36fca08b119dccb7127bd6"
+content-hash = "98f843129bd1eef24158c3960bbfee903ab98281d60699b40ca2da8ba5538f77"
