@@ -5,6 +5,7 @@ description = "Arcane Insight is a data analytics project designed to harness th
 authors = ["Mattias Thalén <bitter-polders0x@icloud.com>"]
 license = "GNU General Public License v3.0"
 readme = "README.md"
+package-mode = false 
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.13"
@@ -13,7 +14,6 @@ dlt = {extras = ["duckdb"], version = "^1.3.0"}
 sqlmesh = "^0.130.2"
 duckdb = "^1.1.3"
 duckcli = "^0.2.1"
-
 
 [tool.poetry.group.dev.dependencies]
 pyspark = "^3.5.3"
