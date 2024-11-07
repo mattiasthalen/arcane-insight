@@ -1,5 +1,6 @@
 import dlt
 
+from dlt.destinations import filesystem
 from dlt.sources.helpers.rest_client.paginators import PageNumberPaginator
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 
@@ -58,11 +59,13 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 def load_battle_net() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="battle_net",
-        destination=dlt.destinations.duckdb("./data/bronze/battle_net.duckdb"),
-        dataset_name="api",
+        destination=filesystem(
+            bucket_url="data/bronze/",
+        ),
+        dataset_name="battle_net",
     )
 
-    load_info = pipeline.run(battle_net__source())
+    load_info = pipeline.run(battle_net__source(), loader_file_format="parquet")
     print(load_info)
 
 if __name__ == "__main__":

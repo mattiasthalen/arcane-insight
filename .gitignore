@@ -11,3 +11,6 @@ secrets.toml
 # ignore duckdb
 *.duckdb
 *.wal
+
+# ignore data files
+*.parquet
