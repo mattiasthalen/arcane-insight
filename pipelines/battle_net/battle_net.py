@@ -33,16 +33,22 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                     "path": "hearthstone/cards",
                     "paginator": "page_number",
                 },
+            },
+            {
                 "name": "raw__hearthstone__cardbacks",
                 "endpoint": {
                     "path": "hearthstone/cardbacks",
                     "paginator": "page_number",
                 },
-                "name": "raw__hearthstone__decks",
-                "endpoint": {
-                    "path": "hearthstone/deck",
-                    "paginator": "single_page",
-                },
+            },
+            # {
+            #     "name": "raw__hearthstone__decks",
+            #     "endpoint": {
+            #         "path": "hearthstone/deck",
+            #         "paginator": "single_page",
+            #     },
+            # },
+            {
                 "name": "raw__hearthstone__metadata",
                 "endpoint": {
                     "path": "hearthstone/metadata",
