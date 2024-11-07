@@ -1,6 +1,5 @@
 import dlt
 
-from dlt.destinations import filesystem
 from dlt.sources.helpers.rest_client.paginators import PageNumberPaginator
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 
@@ -42,56 +41,49 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                 },
             },
             {
-                "name": "raw__hearthstone__metadata",
-                "endpoint": {
-                    "path": "hearthstone/metadata",
-                    "paginator": "single_page",
-                },
-            },
-            {
-                "name": "raw__hearthstone__metadata__sets",
+                "name": "raw__hearthstone__sets",
                 "endpoint": {
                     "path": "hearthstone/metadata/sets",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__set_groups",
+                "name": "raw__hearthstone__set_groups",
                 "endpoint": {
                     "path": "hearthstone/metadata/setGroups",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__types",
+                "name": "raw__hearthstone__types",
                 "endpoint": {
                     "path": "hearthstone/metadata/types",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__rarities",
+                "name": "raw__hearthstone__rarities",
                 "endpoint": {
                     "path": "hearthstone/metadata/rarities",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__classes",
+                "name": "raw__hearthstone__classes",
                 "endpoint": {
                     "path": "hearthstone/metadata/classes",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__minion_types",
+                "name": "raw__hearthstone__minion_types",
                 "endpoint": {
                     "path": "hearthstone/metadata/minionTypes",
                     "paginator": "single_page",
                 },
             },
             {
-                "name": "raw__hearthstone__metadata__keywords",
+                "name": "raw__hearthstone__keywords",
                 "endpoint": {
                     "path": "hearthstone/metadata/keywords",
                     "paginator": "single_page",
@@ -105,9 +97,10 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 def load_battle_net() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="battle_net",
-        destination=filesystem(
-            bucket_url="data/bronze/",
-        ),
+        destination=dlt.destinations.duckdb("data/bronze/bronze.duckdb"),
+        # destination=dlt.destinations.filesystem(
+        #     bucket_url="data/bronze/",
+        # ),
         dataset_name="battle_net",
     )
 
