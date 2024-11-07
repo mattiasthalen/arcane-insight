@@ -57,10 +57,6 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 
 def load_battle_net() -> None:
     pipeline = dlt.pipeline(
-        # pipeline_name="rest_api__battle_net",
-        # destination='duckdb',
-        # dataset_name="rest_api_data",
-        # 
         pipeline_name="battle_net",
         destination=dlt.destinations.duckdb("../data/landing_zone.duckdb"),
         dataset_name="battle_net",
