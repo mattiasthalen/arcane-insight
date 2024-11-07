@@ -2,7 +2,7 @@ gateways:
   local:
     connection:
       type: duckdb
-      database: /Users/mattiasthalen/Repositories/arcane-insight/data/bronze/bronze.duckdb
+      database: ./data/bronze.duckdb
 
 default_gateway: local
 
