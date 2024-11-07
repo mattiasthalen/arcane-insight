@@ -13,7 +13,6 @@ dlt = {extras = ["duckdb"], version = "^1.3.0"}
 sqlmesh = "^0.130.2"
 duckdb = "^1.1.3"
 duckcli = "^0.2.1"
-pyarrow = "^18.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,7 +21,6 @@ dlt = {extras = ["duckdb"], version = "^1.3.0"}
 sqlmesh = "^0.130.2"
 duckdb = "^1.1.3"
 duckcli = "^0.2.1"
-pyarrow = "^18.0.0"
 
 [build-system]
 requires = ["poetry-core"]
