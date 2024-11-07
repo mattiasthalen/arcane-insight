@@ -1,6 +1,8 @@
 import dlt
 
+from dlt.sources.helpers.rest_client.paginators import PageNumberPaginator
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
+
 from typing import Any, Optional
 
 
@@ -18,7 +20,6 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 
         },
         "resource_defaults": {
-            "primary_key": "id",
             "write_disposition": "replace",
             "endpoint": {
                 "params": {
@@ -29,25 +30,19 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
         "resources": [
             {
                 "name": "raw__hearthstone__cards",
+                "primary_key": "id",
                 "endpoint": {
                     "path": "hearthstone/cards",
-                    "paginator": "page_number",
+                    "paginator": {
+                        "type": "page_number",
+                        "base_page": 1,
+                        "total_path": None,
+                    },
+                    "params": {
+                        "pageSize": 500,
+                    }
                 },
             },
-            {
-                "name": "raw__hearthstone__cardbacks",
-                "endpoint": {
-                    "path": "hearthstone/cardbacks",
-                    "paginator": "page_number",
-                },
-            },
-            # {
-            #     "name": "raw__hearthstone__decks",
-            #     "endpoint": {
-            #         "path": "hearthstone/deck",
-            #         "paginator": "single_page",
-            #     },
-            # },
             {
                 "name": "raw__hearthstone__metadata",
                 "endpoint": {
@@ -55,11 +50,10 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                     "paginator": "single_page",
                 },
             },
-        ],
+        ]
     }
 
     yield from rest_api_resources(config)
-
 
 def load_battle_net() -> None:
     pipeline = dlt.pipeline(
