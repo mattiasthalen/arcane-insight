@@ -97,11 +97,11 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 def load_battle_net() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="battle_net",
-        destination=dlt.destinations.duckdb("data/bronze.duckdb"),
+        destination=dlt.destinations.duckdb("data/arcane_insight.duckdb"),
         # destination=dlt.destinations.filesystem(
         #     bucket_url="data/bronze/",
         # ),
-        dataset_name="battle_net",
+        dataset_name="bronze",
     )
 
     load_info = pipeline.run(battle_net__source(), loader_file_format="parquet")

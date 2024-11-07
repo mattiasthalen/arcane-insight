@@ -21,6 +21,6 @@ SELECT
   schema_version_hash,
   TO_TIMESTAMP(CAST(load_id AS DOUBLE)) as _dlt_load_time
 FROM
-  battle_net._dlt_loads
+  bronze._dlt_loads
 WHERE
   TO_TIMESTAMP(CAST(load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds

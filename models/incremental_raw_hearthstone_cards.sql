@@ -78,6 +78,6 @@ SELECT
   max_sideboard_cards,
   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) as _dlt_load_time
 FROM
-  battle_net.raw_hearthstone_cards
+  bronze.raw_hearthstone_cards
 WHERE
   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds

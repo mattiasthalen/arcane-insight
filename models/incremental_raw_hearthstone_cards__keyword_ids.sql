@@ -19,6 +19,6 @@ SELECT
   _dlt_id,
   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) as _dlt_load_time
 FROM
-  battle_net.raw_hearthstone_cards__keyword_ids
+  bronze.raw_hearthstone_cards__keyword_ids
 WHERE
   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds
