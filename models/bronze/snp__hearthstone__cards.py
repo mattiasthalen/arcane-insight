@@ -61,15 +61,16 @@ def execute(
     source_df = context.spark.read.parquet("./warehouse/bronze/battle_net/raw_hearthstone_cards/1731050241.346379.ffc7685335.parquet")
     source_df = source_df.withColumn('_dlt_loaded_at', F.from_unixtime(F.col('_dlt_load_id').cast('double')))
     
-    filtered_df = source_df.filter((F.col('_dlt_loaded_at') >= start) & (F.col('_dlt_loaded_at') <= end))
+    source_df.createOrReplaceTempView("raw__hearthstone__cards")
     
-    columns_to_hash = [F.col(c) for c in filtered_df.columns if not c.startswith('_dlt')]
-    hash_expr = F.hex(F.sha2(F.concat_ws('|', *columns_to_hash), 256))
+    sql_query = f"""
+        SELECT *, 
+               HEX(SHA2(CONCAT_WS('|', {', '.join([f'`{col}`' for col in source_df.columns if not col.startswith('_dlt')])}), 256)) AS _sqlmesh_hash_diff,
+               '{execution_time}' AS _sqlmesh_loaded_at
+        FROM raw__hearthstone__cards
+        WHERE _dlt_loaded_at >= '{start}' AND _dlt_loaded_at <= '{end}'
+    """
     
-    final_df = (
-        filtered_df
-            .withColumn('_sqlmesh_hash_diff', hash_expr)
-            .withColumn('_sqlmesh_loaded_at', F.lit(execution_time))
-    )
+    final_df = context.spark.sql(sql_query)
     
     return final_df
