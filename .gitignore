@@ -13,5 +13,11 @@ secrets.toml
 *.duckdb
 *.wal
 
+# ignore artifacts
+spark-warehouse/
+metastore_db/
+.cache/
+logs/
+
 # ignore data files
 *.parquet

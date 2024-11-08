@@ -3,16 +3,17 @@ gateways:
     connection:
       type: spark
       config:
+        spark.executorEnv.HADOOP_USER_NAME: "mattiasthalen"
+        spark.driver.extraJavaOptions: -Djava.security.manager=allow
+        spark.executor.extraJavaOptions: -Djava.security.manager=allow
         spark.sql.extensions: org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions
-        spark.sql.catalog.spark_catalog: org.apache.iceberg.spark.SparkSessionCatalog
-        spark.sql.catalog.spark_catalog.type: hive
         spark.sql.catalog.local: org.apache.iceberg.spark.SparkCatalog
         spark.sql.catalog.local.type: hadoop
         spark.sql.catalog.local.warehouse: ./warehouse
     
     state_connection:
       type: duckdb
-      database: ./warehouse/state.duckdb
+      database: ./spark-warehouse/state.duckdb
 
 default_gateway: local
 default_target_environment: dev
