@@ -3,7 +3,7 @@ gateways:
     connection:
       type: spark
       config:
-        spark.executorEnv.HADOOP_USER_NAME: "mattiasthalen"
+        spark.executorEnv.HADOOP_USER_NAME: mattiasthalen
         spark.driver.extraJavaOptions: -Djava.security.manager=allow
         spark.executor.extraJavaOptions: -Djava.security.manager=allow
         spark.sql.extensions: org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions
