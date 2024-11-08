@@ -1,14 +1,17 @@
-import typing as t
-from datetime import datetime
-
 import pandas as pd
-from pyspark.sql import DataFrame, functions
+import typing as t
 
+from datetime import datetime
+from pyspark.sql import DataFrame, functions as F
 from sqlmesh import ExecutionContext, model
+from sqlmesh.core.model.kind import ModelKindName
 
 @model(
     name="bronze.snp__hearthstone__cards",
-    kind="full",
+    kind=dict(
+        name=ModelKindName.INCREMENTAL_BY_UNIQUE_KEY,
+        unique_key="hash_diff"
+    ),
     columns={
          "id": "bigint"
     ,    "collectible": "bigint"
@@ -43,6 +46,8 @@ from sqlmesh import ExecutionContext, model
     ,    "tourist_class_id": "bigint"
     ,    "copy_of_card_id": "bigint"
     ,    "max_sideboard_cards": "bigint"
+    ,    "_sqlmesh_hash_diff": "text"
+    ,    "_sqlmesh_loaded_at": "datetime"
     },
 )
 def execute(
@@ -53,6 +58,18 @@ def execute(
     **kwargs: t.Any,
 ) -> DataFrame:
     
-    df = context.spark.read.parquet("./warehouse/bronze/battle_net/raw_hearthstone_cards/1731050241.346379.ffc7685335.parquet")
+    source_df = context.spark.read.parquet("./warehouse/bronze/battle_net/raw_hearthstone_cards/1731050241.346379.ffc7685335.parquet")
+    source_df = source_df.withColumn('_dlt_loaded_at', F.from_unixtime(F.col('_dlt_load_id').cast('double')))
     
-    return df
+    filtered_df = source_df.filter((F.col('_dlt_loaded_at') >= start) & (F.col('_dlt_loaded_at') <= end))
+    
+    columns_to_hash = [F.col(c) for c in filtered_df.columns if not c.startswith('_dlt')]
+    hash_expr = F.hex(F.sha2(F.concat_ws('|', *columns_to_hash), 256))
+    
+    final_df = (
+        filtered_df
+            .withColumn('_sqlmesh_hash_diff', hash_expr)
+            .withColumn('_sqlmesh_loaded_at', F.lit(execution_time))
+    )
+    
+    return final_df
