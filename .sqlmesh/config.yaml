@@ -15,6 +15,7 @@ gateways:
       database: ./warehouse/state.duckdb
 
 default_gateway: local
+default_target_environment: dev
 
 model_defaults:
   dialect: spark
