@@ -10,6 +10,7 @@ gateways:
         spark.sql.catalog.local: org.apache.iceberg.spark.SparkCatalog
         spark.sql.catalog.local.type: hadoop
         spark.sql.catalog.local.warehouse: ./warehouse
+        spark.log.level: ERROR
     
     state_connection:
       type: duckdb
