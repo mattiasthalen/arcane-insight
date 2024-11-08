@@ -1,8 +1,11 @@
 gateways:
   local:
     connection:
+      type: spark
+    
+    state_connection:
       type: duckdb
-      database: db.db
+      database: ./warehouse/state.duckdb
 
 default_gateway: local
 
