@@ -49,7 +49,12 @@ columns={
     "_sqlmesh__extracted_at": "datetime"
 }
 
+# Get this script name as the model name
+current_file_path = os.path.relpath(__file__, os.getcwd())
+model_name = '.'.join(os.path.splitext(current_file_path)[0].split(os.sep)[1:])
+
 @model(
+    name=model_name,
     kind=dict(
         name=ModelKindName.FULL,
     ),
