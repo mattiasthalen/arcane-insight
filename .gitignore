@@ -8,6 +8,10 @@ secrets.toml
 **/*.py[cod]
 **/*$py.class
 
+# ignore sqlmesh artifacts
+.cache/
+logs/
+
 # ignore duckdb
 *.duckdb
 *.wal
