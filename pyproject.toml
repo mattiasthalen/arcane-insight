@@ -11,7 +11,7 @@ package-mode = false
 python = ">=3.12,<3.13"
 pyspark = "^3.5.3"
 dlt = {extras = ["cli", "deltalake", "duckdb", "parquet"], version = "^1.3.0"}
-sqlmesh = "^0.130.2"
+sqlmesh = {extras = ["web"], version = "^0.131.0"}
 duckdb = "^1.1.3"
 duckcli = "^0.2.1"
 streamlit = "^1.40.0"
@@ -20,7 +20,7 @@ pyarrow = "^17.0.0"
 [tool.poetry.group.dev.dependencies]
 pyspark = "^3.5.3"
 dlt = {extras = ["cli", "deltalake", "duckdb", "parquet"], version = "^1.3.0"}
-sqlmesh = "^0.130.2"
+sqlmesh = {extras = ["web"], version = "^0.131.0"}
 duckdb = "^1.1.3"
 duckcli = "^0.2.1"
 streamlit = "^1.40.0"
