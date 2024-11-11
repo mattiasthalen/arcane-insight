@@ -89,8 +89,6 @@ def execute(
     response.raise_for_status()
     data = response.json()
     page_count = data.get("pageCount", 1)
-    
-    all_keys = set() 
 
     for page_num in range(1, page_count + 1):
         print(f"Fetching page {page_num}/{page_count}...")
@@ -103,7 +101,6 @@ def execute(
         
         if results:
             df = pd.DataFrame(results)
-            all_keys.update(df.columns)
             
             # Add missing columns using pd.NA
             missing_columns = set(columns.keys()) - set(df.columns)
@@ -115,5 +112,3 @@ def execute(
             df["_sqlmesh__extracted_at"] = execution_time
             
             yield df
-            
-    print(f"Discovered keys: {all_keys}")
