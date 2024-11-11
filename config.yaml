@@ -5,6 +5,7 @@ gateways:
       database: ./data/arcane_insight.duckdb
 
 default_gateway: local
+default_target_environment: dev
 
 model_defaults:
   dialect: duckdb
