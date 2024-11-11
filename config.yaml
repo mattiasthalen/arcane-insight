@@ -10,3 +10,6 @@ default_target_environment: dev
 model_defaults:
   dialect: duckdb
   start: 2024-11-06
+
+model_naming:
+  infer_names: true
