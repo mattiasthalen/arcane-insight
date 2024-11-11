@@ -1,8 +1,5 @@
 MODEL (
-  name bronze_sqlmesh.incremental_raw_hearthstone_rarities,
-  kind INCREMENTAL_BY_TIME_RANGE (
-    time_column _dlt_loaded_at,
-  ),
+  kind FULL,
   columns (
     slug TEXT,
     id BIGINT,
@@ -10,7 +7,7 @@ MODEL (
     _dlt_load_id TEXT,
     _dlt_id TEXT,
     _dlt_loaded_at TIMESTAMP
-  ),
+  )
 );
 
 SELECT
@@ -19,8 +16,5 @@ SELECT
   name,
   _dlt_load_id,
   _dlt_id,
-  TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) as _dlt_loaded_at
-FROM
-  bronze.raw_hearthstone_rarities
-WHERE
-  TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds
+  TO_TIMESTAMP(_dlt_load_id::DOUBLE) AS _dlt_loaded_at
+FROM bronze.raw_hearthstone_rarities /* WHERE */ /*   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds */

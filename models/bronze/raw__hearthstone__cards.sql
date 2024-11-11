@@ -1,8 +1,5 @@
 MODEL (
-  name bronze_sqlmesh.incremental_raw_hearthstone_cards,
-  kind INCREMENTAL_BY_TIME_RANGE (
-    time_column _dlt_loaded_at,
-  ),
+  kind FULL,
   columns (
     id BIGINT,
     collectible BIGINT,
@@ -39,7 +36,9 @@ MODEL (
     max_sideboard_cards BIGINT,
     _dlt_loaded_at TIMESTAMP
   ),
-  grain (id),
+  grain (
+    id
+  )
 );
 
 SELECT
@@ -76,8 +75,5 @@ SELECT
   tourist_class_id,
   copy_of_card_id,
   max_sideboard_cards,
-  TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) as _dlt_loaded_at
-FROM
-  bronze.raw_hearthstone_cards
-WHERE
-  TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds
+  TO_TIMESTAMP(_dlt_load_id::DOUBLE) AS _dlt_loaded_at
+FROM bronze.raw_hearthstone_cards /* WHERE */ /*   TO_TIMESTAMP(CAST(_dlt_load_id AS DOUBLE)) BETWEEN @start_ds AND @end_ds */

@@ -1,14 +1,11 @@
 MODEL (
-  name bronze_sqlmesh.incremental_raw_hearthstone_types__game_modes,
-  kind INCREMENTAL_BY_TIME_RANGE (
-    time_column _dlt_loaded_at,
-  ),
+  kind FULL,
   columns (
     value BIGINT,
     _dlt_parent_id TEXT,
     _dlt_list_idx BIGINT,
     _dlt_id TEXT
-  ),
+  )
 );
 
 SELECT
@@ -16,5 +13,4 @@ SELECT
   _dlt_parent_id,
   _dlt_list_idx,
   _dlt_id
-FROM
-  bronze.raw_hearthstone_types__game_modes
+FROM bronze.raw_hearthstone_types__game_modes
