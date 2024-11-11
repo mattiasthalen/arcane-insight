@@ -1,4 +1,5 @@
 MODEL (
+enabled FALSE,
   kind INCREMENTAL_BY_UNIQUE_KEY (
     unique_key _sqlmesh_hashkey
   ),
