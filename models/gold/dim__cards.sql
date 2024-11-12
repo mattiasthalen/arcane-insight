@@ -22,8 +22,6 @@ WITH source AS (
     health AS card__health,
     image AS card__image,
     image_gold AS card__image_gold,
-    is_zilliax_cosmetic_module AS card__is_zilliax_cosmetic_module,
-    is_zilliax_functional_module AS card__is_zilliax_functional_module,
     card_name AS card__name,
     card_slug AS card__slug,
     card_text AS card__text,

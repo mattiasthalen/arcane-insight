@@ -1,6 +1,6 @@
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
+    time_column (fact__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -42,16 +42,16 @@ WITH source AS (
     rune_cost['frost'] AS frost_rune_cost,
     rune_cost['unholy'] AS unholy_rune_cost,
     blood_rune_cost + frost_rune_cost + unholy_rune_cost AS total_rune_cost,
-    _sqlmesh__extracted_at,
-    _sqlmesh__loaded_at,
-    _sqlmesh__record_version,
-    _sqlmesh__record_valid_from,
-    _sqlmesh__record_valid_to,
-    _sqlmesh__is_current_record
+    _sqlmesh__extracted_at AS fact__extracted_at,
+    _sqlmesh__loaded_at AS fact__loaded_at,
+    _sqlmesh__record_version AS fact__record_version,
+    _sqlmesh__record_valid_from AS fact__record_valid_from,
+    _sqlmesh__record_valid_to AS fact__record_valid_to,
+    _sqlmesh__is_current_record AS fact__is_current_record
   FROM source
 )
 SELECT
   *
 FROM final
 WHERE
-  _sqlmesh__loaded_at BETWEEN @start_ts AND @end_ts
+  fact__loaded_at BETWEEN @start_ts AND @end_ts
