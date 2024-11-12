@@ -2,7 +2,7 @@
 MODEL (
   name gold.mart.mart__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (fact__record_valid_from, '%Y-%m-%d %H:%M:%S')
+    time_column (fact__valid_from, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -21,7 +21,7 @@ WITH fact__cards AS (
 ), final AS (
   SELECT
     fact__cards.fact_name,
-    fact__cards.fact_record_id,
+    fact__cards.fact_id,
     dim__cards.card__armor,
     dim__cards.card__artist_name,
     dim__cards.card__attack,
@@ -39,9 +39,9 @@ WITH fact__cards AS (
     dim__cards.card__extracted_at,
     dim__cards.card__loaded_at,
     dim__cards.card__hash_diff,
-    dim__cards.card__record_version,
-    dim__cards.card__record_valid_from,
-    dim__cards.card__record_valid_to,
+    dim__cards.card__version,
+    dim__cards.card__valid_from,
+    dim__cards.card__valid_to,
     dim__cards.card__is_current_record,
     fact__cards.is_zilliax_cosmetic_module,
     fact__cards.is_zilliax_functional_module,
@@ -52,9 +52,9 @@ WITH fact__cards AS (
     fact__cards.total_rune_cost,
     fact__cards.fact__extracted_at,
     fact__cards.fact__loaded_at,
-    fact__cards.fact__record_version,
-    fact__cards.fact__record_valid_from,
-    fact__cards.fact__record_valid_to,
+    fact__cards.fact__version,
+    fact__cards.fact__valid_from,
+    fact__cards.fact__valid_to,
     fact__cards.fact__is_current_record
   FROM fact__cards
   LEFT JOIN link__cards
@@ -66,4 +66,4 @@ SELECT
   *
 FROM final
 WHERE
-  fact__record_valid_from BETWEEN @start_ts AND @end_ts
+  fact__valid_from BETWEEN @start_ts AND @end_ts

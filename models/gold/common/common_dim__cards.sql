@@ -31,9 +31,9 @@ WITH source AS (
     _sqlmesh__extracted_at AS card__extracted_at, /* Timestamp when the card was extracted */
     _sqlmesh__loaded_at AS card__loaded_at, /* Timestamp when the card was loaded */
     _sqlmesh__hash_diff AS card__hash_diff, /* Hash diff of the card */
-    _sqlmesh__record_version AS card__record_version, /* Record version of the card */
-    _sqlmesh__record_valid_from AS card__record_valid_from, /* Card valid from timestamp */
-    _sqlmesh__record_valid_to AS card__record_valid_to, /* Card valid to timestamp */
+    _sqlmesh__version AS card__version, /* Record version of the card */
+    _sqlmesh__valid_from AS card__valid_from, /* Card valid from timestamp */
+    _sqlmesh__valid_to AS card__valid_to, /* Card valid to timestamp */
     _sqlmesh__is_current_record AS card__is_current_record /* Whether the card is current */
   FROM source
 )

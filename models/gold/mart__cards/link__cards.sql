@@ -19,8 +19,8 @@ WITH fact__cards AS (
     card_relations,
     fact__extracted_at,
     fact__loaded_at,
-    fact__record_valid_from,
-    fact__record_valid_to,
+    fact__valid_from,
+    fact__valid_to,
     UNNEST(card_relations.child_card_ids) AS child_card_id,
     card_relations.card_id,
     card_relations.copy_of_card_id,
@@ -41,8 +41,8 @@ WITH fact__cards AS (
     card_id,
     MAX(fact__extracted_at) AS link__extracted_at,
     MAX(fact__loaded_at) AS link__loaded_at,
-    MAX(fact__record_valid_from) AS link__record_valid_from,
-    MIN(fact__record_valid_to) AS link__record_valid_to
+    MAX(fact__valid_from) AS link__valid_from,
+    MIN(fact__valid_to) AS link__valid_to
   FROM fact__unpivoted
   GROUP BY ALL
 ), final AS (
@@ -52,12 +52,12 @@ WITH fact__cards AS (
     dim__cards.card_pit_hk, /* Unique identifier in time for the card */
     fact__aggregated.link__extracted_at, /* Time when the link was extracted */
     fact__aggregated.link__loaded_at, /* Time when the link was loaded */
-    fact__aggregated.link__record_valid_from, /* Time when the link is valid from */
-    fact__aggregated.link__record_valid_to /* Time when the link is valid to */
+    fact__aggregated.link__valid_from, /* Time when the link is valid from */
+    fact__aggregated.link__valid_to /* Time when the link is valid to */
   FROM fact__aggregated
   LEFT JOIN dim__cards
     ON fact__aggregated.card_id = dim__cards.card_id
-    AND fact__aggregated.link__loaded_at BETWEEN dim__cards.card__record_valid_from AND dim__cards.card__record_valid_from
+    AND fact__aggregated.link__loaded_at BETWEEN dim__cards.card__valid_from AND dim__cards.card__valid_from
 )
 SELECT
   *

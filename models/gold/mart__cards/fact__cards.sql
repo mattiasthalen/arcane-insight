@@ -32,9 +32,9 @@ WITH source AS (
     blood_rune_cost + frost_rune_cost + unholy_rune_cost AS total_rune_cost, /* Total rune cost of the card */
     _sqlmesh__extracted_at AS fact__extracted_at, /* Timestamp when the record was extracted */
     _sqlmesh__loaded_at AS fact__loaded_at, /* Timestamp when the record was loaded */
-    _sqlmesh__record_version AS fact__record_version, /* Version of the record */
-    _sqlmesh__record_valid_from AS fact__record_valid_from, /* Timestamp when the record is valid from */
-    _sqlmesh__record_valid_to AS fact__record_valid_to, /* Timestamp when the record is valid to */
+    _sqlmesh__version AS fact__version, /* Version of the record */
+    _sqlmesh__valid_from AS fact__valid_from, /* Timestamp when the record is valid from */
+    _sqlmesh__valid_to AS fact__valid_to, /* Timestamp when the record is valid to */
     _sqlmesh__is_current_record AS fact__is_current_record /* Flag for the current record */
   FROM source
 ), final AS (
@@ -53,7 +53,7 @@ WITH source AS (
       rarity_id,
       spell_school_id,
       tourist_class_id
-    ) AS fact_record_id, /* Unique identifier for the fact table */
+    ) AS fact_id, /* Unique identifier for the fact table */
     fact.*
   FROM fact
 )

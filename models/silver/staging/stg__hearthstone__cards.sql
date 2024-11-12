@@ -13,10 +13,10 @@ WITH source AS (
 ), valid_range AS (
   SELECT
     *,
-    ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__record_version,
-    LAG(_sqlmesh__loaded_at, 1, '1970-01-01 00:00:00') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__record_valid_from,
-    LEAD(_sqlmesh__loaded_at, 1, '9999-12-31 23:59:59') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__record_valid_to,
-    _sqlmesh__record_valid_to = '9999-12-31 23:59:59' AS _sqlmesh__is_current_record
+    ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__version,
+    LAG(_sqlmesh__loaded_at, 1, '1970-01-01 00:00:00') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__valid_from,
+    LEAD(_sqlmesh__loaded_at, 1, '9999-12-31 23:59:59') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__valid_to,
+    _sqlmesh__valid_to = '9999-12-31 23:59:59' AS _sqlmesh__is_current_record
   FROM source
 ), casted AS (
   SELECT
@@ -56,15 +56,15 @@ WITH source AS (
     _sqlmesh__extracted_at::TIMESTAMP,
     _sqlmesh__hash_diff::BLOB,
     _sqlmesh__loaded_at::TIMESTAMP,
-    _sqlmesh__record_version::INT,
-    _sqlmesh__record_valid_from::TIMESTAMP,
-    _sqlmesh__record_valid_to::TIMESTAMP,
+    _sqlmesh__version::INT,
+    _sqlmesh__valid_from::TIMESTAMP,
+    _sqlmesh__valid_to::TIMESTAMP,
     _sqlmesh__is_current_record::BOOLEAN
   FROM valid_range
 ), hash_keys AS (
   SELECT
     *,
-    @generate_surrogate_key__sha_256(card_id, _sqlmesh__record_valid_from) AS card_pit_hk
+    @generate_surrogate_key__sha_256(card_id, _sqlmesh__valid_from) AS card_pit_hk
   FROM casted
 ), final AS (
   SELECT
