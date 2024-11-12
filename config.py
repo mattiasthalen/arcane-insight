@@ -34,7 +34,8 @@ config = Config(
                     catalogs={
                         "bronze": "./data/bronze.duckdb",
                         "silver": "./data/silver.duckdb",
-                        "gold": "./data/gold.duckdb"
+                        "gold": "./data/gold.duckdb",
+                        "platinum": "./data/platinum.duckdb"
                     }
                 )
             )

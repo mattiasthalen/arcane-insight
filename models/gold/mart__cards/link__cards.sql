@@ -9,11 +9,11 @@ MODEL (
 WITH fact__cards AS (
   SELECT
     *
-  FROM gold.fact__cards
+  FROM gold.mart__cards.fact__cards
 ), dim__cards AS (
   SELECT
     *
-  FROM gold.dim__cards
+  FROM gold.mart__cards.dim__cards
 ), fact__unnested AS (
   SELECT
     card_relations,

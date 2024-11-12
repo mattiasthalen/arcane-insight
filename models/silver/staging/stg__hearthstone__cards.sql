@@ -9,7 +9,7 @@ MODEL (
 WITH source AS (
   SELECT
     *
-  FROM bronze.snp__hearthstone__cards
+  FROM bronze.snapshot.snp__hearthstone__cards
 ), valid_range AS (
   SELECT
     *,

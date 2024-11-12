@@ -18,4 +18,4 @@ SELECT
     )
   ) AS _sqlmesh__hash_diff,
   @execution_ts::TIMESTAMP AS _sqlmesh__loaded_at
-FROM bronze.raw__hearthstone__classes
+FROM bronze.raw.raw__hearthstone__classes

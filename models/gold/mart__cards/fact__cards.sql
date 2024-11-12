@@ -9,7 +9,7 @@ MODEL (
 WITH source AS (
   SELECT
     *
-  FROM silver.stg__hearthstone__cards
+  FROM silver.staging.stg__hearthstone__cards
 ), fact AS (
   SELECT
     card_relations, /* Structure for the card relationship */
