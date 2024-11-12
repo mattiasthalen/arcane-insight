@@ -1,8 +1,8 @@
 MODEL (
   kind INCREMENTAL_BY_UNIQUE_KEY (
     unique_key _sqlmesh__hash_diff,
-    forward_only FALSE,
-    disable_restatement FALSE
+    forward_only TRUE,
+    disable_restatement TRUE
   )
 );
 
