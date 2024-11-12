@@ -1,5 +1,6 @@
-/* Snapshot model of the cards from Hearthstone */
+/* Snapshot model of the keywords from Hearthstone */
 MODEL (
+  name bronze.snapshot.snp__hearthstone__keywords,
   kind INCREMENTAL_BY_UNIQUE_KEY (
     unique_key _sqlmesh__hash_diff,
     forward_only TRUE,
@@ -11,10 +12,10 @@ SELECT
   *,
   @generate_surrogate_key__sha_256(
     @star_v2(
-      relation := raw__hearthstone__cards,
+      relation := raw__hearthstone__keywords,
       exclude := _sqlmesh__extracted_at,
       select_only := TRUE
     )
   ) AS _sqlmesh__hash_diff,
   @execution_ts::TIMESTAMP AS _sqlmesh__loaded_at
-FROM bronze.raw__hearthstone__cards
+FROM bronze.raw.raw__hearthstone__keywords

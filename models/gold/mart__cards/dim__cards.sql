@@ -1,5 +1,6 @@
 /* Dimension of all the cards in Hearthstone */
 MODEL (
+  name gold.mart__cards.dim__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (card__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
@@ -8,7 +9,7 @@ MODEL (
 WITH source AS (
   SELECT
     *
-  FROM silver.stg__hearthstone__cards
+  FROM silver.staging.stg__hearthstone__cards
 ), final AS (
   SELECT
     card_pit_hk, /* Unique identifier in time for the card */

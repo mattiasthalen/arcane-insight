@@ -1,5 +1,6 @@
 /* Fact of all the cards in Hearthstone */
 MODEL (
+  name gold.mart__cards.fact__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (fact__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
@@ -8,7 +9,7 @@ MODEL (
 WITH source AS (
   SELECT
     *
-  FROM silver.stg__hearthstone__cards
+  FROM silver.staging.stg__hearthstone__cards
 ), fact AS (
   SELECT
     card_relations, /* Structure for the card relationship */

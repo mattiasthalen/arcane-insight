@@ -1,5 +1,6 @@
 /* Link between fact and dimension for all Hearthstone card relationships */
 MODEL (
+  name gold.mart__cards.link__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (link__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
@@ -8,11 +9,11 @@ MODEL (
 WITH fact__cards AS (
   SELECT
     *
-  FROM gold.fact__cards
+  FROM gold.mart__cards.fact__cards
 ), dim__cards AS (
   SELECT
     *
-  FROM gold.dim__cards
+  FROM gold.mart__cards.dim__cards
 ), fact__unnested AS (
   SELECT
     card_relations,

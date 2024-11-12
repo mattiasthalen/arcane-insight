@@ -1,5 +1,6 @@
 /* Mart model of the cards from Hearthstone */
 MODEL (
+  name platinum.mart.mart__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (fact__record_valid_from, '%Y-%m-%d %H:%M:%S')
   )
@@ -8,15 +9,15 @@ MODEL (
 WITH fact__cards AS (
   SELECT
     *
-  FROM gold.fact__cards
+  FROM gold.mart__cards.fact__cards
 ), link__cards AS (
   SELECT
     *
-  FROM gold.link__cards
+  FROM gold.mart__cards.link__cards
 ), dim__cards AS (
   SELECT
     *
-  FROM gold.dim__cards
+  FROM gold.mart__cards.dim__cards
 ), final AS (
   SELECT
     fact__cards.fact_name,

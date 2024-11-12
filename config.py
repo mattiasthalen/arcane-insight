@@ -29,12 +29,17 @@ config = Config(
     project="arcane-insight",
     default_target_environment=default_environment,
     gateways={
-        "local": GatewayConfig(
-            connection=DuckDBConnectionConfig(
-                database="./data/arcane-insight.duckdb"
+            "local": GatewayConfig(
+                connection=DuckDBConnectionConfig(
+                    catalogs={
+                        "bronze": "./data/bronze.duckdb",
+                        "silver": "./data/silver.duckdb",
+                        "gold": "./data/gold.duckdb",
+                        "platinum": "./data/platinum.duckdb"
+                    }
+                )
             )
-        )
-    },
+        },
     default_gateway="local",
     model_defaults=ModelDefaultsConfig(
         dialect="duckdb",

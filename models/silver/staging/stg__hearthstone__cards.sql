@@ -1,5 +1,6 @@
 /* Staging model for the Hearthstone cards */
 MODEL (
+  name silver.staging.stg__hearthstone__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
@@ -8,7 +9,7 @@ MODEL (
 WITH source AS (
   SELECT
     *
-  FROM bronze.snp__hearthstone__cards
+  FROM bronze.snapshot.snp__hearthstone__cards
 ), valid_range AS (
   SELECT
     *,
