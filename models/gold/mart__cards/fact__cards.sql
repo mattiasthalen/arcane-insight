@@ -12,7 +12,7 @@ WITH source AS (
   FROM silver.staging.stg__hearthstone__cards
 ), fact AS (
   SELECT
-    card_relations, /* Structure for the card relationship */
+    card_relations_hk, /* Unique identifier for the card relations */
     card_set_id, /* Unique identifier for the card set */
     card_type_id, /* Unique identifier for the card type */
     class_id, /* Unique identifier for the class */
@@ -23,6 +23,7 @@ WITH source AS (
     rarity_id, /* Unique identifier for the rarity */
     spell_school_id, /* Unique identifier for the spell school */
     tourist_class_id, /* Unique identifier for the tourist class */
+    card_relations, /* List of card relations */
     is_zilliax_cosmetic_module, /* Flag for Zilliax cosmetic module */
     is_zilliax_functional_module, /* Flag for Zilliax functional module */
     mana_cost, /* Mana cost of the card */
@@ -42,7 +43,7 @@ WITH source AS (
     'cards' AS fact_name, /* Name of the fact table */
     @generate_surrogate_key__sha_256(
       fact_name,
-      card_relations,
+      card_relations_hk,
       card_set_id,
       card_type_id,
       class_id,

@@ -69,7 +69,8 @@ WITH source AS (
 ), final AS (
   SELECT
     *,
-    {'card_id': card_id, 'parent_card_id': parent_card_id, 'copy_of_card_id': copy_of_card_id, 'child_card_ids': child_card_ids} AS card_relations
+    {'card_id': card_id, 'parent_card_id': parent_card_id, 'copy_of_card_id': copy_of_card_id, 'child_card_ids': child_card_ids} AS card_relations,
+    @generate_surrogate_key__sha_256(card_relations) AS card_relations_hk
   FROM hash_keys
 )
 SELECT

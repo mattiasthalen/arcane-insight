@@ -4,4 +4,6 @@ MODEL (
   kind VIEW
 );
 
-SELECT * FROM gold.common.common_dim__cards
+SELECT
+  *
+FROM gold.common.common_dim__cards
