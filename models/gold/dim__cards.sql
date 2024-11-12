@@ -10,6 +10,7 @@ WITH source AS (
   FROM silver.stg__hearthstone__cards
 ), final AS (
   SELECT
+    card_pit_hk,
     card_id,
     armor AS card__armor,
     artist_name AS card__artist_name,

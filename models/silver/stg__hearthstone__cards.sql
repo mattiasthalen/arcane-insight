@@ -59,11 +59,16 @@ WITH source AS (
     _sqlmesh__record_valid_to::TIMESTAMP,
     _sqlmesh__is_current_record::BOOLEAN
   FROM valid_range
+), hash_keys AS (
+  SELECT
+    *,
+    @generate_surrogate_key__sha_256(card_id, _sqlmesh__record_valid_from) AS card_pit_hk
+  FROM casted
 ), final AS (
   SELECT
     *,
     {'card_id': card_id, 'parent_card_id': parent_card_id, 'copy_of_card_id': copy_of_card_id, 'child_card_ids': child_card_ids} AS card_relations
-  FROM casted
+  FROM hash_keys
 )
 SELECT
   *

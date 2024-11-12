@@ -57,8 +57,7 @@ WITH fact__cards AS (
   LEFT JOIN link__cards
     ON fact__cards.card_relations = link__cards.card_relations
   LEFT JOIN dim__cards
-    ON link__cards.card_id = dim__cards.card_id
-    AND fact__cards.fact__record_valid_from BETWEEN dim__cards.card__record_valid_from AND dim__cards.card__record_valid_to
+    ON link__cards.card_pit_hk = dim__cards.card_pit_hk
 )
 SELECT
   *
