@@ -1,6 +1,6 @@
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column _sqlmesh__loaded_at
+    time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -64,4 +64,4 @@ SELECT
   *
 FROM casted
 WHERE
-  _sqlmesh__loaded_at BETWEEN @start_ts AND @end_ts
+  _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts
