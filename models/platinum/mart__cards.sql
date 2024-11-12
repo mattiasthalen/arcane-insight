@@ -1,3 +1,4 @@
+/* Mart model of the cards from Hearthstone */
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (fact__record_valid_from, '%Y-%m-%d %H:%M:%S')

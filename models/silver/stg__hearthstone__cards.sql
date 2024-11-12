@@ -1,3 +1,4 @@
+/* Staging model for the Hearthstone cards */
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')

@@ -1,3 +1,4 @@
+/* Snapshot model of the types from Hearthstone */
 MODEL (
   kind INCREMENTAL_BY_UNIQUE_KEY (
     unique_key _sqlmesh__hash_diff,

@@ -1,3 +1,4 @@
+/* Link between fact and dimension for all Hearthstone card relationships */
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (link__loaded_at, '%Y-%m-%d %H:%M:%S')
@@ -45,13 +46,13 @@ WITH fact__cards AS (
   GROUP BY ALL
 ), final AS (
   SELECT
-    fact__aggregated.card_relations,
-    fact__aggregated.card_relation,
-    dim__cards.card_pit_hk,
-    fact__aggregated.link__extracted_at,
-    fact__aggregated.link__loaded_at,
-    fact__aggregated.link__record_valid_from,
-    fact__aggregated.link__record_valid_to
+    fact__aggregated.card_relations, /* Structure for the card relationship */
+    fact__aggregated.card_relation, /* Type of relationship */
+    dim__cards.card_pit_hk, /* Unique identifier in time for the card */
+    fact__aggregated.link__extracted_at, /* Time when the link was extracted */
+    fact__aggregated.link__loaded_at, /* Time when the link was loaded */
+    fact__aggregated.link__record_valid_from, /* Time when the link is valid from */
+    fact__aggregated.link__record_valid_to /* Time when the link is valid to */
   FROM fact__aggregated
   LEFT JOIN dim__cards
     ON fact__aggregated.card_id = dim__cards.card_id

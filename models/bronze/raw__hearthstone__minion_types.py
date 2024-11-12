@@ -26,6 +26,7 @@ columns={
 
 @model(
     name=model_name,
+    description='Extract & load model for the minion endpoint from the Hearthstone API.',
     kind=dict(
         name=ModelKindName.FULL,
     ),

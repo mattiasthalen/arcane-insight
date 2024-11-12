@@ -29,6 +29,7 @@ model_name = '.'.join(os.path.splitext(current_file_path)[0].split(os.sep)[1:])
 
 @model(
     name=model_name,
+    description='Extract & load model for the cardbacks endpoint from the Hearthstone API.',
     kind=dict(
         name=ModelKindName.FULL,
     ),
