@@ -4,55 +4,58 @@ MODEL (
   )
 );
 
-WITH source AS (
+WITH fact__cards AS (
   SELECT
     *
-  FROM silver.stg__hearthstone__cards
-), unnested AS (
+  FROM gold.fact__cards
+), dim__cards AS (
+  SELECT
+    *
+  FROM gold.dim__cards
+), fact__unnested AS (
   SELECT
     card_relations,
-    _sqlmesh__extracted_at,
-    _sqlmesh__loaded_at,
-    _sqlmesh__record_valid_from,
-    _sqlmesh__record_valid_to,
+    fact__extracted_at,
+    fact__loaded_at,
+    fact__record_valid_from,
+    fact__record_valid_to,
     UNNEST(card_relations.child_card_ids) AS child_card_id,
     card_relations.card_id,
     card_relations.copy_of_card_id,
     card_relations.parent_card_id
-  FROM source
-), unpivoted AS (
-  SELECT DISTINCT
+  FROM fact__cards
+), fact__unpivoted AS (
+  SELECT
     *
-  FROM unnested
+  FROM fact__unnested
   UNPIVOT(card_id FOR card_relation IN (card_id, copy_of_card_id, parent_card_id, child_card_id))
   ORDER BY
     card_relation,
     card_id
-), aggregated AS (
+), fact__aggregated AS (
   SELECT
     card_relations,
     card_relation,
     card_id,
-    MAX(_sqlmesh__extracted_at) AS link__extracted_at,
-    MAX(_sqlmesh__loaded_at) AS link__loaded_at,
-    MAX(_sqlmesh__record_valid_from) AS link__record_valid_from,
-    MIN(_sqlmesh__record_valid_to) AS link__record_valid_to
-  FROM unpivoted
+    MAX(fact__extracted_at) AS link__extracted_at,
+    MAX(fact__loaded_at) AS link__loaded_at,
+    MAX(fact__record_valid_from) AS link__record_valid_from,
+    MIN(fact__record_valid_to) AS link__record_valid_to
+  FROM fact__unpivoted
   GROUP BY ALL
 ), final AS (
   SELECT
-    @generate_surrogate_key__sha_256(aggregated.card_relations, aggregated.link__record_valid_from) AS link_pit_hk,
-    aggregated.card_relations,
-    aggregated.card_relation,
-    source.card_pit_hk,
-    aggregated.link__extracted_at,
-    aggregated.link__loaded_at,
-    aggregated.link__record_valid_from,
-    aggregated.link__record_valid_to
-  FROM aggregated
-  LEFT JOIN source
-    ON aggregated.card_id = source.card_id
-    AND aggregated.link__loaded_at BETWEEN source._sqlmesh__record_valid_from AND source._sqlmesh__record_valid_to
+    fact__aggregated.card_relations,
+    fact__aggregated.card_relation,
+    dim__cards.card_pit_hk,
+    fact__aggregated.link__extracted_at,
+    fact__aggregated.link__loaded_at,
+    fact__aggregated.link__record_valid_from,
+    fact__aggregated.link__record_valid_to
+  FROM fact__aggregated
+  LEFT JOIN dim__cards
+    ON fact__aggregated.card_id = dim__cards.card_id
+    AND fact__aggregated.link__loaded_at BETWEEN dim__cards.card__record_valid_from AND dim__cards.card__record_valid_from
 )
 SELECT
   *

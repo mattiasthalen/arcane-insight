@@ -56,7 +56,7 @@ WITH fact__cards AS (
     fact__cards.fact__is_current_record
   FROM fact__cards
   LEFT JOIN link__cards
-    ON fact__cards.link_pit_hk = link__cards.link_pit_hk
+    ON fact__cards.card_relations = link__cards.card_relations
   LEFT JOIN dim__cards
     ON link__cards.card_pit_hk = dim__cards.card_pit_hk
 )

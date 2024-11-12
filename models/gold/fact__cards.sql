@@ -8,10 +8,6 @@ WITH source AS (
   SELECT
     *
   FROM silver.stg__hearthstone__cards
-), link__cards AS (
-  SELECT
-    *
-  FROM gold.link__cards
 ), fact AS (
   SELECT
     card_relations,
@@ -44,24 +40,20 @@ WITH source AS (
     'cards' AS fact_name,
     @generate_surrogate_key__sha_256(
       fact_name,
-      link__cards.link_pit_hk,
-      fact.card_set_id,
-      fact.card_type_id,
-      fact.class_id,
-      fact.keyword_ids,
-      fact.minion_type_id,
-      fact.multi_class_ids,
-      fact.multi_type_ids,
-      fact.rarity_id,
-      fact.spell_school_id,
-      fact.tourist_class_id
+      card_relations,
+      card_set_id,
+      card_type_id,
+      class_id,
+      keyword_ids,
+      minion_type_id,
+      multi_class_ids,
+      multi_type_ids,
+      rarity_id,
+      spell_school_id,
+      tourist_class_id
     ) AS fact_record_id,
-    fact.*,
-    link__cards.link_pit_hk
+    fact.*
   FROM fact
-  LEFT JOIN link__cards
-    ON fact.card_relations = link__cards.card_relations
-    AND fact.fact__record_valid_from BETWEEN link__cards.link__record_valid_from AND link__cards.link__record_valid_to
 )
 SELECT
   *
