@@ -59,9 +59,14 @@ WITH source AS (
     _sqlmesh__record_valid_to::TIMESTAMP,
     _sqlmesh__is_current_record::BOOLEAN
   FROM valid_range
+), final AS (
+  SELECT
+    *,
+    {'card_id': card_id, 'parent_card_id': parent_card_id, 'copy_of_card_id': copy_of_card_id, 'child_card_ids': child_card_ids} AS card_relations
+  FROM casted
 )
 SELECT
   *
-FROM casted
+FROM final
 WHERE
   _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts
