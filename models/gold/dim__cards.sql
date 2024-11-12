@@ -1,6 +1,6 @@
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (card__loaded_at, '%Y-%m-%d %H:%M:%S')
+    time_column (card__record_valid_from, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -39,4 +39,4 @@ SELECT
   *
 FROM final
 WHERE
-  card__loaded_at BETWEEN @start_ts AND @end_ts
+  card__record_valid_from BETWEEN @start_ts AND @end_ts

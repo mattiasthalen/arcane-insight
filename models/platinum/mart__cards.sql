@@ -1,6 +1,6 @@
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (fact__loaded_at, '%Y-%m-%d %H:%M:%S')
+    time_column (fact__record_valid_from, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -55,7 +55,7 @@ WITH fact__cards AS (
     fact__cards.fact__is_current_record
   FROM fact__cards
   LEFT JOIN link__cards
-    ON fact__cards.card_relations = link__cards.card_relations
+    ON fact__cards.link_pit_hk = link__cards.link_pit_hk
   LEFT JOIN dim__cards
     ON link__cards.card_pit_hk = dim__cards.card_pit_hk
 )
@@ -63,4 +63,4 @@ SELECT
   *
 FROM final
 WHERE
-  fact__loaded_at BETWEEN @start_ts AND @end_ts
+  fact__record_valid_from BETWEEN @start_ts AND @end_ts
