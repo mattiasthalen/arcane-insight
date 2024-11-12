@@ -1,6 +1,6 @@
 MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (link__record_valid_from, '%Y-%m-%d %H:%M:%S')
+    time_column (link__loaded_at, '%Y-%m-%d %H:%M:%S')
   )
 );
 
@@ -11,6 +11,8 @@ WITH source AS (
 ), unnested AS (
   SELECT
     card_relations,
+    _sqlmesh__extracted_at,
+    _sqlmesh__loaded_at,
     _sqlmesh__record_valid_from,
     _sqlmesh__record_valid_to,
     UNNEST(card_relations.child_card_ids) AS child_card_id,
@@ -31,6 +33,8 @@ WITH source AS (
     card_relations,
     card_relation,
     card_id,
+    MAX(_sqlmesh__extracted_at) AS link__extracted_at,
+    MAX(_sqlmesh__loaded_at) AS link__loaded_at,
     MAX(_sqlmesh__record_valid_from) AS link__record_valid_from,
     MIN(_sqlmesh__record_valid_to) AS link__record_valid_to
   FROM unpivoted
@@ -41,15 +45,17 @@ WITH source AS (
     aggregated.card_relations,
     aggregated.card_relation,
     source.card_pit_hk,
+    aggregated.link__extracted_at,
+    aggregated.link__loaded_at,
     aggregated.link__record_valid_from,
     aggregated.link__record_valid_to
   FROM aggregated
   LEFT JOIN source
     ON aggregated.card_id = source.card_id
-    AND aggregated.link__record_valid_from BETWEEN source._sqlmesh__record_valid_from AND source._sqlmesh__record_valid_to
+    AND aggregated.link__loaded_at BETWEEN source._sqlmesh__record_valid_from AND source._sqlmesh__record_valid_to
 )
 SELECT
   *
 FROM final
 WHERE
-  link__record_valid_from BETWEEN @start_ts AND @end_ts
+  link__loaded_at BETWEEN @start_ts AND @end_ts

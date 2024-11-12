@@ -18,6 +18,7 @@ WITH fact__cards AS (
   FROM gold.dim__cards
 ), final AS (
   SELECT
+    fact__cards.fact_name,
     fact__cards.fact_record_id,
     dim__cards.card__armor,
     dim__cards.card__artist_name,
