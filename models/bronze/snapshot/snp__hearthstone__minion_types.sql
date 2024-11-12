@@ -1,5 +1,6 @@
 /* Snapshot model of the minion types from Hearthstone */
 MODEL (
+  name bronze.snapshot.snp__hearthstone__minion_types,
   kind INCREMENTAL_BY_UNIQUE_KEY (
     unique_key _sqlmesh__hash_diff,
     forward_only TRUE,

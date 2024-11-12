@@ -11,22 +11,24 @@ from sqlmesh.core.model.kind import ModelKindName
 
 load_dotenv()
 
-# Get this script name as the model name
-current_file_path = os.path.relpath(__file__, os.getcwd())
-model_name = '.'.join(os.path.splitext(current_file_path)[0].split(os.sep)[1:])
-
 columns={
-    "slug": "text",
     "id": "text",
     "name": "text",
-    "gameModes": "text",
+    "slug": "text",
+    "hyped": "text",
+    "type": "text",
+    "collectibleCount": "text",
+    "collectibleRevealedCount": "text",
+    "nonCollectibleCount": "text",
+    "nonCollectibleRevealedCount": "text",
+    "aliasSetIds": "text",
     
     "_sqlmesh__extracted_at": "datetime"
 }
 
 @model(
-    name=model_name,
-    description='Extract & load model for the types endpoint from the Hearthstone API.',
+    name='bronze.raw.raw__hearthstone__sets',
+    description='Extract & load model for the sets endpoint from the Hearthstone API.',
     kind=dict(
         name=ModelKindName.FULL,
     ),
@@ -53,7 +55,7 @@ def execute(
     access_token = token_response.json().get("access_token")
     
     # Fetch data
-    base_url = "https://eu.api.blizzard.com/hearthstone/metadata/types"
+    base_url = "https://eu.api.blizzard.com/hearthstone/metadata/sets"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {"locale": "en_US"}
 

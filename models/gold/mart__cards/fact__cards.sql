@@ -1,5 +1,6 @@
 /* Fact of all the cards in Hearthstone */
 MODEL (
+  name gold.mart__cards.fact__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (fact__loaded_at, '%Y-%m-%d %H:%M:%S')
   )

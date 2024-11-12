@@ -12,24 +12,46 @@ from sqlmesh.core.model.kind import ModelKindName
 load_dotenv()
 
 columns={
+    "armor": "text",
+    "artistName": "text",
+    "attack": "text",
+    "bannedFromSideboard": "text",
+    "cardSetId": "text",
+    "cardTypeId": "text",
+    "childIds": "text",
+    "classId": "text",
+    "collectible": "text",
+    "copyOfCardId": "text",
+    "cropImage": "text",
+    "durability": "text",
+    "flavorText": "text",
+    "health": "text",
     "id": "text",
-    "cardbackCategory": "text",
-    "text": "text",
-    "name": "text",
-    "sortCategory": "text",
-    "slug": "text",
     "image": "text",
+    "imageGold": "text",
+    "isZilliaxCosmeticModule": "text",
+    "isZilliaxFunctionalModule": "text",
+    "keywordIds": "text",
+    "manaCost": "text",
+    "maxSideboardCards": "text",
+    "minionTypeId": "text",
+    "multiClassIds": "text",
+    "multiTypeIds": "text",
+    "name": "text",
+    "parentId": "text",
+    "rarityId": "text",
+    "runeCost": "text",
+    "slug": "text",
+    "spellSchoolId": "text",
+    "text": "text",
+    "touristClassId": "text",
     
     "_sqlmesh__extracted_at": "datetime"
 }
 
-# Get this script name as the model name
-current_file_path = os.path.relpath(__file__, os.getcwd())
-model_name = '.'.join(os.path.splitext(current_file_path)[0].split(os.sep)[1:])
-
 @model(
-    name=model_name,
-    description='Extract & load model for the cardbacks endpoint from the Hearthstone API.',
+    name='bronze.raw.raw__hearthstone__cards',
+    description='Extract & load model for the card endpoint from the Hearthstone API.',
     kind=dict(
         name=ModelKindName.FULL,
     ),
@@ -56,7 +78,7 @@ def execute(
     access_token = token_response.json().get("access_token")
     
     # Fetch paginated data
-    base_url = "https://eu.api.blizzard.com/hearthstone/cardbacks"
+    base_url = "https://eu.api.blizzard.com/hearthstone/cards"
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {"locale": "en_US", "pageSize": 500, "page": 1}
 
@@ -64,8 +86,6 @@ def execute(
     response.raise_for_status()
     data = response.json()
     page_count = data.get("pageCount", 1)
-    
-    all_keys = set()
 
     for page_num in range(1, page_count + 1):
         print(f"Fetching page {page_num}/{page_count}...")
@@ -74,7 +94,7 @@ def execute(
         response.raise_for_status()
         
         data = response.json()
-        results = data.get("cardBacks", [])
+        results = data.get("cards", [])
         
         if results:
             df = pd.DataFrame(results)
@@ -89,7 +109,3 @@ def execute(
             df["_sqlmesh__extracted_at"] = execution_time
             
             yield df
-            
-            all_keys.update(df.columns)
-    
-    # print(all_keys)
