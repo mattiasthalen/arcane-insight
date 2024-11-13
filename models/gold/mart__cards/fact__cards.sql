@@ -75,3 +75,6 @@ SELECT
 FROM final
 WHERE
   fact__loaded_at BETWEEN @start_ts AND @end_ts
+;
+
+@export_to_parquet(@this_model, "data")

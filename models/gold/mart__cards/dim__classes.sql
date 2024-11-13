@@ -7,3 +7,6 @@ MODEL (
 SELECT
   *
 FROM gold.common.common_dim__classes
+;
+
+@export_to_parquet(@this_model, "data")
