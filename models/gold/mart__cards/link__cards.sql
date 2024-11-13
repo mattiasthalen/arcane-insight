@@ -63,7 +63,6 @@ SELECT
   *
 FROM final
 WHERE
-  link__loaded_at BETWEEN @start_ts AND @end_ts
-  ;
+  link__loaded_at BETWEEN @start_ts AND @end_ts;
 
 @export_to_parquet(@this_model, "data")
