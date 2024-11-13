@@ -2,9 +2,6 @@
 MODEL (
   name silver.staging.stg__hearthstone__classes,
   kind FULL
-  -- kind INCREMENTAL_BY_TIME_RANGE (
-  --   time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
-  -- )
 );
 
 WITH source AS (
@@ -49,6 +46,4 @@ WITH source AS (
 )
 SELECT
   *
-FROM final
--- WHERE
-  -- _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts
+FROM final /* WHERE */ /* _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts */

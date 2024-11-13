@@ -14,11 +14,11 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.link__cards
-  ), dim__cards AS (
+), dim__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__cards
-  ), dim__classes AS (
+), dim__classes AS (
   SELECT
     *
   FROM gold.mart__cards.dim__classes
@@ -72,9 +72,9 @@ WITH fact__cards AS (
   FROM fact__cards
   LEFT JOIN link__cards
     ON fact__cards.fact_record_hk = link__cards.fact_record_hk
-    LEFT JOIN dim__cards
+  LEFT JOIN dim__cards
     ON link__cards.card_pit_hk = dim__cards.card_pit_hk
-    LEFT JOIN dim__classes
+  LEFT JOIN dim__classes
     ON fact__cards.class_pit_hk = dim__classes.class_pit_hk
 )
 SELECT

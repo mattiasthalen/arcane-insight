@@ -11,10 +11,9 @@ WITH source AS (
     *
   FROM silver.staging.stg__hearthstone__cards
 ), dim__classes AS (
-SELECT
+  SELECT
     *
   FROM gold.common.common_dim__classes
-
 ), fact AS (
   SELECT
     card_relations_hk, /* Unique identifier for the card relations */
@@ -43,16 +42,14 @@ SELECT
     _sqlmesh__valid_to AS fact__valid_to, /* Timestamp when the record is valid to */
     _sqlmesh__is_current_record AS fact__is_current_record /* Flag for the current record */
   FROM source
-), dimensions as (
-    select
-        dim__classes.class_pit_hk, /* Unique identifier in time for the class */
-        fact.*
-        
-    from fact
-    
-    left join dim__classes
-        on fact.class_id = dim__classes.class_id
-        and fact.fact__valid_from between dim__classes.class__valid_from and dim__classes.class__valid_to
+), dimensions AS (
+  SELECT
+    dim__classes.class_pit_hk, /* Unique identifier in time for the class */
+    fact.*
+  FROM fact
+  LEFT JOIN dim__classes
+    ON fact.class_id = dim__classes.class_id
+    AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
 ), final AS (
   SELECT
     'cards' AS fact_name, /* Name of the fact table */
