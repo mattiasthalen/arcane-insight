@@ -38,7 +38,7 @@ WITH source AS (
 ), hash_keys AS (
   SELECT
     *,
-    @generate_surrogate_key__sha_256(card_id, _sqlmesh__valid_from) AS class_pit_hk
+    @generate_surrogate_key__sha_256(class_id, _sqlmesh__valid_from) AS class_pit_hk
   FROM casted
 ), final AS (
   SELECT
