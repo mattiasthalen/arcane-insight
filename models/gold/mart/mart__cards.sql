@@ -14,14 +14,18 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.link__cards
-), dim__cards AS (
+  ), dim__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__cards
+  ), dim__classes AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__classes
 ), final AS (
   SELECT
     fact__cards.fact_name,
-    fact__cards.fact_id,
+    fact__cards.fact_record_hk,
     dim__cards.card__armor,
     dim__cards.card__artist_name,
     dim__cards.card__attack,
@@ -43,6 +47,15 @@ WITH fact__cards AS (
     dim__cards.card__valid_from,
     dim__cards.card__valid_to,
     dim__cards.card__is_current_record,
+    dim__classes.class_slug,
+    dim__classes.class_name,
+    dim__classes.class__extracted_at,
+    dim__classes.class__loaded_at,
+    dim__classes.class__hash_diff,
+    dim__classes.class__version,
+    dim__classes.class__valid_from,
+    dim__classes.class__valid_to,
+    dim__classes.class__is_current_record,
     fact__cards.is_zilliax_cosmetic_module,
     fact__cards.is_zilliax_functional_module,
     fact__cards.mana_cost,
@@ -58,9 +71,11 @@ WITH fact__cards AS (
     fact__cards.fact__is_current_record
   FROM fact__cards
   LEFT JOIN link__cards
-    ON fact__cards.card_relations_hk = link__cards.card_relations_hk
-  LEFT JOIN dim__cards
+    ON fact__cards.fact_record_hk = link__cards.fact_record_hk
+    LEFT JOIN dim__cards
     ON link__cards.card_pit_hk = dim__cards.card_pit_hk
+    LEFT JOIN dim__classes
+    ON fact__cards.class_pit_hk = dim__classes.class_pit_hk
 )
 SELECT
   *

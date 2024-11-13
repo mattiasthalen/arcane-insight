@@ -16,7 +16,7 @@ WITH fact__cards AS (
   FROM gold.mart__cards.dim__cards
 ), fact__unnested AS (
   SELECT
-    card_relations_hk,
+    fact_record_hk,
     fact__extracted_at,
     fact__loaded_at,
     fact__valid_from,
@@ -32,11 +32,11 @@ WITH fact__cards AS (
   FROM fact__unnested
   UNPIVOT(card_id FOR card_relation IN (card_id, copy_of_card_id, parent_card_id, child_card_id))
   ORDER BY
-    card_relations_hk,
+    fact_record_hk,
     card_id
 ), fact__aggregated AS (
   SELECT
-    card_relations_hk,
+    fact_record_hk,
     card_relation,
     card_id,
     MAX(fact__extracted_at) AS link__extracted_at,
@@ -47,7 +47,7 @@ WITH fact__cards AS (
   GROUP BY ALL
 ), final AS (
   SELECT
-    fact__aggregated.card_relations_hk, /* Unique identifier for the card relations */
+    fact__aggregated.fact_record_hk, /* Unique identifier for the fact record */
     fact__aggregated.card_relation, /* Type of relationship */
     dim__cards.card_pit_hk, /* Unique identifier in time for the card */
     fact__aggregated.link__extracted_at, /* Time when the link was extracted */
