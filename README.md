@@ -6,26 +6,26 @@ Focused on card statistics and attributes, this project reveals detailed insight
 ### Bronze
 ```mermaid
 erDiagram
-    bronze.raw.raw__hearthstone__cards }o--|| bronze.raw.raw__hearthstone__cards: "parentId > id"
-    bronze.raw.raw__hearthstone__cards }o--|| bronze.raw.raw__hearthstone__cards: "childIds > id"
-    bronze.raw.raw__hearthstone__cards||--|| bronze.raw.raw__hearthstone__cards: "copyOfCardId > id"
+    raw__hearthstone__cards }o--|| raw__hearthstone__cards: "parentId > id"
+    raw__hearthstone__cards }o--|| raw__hearthstone__cards: "childIds > id"
+    raw__hearthstone__cards||--|| raw__hearthstone__cards: "copyOfCardId > id"
     
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__cardbacks: "id > id"
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__classes: "classId > id"
-    bronze.raw.raw__hearthstone__cards }o--o{ bronze.raw.raw__hearthstone__classes: "multiClassIds > id"
-    bronze.raw.raw__hearthstone__cards }o--o{ bronze.raw.raw__hearthstone__keywords: "keywordIds > id"
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__minion_types: "minionTypeId > id"
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__rarities: "rarityId > id"
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__sets: "cardSetId > id"
-    bronze.raw.raw__hearthstone__cards||--o{ bronze.raw.raw__hearthstone__types: "cardTypeId > id"
-    bronze.raw.raw__hearthstone__cards }o--o{ bronze.raw.raw__hearthstone__types: "multiTypeIds > id"
-    bronze.raw.raw__hearthstone__sets }o--o{ bronze.raw.raw__hearthstone__set_groups: "id > cardSets"
+    raw__hearthstone__cards||--o{ raw__hearthstone__cardbacks: "id > id"
+    raw__hearthstone__cards||--o{ raw__hearthstone__classes: "classId > id"
+    raw__hearthstone__cards }o--o{ raw__hearthstone__classes: "multiClassIds > id"
+    raw__hearthstone__cards }o--o{ raw__hearthstone__keywords: "keywordIds > id"
+    raw__hearthstone__cards||--o{ raw__hearthstone__minion_types: "minionTypeId > id"
+    raw__hearthstone__cards||--o{ raw__hearthstone__rarities: "rarityId > id"
+    raw__hearthstone__cards||--o{ raw__hearthstone__sets: "cardSetId > id"
+    raw__hearthstone__cards||--o{ raw__hearthstone__types: "cardTypeId > id"
+    raw__hearthstone__cards }o--o{ raw__hearthstone__types: "multiTypeIds > id"
+    raw__hearthstone__sets }o--o{ raw__hearthstone__set_groups: "id > cardSets"
     
-    bronze.raw.raw__hearthstone__classes }o--|| bronze.raw.raw__hearthstone__cards: "cardId > id"
-    bronze.raw.raw__hearthstone__classes }o--|| bronze.raw.raw__hearthstone__cards: "heroPowerCardId > id"
-    bronze.raw.raw__hearthstone__classes }o--o{ bronze.raw.raw__hearthstone__cards: "alternateHeroCardIds > id"
+    raw__hearthstone__classes }o--|| raw__hearthstone__cards: "cardId > id"
+    raw__hearthstone__classes }o--|| raw__hearthstone__cards: "heroPowerCardId > id"
+    raw__hearthstone__classes }o--o{ raw__hearthstone__cards: "alternateHeroCardIds > id"
 
-    bronze.raw.raw__hearthstone__cardbacks {
+    raw__hearthstone__cardbacks {
         string id PK
         string cardbackCategory
         string text
@@ -35,7 +35,7 @@ erDiagram
         string image
     }
 
-    bronze.raw.raw__hearthstone__cards {
+    raw__hearthstone__cards {
         string id PK
         string armor
         string artistName
@@ -71,7 +71,7 @@ erDiagram
         string touristClassId
     }
 
-    bronze.raw.raw__hearthstone__classes {
+    raw__hearthstone__classes {
         string id PK
         string slug
         string name
@@ -80,7 +80,7 @@ erDiagram
         string alternateHeroCardIds FK
     }
 
-    bronze.raw.raw__hearthstone__keywords {
+    raw__hearthstone__keywords {
         string id PK
         string slug
         string name
@@ -89,14 +89,14 @@ erDiagram
         string gameModes
     }
 
-    bronze.raw.raw__hearthstone__minion_types {
+    raw__hearthstone__minion_types {
         string id PK
         string slug
         string name
         string gameModes
     }
 
-    bronze.raw.raw__hearthstone__rarities {
+    raw__hearthstone__rarities {
         string id PK
         string slug
         string name
@@ -104,7 +104,7 @@ erDiagram
         string dustValue
     }
 
-    bronze.raw.raw__hearthstone__set_groups {
+    raw__hearthstone__set_groups {
         string slug PK
         string year
         string svg
@@ -115,7 +115,7 @@ erDiagram
         string yearRange
     }
 
-    bronze.raw.raw__hearthstone__sets {
+    raw__hearthstone__sets {
         string id PK
         string name
         string slug
@@ -128,7 +128,7 @@ erDiagram
         string aliasSetIds
     }
 
-    bronze.raw.raw__hearthstone__types {
+    raw__hearthstone__types {
         string id PK
         string slug
         string name
