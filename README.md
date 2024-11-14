@@ -37,14 +37,19 @@ erDiagram
 
     raw__hearthstone__cards {
         string id PK
-        string armor
-        string artistName
-        string attack
-        string bannedFromSideboard
         string cardSetId FK
         string cardTypeId FK
         string childIds FK
         string classId FK
+        string keywordIds FK
+        string minionTypeId FK
+        string multiClassIds FK
+        string multiTypeIds FK
+        string rarityId FK
+        string armor
+        string artistName
+        string attack
+        string bannedFromSideboard
         string collectible
         string copyOfCardId
         string cropImage
@@ -55,15 +60,10 @@ erDiagram
         string imageGold
         string isZilliaxCosmeticModule
         string isZilliaxFunctionalModule
-        string keywordIds FK
         string manaCost
         string maxSideboardCards
-        string minionTypeId FK
-        string multiClassIds FK
-        string multiTypeIds FK
         string name
         string parentId
-        string rarityId FK
         string runeCost
         string slug
         string spellSchoolId
@@ -73,11 +73,11 @@ erDiagram
 
     raw__hearthstone__classes {
         string id PK
-        string slug
-        string name
         string cardId FK
         string heroPowerCardId FK
         string alternateHeroCardIds FK
+        string slug
+        string name
     }
 
     raw__hearthstone__keywords {
@@ -106,9 +106,9 @@ erDiagram
 
     raw__hearthstone__set_groups {
         string slug PK
+        string cardSets FK
         string year
         string svg
-        string cardSets FK
         string name
         string standard
         string icon
