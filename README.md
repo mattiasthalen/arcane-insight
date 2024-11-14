@@ -36,6 +36,7 @@ erDiagram
 erDiagram
     fact__cards }|--|| dim__cards: "card_pit_hk"
     fact__cards }|--|| dim__classes: "class_pit_hk"
+    fact__cards }|--|| dim__types: "type_pit_hk"
     
     fact__cards ||--|{ link__related_cards: "fact_record_hk"
     link__related_cards }|--|| dim__related_cards: "related_card_pit_hk"
