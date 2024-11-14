@@ -135,3 +135,94 @@ erDiagram
         string gameModes
     }
 ```
+
+### Gold
+#### mart__cards
+```mermaid
+erDiagram
+    fact__cards ||--o{ link__cards: "fact_record_hk > fact_record_hk"
+    link__cards }o--|| dim__cards: "card_pit_hk > card_pit_hk"
+    
+    fact__cards }o--|| dim__classes: "class_pit_hk > class_pit_hk"
+
+    fact__cards {
+        varbinary fact_record_hk PK
+        varbinary card_relations_hk FK
+        int card_set_id FK
+        int card_type_id FK
+        int class_id FK
+        varbinary class_pit_hk FK
+        array keyword_ids FK
+        int minion_type_id FK
+        array multi_class_ids FK
+        array multi_type_ids FK
+        int rarity_id FK
+        int spell_school_id FK
+        int tourist_class_id FK
+        string fact_name
+        struct card_relations
+        boolean is_zilliax_cosmetic_module
+        boolean is_zilliax_functional_module
+        int mana_cost
+        int blood_rune_cost
+        int frost_rune_cost
+        int unholy_rune_cost
+        int total_rune_cost
+        timestamp fact__extracted_at
+        timestamp fact__loaded_at
+        int fact__version
+        timestamp fact__valid_from
+        timestamp fact__valid_to
+        boolean fact__is_current_record
+    }
+    
+    link__cards {
+        varbinary fact_record_hk FK
+        varbinary card_pit_hk FK
+        text card_relation
+        timestamp link__extracted_at
+        timestamp link__loaded_at
+        timestamp link__valid_from
+        timestamp link__valid_to
+    }
+    
+    dim__cards {
+        varbinary card_pit_hk PK
+        int card_id
+        int card__armor
+        string card__artist_name
+        int card__attack
+        boolean card__banned_from_sideboard
+        boolean card__collectible
+        string card__crop_image
+        string card__durability
+        string card__flavor_text
+        int card__health
+        string card__image
+        string card__image_gold
+        string card__name
+        string card__slug
+        string card__text
+        timestamp card__extracted_at
+        timestamp card__loaded_at
+        varbinary card__hash_diff
+        int card__version
+        timestamp card__valid_from
+        timestamp card__valid_to
+        boolean card__is_current_record
+    }
+    
+    dim__classes {
+        varbinary class_pit_hk
+        int class_id
+        text class_slug
+        text class_name
+        timestamp class__extracted_at
+        timestamp class__loaded_at
+        varbinary class__hash_diff
+        int class__version
+        timestamp class__valid_from
+        timestamp class__valid_to
+        boolean class__is_current_record
+    }
+```
