@@ -10,12 +10,17 @@ WITH source AS (
   SELECT
     *
   FROM silver.staging.stg__hearthstone__cards
+), dim__cards AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__cards
 ), dim__classes AS (
   SELECT
     *
   FROM gold.common.common_dim__classes
 ), fact AS (
   SELECT
+    card_id, /* Unique identifier for the card */
     card_relations_hk, /* Unique identifier for the card relations */
     card_set_id, /* Unique identifier for the card set */
     card_type_id, /* Unique identifier for the card type */
@@ -44,12 +49,16 @@ WITH source AS (
   FROM source
 ), dimensions AS (
   SELECT
+    dim__cards.card_pit_hk, /* Unique identifier in time for the card */
     dim__classes.class_pit_hk, /* Unique identifier in time for the class */
     fact.*
   FROM fact
-  LEFT JOIN dim__classes
-    ON fact.class_id = dim__classes.class_id
-    AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
+  LEFT JOIN dim__cards
+    ON fact.card_id = dim__cards.card_id
+    AND fact.fact__valid_from BETWEEN dim__cards.card__valid_from AND dim__cards.card__valid_to
+    LEFT JOIN dim__classes
+      ON fact.class_id = dim__classes.class_id
+      AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
 ), final AS (
   SELECT
     'cards' AS fact_name, /* Name of the fact table */
@@ -58,6 +67,7 @@ WITH source AS (
       card_relations_hk,
       card_set_id,
       card_type_id,
+      card_pit_hk,
       class_pit_hk,
       keyword_ids,
       minion_type_id,
