@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 from sqlmesh import ExecutionContext, model
 from sqlmesh.core.model.kind import ModelKindName
 
-load_dotenv()
-
 columns={
     "slug": "text",
     "id": "text",
@@ -37,6 +35,8 @@ def execute(
 ) -> t.Generator[pd.DataFrame, None, None]:
     
     # Authorization
+    load_dotenv()
+    
     token_url = "https://oauth.battle.net/token"
     auth_dict = {
         "grant_type": "client_credentials",

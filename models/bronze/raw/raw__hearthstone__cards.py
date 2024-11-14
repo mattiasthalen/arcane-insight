@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 from sqlmesh import ExecutionContext, model
 from sqlmesh.core.model.kind import ModelKindName
 
-load_dotenv()
-
 columns={
     "armor": "text",
     "artistName": "text",
@@ -66,14 +64,16 @@ def execute(
 ) -> t.Generator[pd.DataFrame, None, None]:
     
     # Authorization
+    load_dotenv()
+    
     token_url = "https://oauth.battle.net/token"
-    data = {
+    auth_dict = {
         "grant_type": "client_credentials",
         "client_id": os.getenv("BATTLE_NET__CLIENT_ID"),
         "client_secret": os.getenv("BATTLE_NET__CLIENT_SECRET"),
     }
     
-    token_response = requests.post(token_url, data=data)
+    token_response = requests.post(token_url, data=auth_dict)
     token_response.raise_for_status()
     access_token = token_response.json().get("access_token")
     
