@@ -140,10 +140,12 @@ erDiagram
 #### mart__cards
 ```mermaid
 erDiagram
-    fact__cards ||--o{ link__cards: "fact_record_hk > fact_record_hk"
-    link__cards }o--|| dim__cards: "card_pit_hk > card_pit_hk"
-    
+    fact__cards }o--|| dim__cards: "card_pit_hk > card_pit_hk"
     fact__cards }o--|| dim__classes: "class_pit_hk > class_pit_hk"
+    
+    fact__cards ||--o{ link__related_cards: "fact_record_hk > fact_record_hk"
+    link__related_cards }o--|| dim__related_cards: "related_card_pit_hk > related_card_pit_hk"
+    
 
     fact__cards {
         varbinary fact_record_hk PK
@@ -176,16 +178,6 @@ erDiagram
         boolean fact__is_current_record
     }
     
-    link__cards {
-        varbinary fact_record_hk FK
-        varbinary card_pit_hk FK
-        text card_relation
-        timestamp link__extracted_at
-        timestamp link__loaded_at
-        timestamp link__valid_from
-        timestamp link__valid_to
-    }
-    
     dim__cards {
         varbinary card_pit_hk PK
         int card_id
@@ -210,6 +202,42 @@ erDiagram
         timestamp card__valid_from
         timestamp card__valid_to
         boolean card__is_current_record
+    }
+    
+    link__related_cards {
+        varbinary fact_record_hk FK
+        varbinary related_card_pit_hk FK
+        text card_relation
+        timestamp link__extracted_at
+        timestamp link__loaded_at
+        timestamp link__valid_from
+        timestamp link__valid_to
+    }
+    
+    dim__related_cards {
+        varbinary related_card_pit_hk PK
+        int related_card_id
+        int related_card__armor
+        string related_card__artist_name
+        int related_card__attack
+        boolean related_card__banned_from_sideboard
+        boolean related_card__collectible
+        string related_card__crop_image
+        string related_card__durability
+        string related_card__flavor_text
+        int related_card__health
+        string related_card__image
+        string related_card__image_gold
+        string related_card__name
+        string related_card__slug
+        string related_card__text
+        timestamp related_card__extracted_at
+        timestamp related_card__loaded_at
+        varbinary related_card__hash_diff
+        int related_card__version
+        timestamp related_card__valid_from
+        timestamp related_card__valid_to
+        boolean related_card__is_current_record
     }
     
     dim__classes {
