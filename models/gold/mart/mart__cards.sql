@@ -10,14 +10,18 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.fact__cards
-), link__cards AS (
+), link__related_cards AS (
   SELECT
     *
-  FROM gold.mart__cards.link__cards
+  FROM gold.mart__cards.link__related_cards
 ), dim__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__cards
+), dim__related_cards AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__related_cards
 ), dim__classes AS (
   SELECT
     *
@@ -47,6 +51,27 @@ WITH fact__cards AS (
     dim__cards.card__valid_from,
     dim__cards.card__valid_to,
     dim__cards.card__is_current_record,
+    dim__related_cards.related_card__armor,
+    dim__related_cards.related_card__artist_name,
+    dim__related_cards.related_card__attack,
+    dim__related_cards.related_card__banned_from_sideboard,
+    dim__related_cards.related_card__collectible,
+    dim__related_cards.related_card__crop_image,
+    dim__related_cards.related_card__durability,
+    dim__related_cards.related_card__flavor_text,
+    dim__related_cards.related_card__health,
+    dim__related_cards.related_card__image,
+    dim__related_cards.related_card__image_gold,
+    dim__related_cards.related_card__name,
+    dim__related_cards.related_card__slug,
+    dim__related_cards.related_card__text,
+    dim__related_cards.related_card__extracted_at,
+    dim__related_cards.related_card__loaded_at,
+    dim__related_cards.related_card__hash_diff,
+    dim__related_cards.related_card__version,
+    dim__related_cards.related_card__valid_from,
+    dim__related_cards.related_card__valid_to,
+    dim__related_cards.related_card__is_current_record,
     dim__classes.class_slug,
     dim__classes.class_name,
     dim__classes.class__extracted_at,
@@ -70,10 +95,12 @@ WITH fact__cards AS (
     fact__cards.fact__valid_to,
     fact__cards.fact__is_current_record
   FROM fact__cards
-  LEFT JOIN link__cards
-    ON fact__cards.fact_record_hk = link__cards.fact_record_hk
   LEFT JOIN dim__cards
-    ON link__cards.card_pit_hk = dim__cards.card_pit_hk
+    ON fact__cards.card_pit_hk = dim__cards.card_pit_hk
+  LEFT JOIN link__related_cards
+    ON fact__cards.fact_record_hk = link__related_cards.fact_record_hk
+  LEFT JOIN dim__related_cards
+    ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
   LEFT JOIN dim__classes
     ON fact__cards.class_pit_hk = dim__classes.class_pit_hk
 )
