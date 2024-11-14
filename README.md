@@ -7,6 +7,7 @@ Focused on card statistics and attributes, this project reveals detailed insight
 
 ## ERDs
 ### Bronze
+#### bronze.raw.*
 ```mermaid
 erDiagram
     raw__hearthstone__cards }|--|| raw__hearthstone__cards: "parentId > id"
@@ -30,7 +31,7 @@ erDiagram
 ```
 
 ### Gold
-#### mart__cards
+#### gold.mart__cards.*
 ```mermaid
 erDiagram
     fact__cards }|--|| dim__cards: "card_pit_hk"
