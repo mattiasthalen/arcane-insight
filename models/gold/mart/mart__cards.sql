@@ -26,6 +26,10 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__classes
+), dim__types AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__types
 ), final AS (
   SELECT
     fact__cards.fact_name,
@@ -81,6 +85,15 @@ WITH fact__cards AS (
     dim__classes.class__valid_from,
     dim__classes.class__valid_to,
     dim__classes.class__is_current_record,
+    dim__types.type_slug,
+    dim__types.type_name,
+    dim__types.type__extracted_at,
+    dim__types.type__loaded_at,
+    dim__types.type__hash_diff,
+    dim__types.type__version,
+    dim__types.type__valid_from,
+    dim__types.type__valid_to,
+    dim__types.type__is_current_record,
     fact__cards.is_zilliax_cosmetic_module,
     fact__cards.is_zilliax_functional_module,
     fact__cards.mana_cost,
@@ -103,6 +116,8 @@ WITH fact__cards AS (
     ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
   LEFT JOIN dim__classes
     ON fact__cards.class_pit_hk = dim__classes.class_pit_hk
+  LEFT JOIN dim__types
+    ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 )
 SELECT
   *
