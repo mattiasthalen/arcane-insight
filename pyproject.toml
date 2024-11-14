@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arcane-insight"
 version = "0.1.0"
-description = "Arcane Insight is a data analytics project designed to harness the power of Apache Iceberg, Spark, and SQLMesh to collect, transform, and analyze data from Blizzard’s Hearthstone API. Focused on card statistics and attributes, this project reveals detailed insights into card mechanics, strengths, and trends to support BI and strategic analysis."
+description = "Arcane Insight is a data analytics project designed to harness the power of SQLMesh & DuckDB to collect, transform, and analyze data from Blizzard’s Hearthstone API. Focused on card statistics and attributes, this project reveals detailed insights into card mechanics, strengths, and trends to support BI and strategic analysis."
 authors = ["Mattias Thalén <bitter-polders0x@icloud.com>"]
 license = "GNU General Public License v3.0"
 readme = "README.md"
