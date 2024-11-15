@@ -34,6 +34,10 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__minion_types
+), dim__rarities AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__rarities
 ), final AS (
   SELECT
     fact__cards.fact_name,
@@ -107,6 +111,17 @@ WITH fact__cards AS (
     dim__minion_types.minion_type__valid_from,
     dim__minion_types.minion_type__valid_to,
     dim__minion_types.minion_type__is_current_record,
+    dim__rarities.rarity_slug,
+    dim__rarities.rarity_name,
+    dim__rarities.rarity_crafting_cost,
+    dim__rarities.rarity_dust_value,
+    dim__rarities.rarity__extracted_at,
+    dim__rarities.rarity__loaded_at,
+    dim__rarities.rarity__hash_diff,
+    dim__rarities.rarity__version,
+    dim__rarities.rarity__valid_from,
+    dim__rarities.rarity__valid_to,
+    dim__rarities.rarity__is_current_record,
     fact__cards.is_zilliax_cosmetic_module,
     fact__cards.is_zilliax_functional_module,
     fact__cards.mana_cost,
@@ -133,6 +148,8 @@ WITH fact__cards AS (
     ON fact__cards.type_pit_hk = dim__types.type_pit_hk
   LEFT JOIN dim__minion_types
     ON fact__cards.minion_type_pit_hk = dim__minion_types.minion_type_pit_hk
+  LEFT JOIN dim__rarities
+    ON fact__cards.rarity_pit_hk = dim__rarities.rarity_pit_hk
 )
 SELECT
   *

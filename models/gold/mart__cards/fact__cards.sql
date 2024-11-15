@@ -26,6 +26,10 @@ WITH source AS (
   SELECT
     *
   FROM gold.common.common_dim__minion_types
+), dim__rarities AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__rarities
 ), fact AS (
   SELECT
     card_id, /* Unique identifier for the card */
@@ -61,6 +65,7 @@ WITH source AS (
     dim__classes.class_pit_hk, /* Unique identifier in time for the class */
     dim__types.type_pit_hk, /* Unique identifier in time for the type */
     dim__minion_types.minion_type_pit_hk, /* Unique identifier in time for the minion type */
+    dim__rarities.rarity_pit_hk, /* Unique identifier in time for the rarity */
     fact.*
   FROM fact
   LEFT JOIN dim__cards
@@ -75,6 +80,9 @@ WITH source AS (
   LEFT JOIN dim__minion_types
     ON fact.minion_type_id = dim__minion_types.minion_type_id
     AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
+  LEFT JOIN dim__rarities
+    ON fact.rarity_id = dim__rarities.rarity_id
+    AND fact.fact__valid_from BETWEEN dim__rarities.rarity__valid_from AND dim__rarities.rarity__valid_to
 ), final AS (
   SELECT
     'cards' AS fact_name, /* Name of the fact table */
@@ -87,10 +95,10 @@ WITH source AS (
       class_pit_hk,
       type_pit_hk,
       minion_type_pit_hk,
+      rarity_pit_hk,
       keyword_ids,
       multi_class_ids,
       multi_type_ids,
-      rarity_id,
       spell_school_id,
       tourist_class_id
     ) AS fact_record_hk, /* Unique identifier for the fact table */
