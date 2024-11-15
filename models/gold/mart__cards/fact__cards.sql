@@ -6,42 +6,9 @@ MODEL (
   )
 );
 
-WITH source AS (
-  SELECT
-    *
-  FROM silver.staging.stg__hearthstone__cards
-), dim__cardbacks AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__cardbacks
-), dim__cards AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__cards
-), dim__classes AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__classes
-), dim__minion_types AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__minion_types
-), dim__rarities AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__rarities
-), dim__sets AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__sets
-), dim__types AS (
-  SELECT
-    *
-  FROM gold.common.common_dim__types
-), fact AS (
+WITH fact AS (
   SELECT
     card_id, /* Unique identifier for the card */
-    card_relations_hk, /* Unique identifier for the card relations */
     card_set_id, /* Unique identifier for the card set */
     card_type_id, /* Unique identifier for the card type */
     class_id, /* Unique identifier for the class */
@@ -66,7 +33,7 @@ WITH source AS (
     _sqlmesh__valid_from AS fact__valid_from, /* Timestamp when the record is valid from */
     _sqlmesh__valid_to AS fact__valid_to, /* Timestamp when the record is valid to */
     _sqlmesh__is_current_record AS fact__is_current_record /* Flag for the current record */
-  FROM source
+  FROM silver.staging.stg__hearthstone__cards
 ), dimensions AS (
   SELECT
     dim__cardbacks.cardback_pit_hk, /* Unique identifier in time for the cardback */
@@ -75,32 +42,32 @@ WITH source AS (
     dim__minion_types.minion_type_pit_hk, /* Unique identifier in time for the minion type */
     dim__rarities.rarity_pit_hk, /* Unique identifier in time for the rarity */
     dim__sets.set_pit_hk, /* Unique identifier in time for the set */
-    dim__tourist_classes.class_pit_hk as tourist_class_pit_hk, /* Unique identifier in time for the tourist class */
+    dim__tourist_classes.tourist_class_pit_hk, /* Unique identifier in time for the tourist class */
     dim__types.type_pit_hk, /* Unique identifier in time for the type */
     fact.*
   FROM fact
-  LEFT JOIN dim__cardbacks
+  LEFT JOIN gold.mart__cards.dim__cardbacks
     ON fact.card_id = dim__cardbacks.card_id
     AND fact.fact__valid_from BETWEEN dim__cardbacks.cardback__valid_from AND dim__cardbacks.cardback__valid_to
-  LEFT JOIN dim__cards
+  LEFT JOIN gold.mart__cards.dim__cards
     ON fact.card_id = dim__cards.card_id
     AND fact.fact__valid_from BETWEEN dim__cards.card__valid_from AND dim__cards.card__valid_to
-  LEFT JOIN dim__classes
+  LEFT JOIN gold.mart__cards.dim__classes
     ON fact.class_id = dim__classes.class_id
     AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
-  LEFT JOIN dim__classes dim__tourist_classes
-    ON fact.tourist_class_id = dim__tourist_classes.class_id
-    AND fact.fact__valid_from BETWEEN dim__tourist_classes.class__valid_from AND dim__tourist_classes.class__valid_to
-  LEFT JOIN dim__minion_types
+  LEFT JOIN gold.mart__cards.dim__tourist_classes
+    ON fact.tourist_class_id = dim__tourist_classes.tourist_class_id
+    AND fact.fact__valid_from BETWEEN dim__tourist_classes.tourist_class__valid_from AND dim__tourist_classes.tourist_class__valid_to
+  LEFT JOIN gold.mart__cards.dim__minion_types
     ON fact.minion_type_id = dim__minion_types.minion_type_id
     AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
-  LEFT JOIN dim__rarities
+  LEFT JOIN gold.mart__cards.dim__rarities
     ON fact.rarity_id = dim__rarities.rarity_id
     AND fact.fact__valid_from BETWEEN dim__rarities.rarity__valid_from AND dim__rarities.rarity__valid_to
-  LEFT JOIN dim__sets
+  LEFT JOIN gold.mart__cards.dim__sets
     ON fact.card_set_id = dim__sets.set_id
     AND fact.fact__valid_from BETWEEN dim__sets.set__valid_from AND dim__sets.set__valid_to
-  LEFT JOIN dim__types
+  LEFT JOIN gold.mart__cards.dim__types
     ON fact.card_type_id = dim__types.type_id
     AND fact.fact__valid_from BETWEEN dim__types.type__valid_from AND dim__types.type__valid_to
 ), final AS (
@@ -108,9 +75,6 @@ WITH source AS (
     'cards' AS fact_name, /* Name of the fact table */
     @generate_surrogate_key__sha_256(
       fact_name,
-      card_relations_hk,
-      card_set_id,
-      card_type_id,
       cardback_pit_hk,
       card_pit_hk,
       class_pit_hk,
@@ -119,6 +83,7 @@ WITH source AS (
       set_pit_hk,
       tourist_class_pit_hk,
       type_pit_hk,
+      card_relations,
       keyword_ids,
       multi_class_ids,
       multi_type_ids,
