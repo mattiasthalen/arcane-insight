@@ -187,7 +187,7 @@ WITH fact__cards AS (
   LEFT JOIN dim__related_cards
     ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
   LEFT JOIN dim__sets
-  ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
+    ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
   LEFT JOIN dim__types
     ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 )

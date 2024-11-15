@@ -21,7 +21,7 @@ WITH source AS (
     id::INT AS set_id,
     name::TEXT AS name,
     slug::TEXT AS slug,
-    hyped::BOOL AS hyped,
+    hyped::BOOLEAN AS hyped,
     type::TEXT AS type,
     collectibleCount::INT AS collectible_count,
     collectibleRevealedCount::INT AS collectible_revealed_count,
