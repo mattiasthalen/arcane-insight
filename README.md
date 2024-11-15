@@ -48,6 +48,9 @@ erDiagram
     fact__cards ||--|{ link__related_classes: "fact_record_hk"
     link__related_classes }|--|| dim__related_classes: "related_class_pit_hk"
     
+    fact__cards ||--|{ link__related_types: "fact_record_hk"
+    link__related_types }|--|| dim__related_types: "related_type_pit_hk"
+    
     fact__cards ||--|{ link__keywords: "fact_record_hk"
     link__keywords }|--|| dim__keywords: "keyword_pit_hk"
 ```
