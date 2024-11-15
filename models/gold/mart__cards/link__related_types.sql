@@ -21,7 +21,7 @@ WITH fact__cards AS (
     fact__loaded_at,
     fact__valid_from,
     fact__valid_to,
-    UNNEST(multi_class_ids) AS related_type_id
+    UNNEST(multi_type_ids) AS related_type_id
   FROM fact__cards
 ), fact__aggregated AS (
   SELECT
