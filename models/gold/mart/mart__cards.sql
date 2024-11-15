@@ -14,6 +14,10 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.link__related_cards
+), dim__cardbacks AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__cardbacks
 ), dim__cards AS (
   SELECT
     *
@@ -26,10 +30,6 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__classes
-), dim__types AS (
-  SELECT
-    *
-  FROM gold.mart__cards.dim__types
 ), dim__minion_types AS (
   SELECT
     *
@@ -38,10 +38,27 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__rarities
+), dim__types AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__types
 ), final AS (
   SELECT
     fact__cards.fact_name,
     fact__cards.fact_record_hk,
+    dim__cardbacks.cardback_category,
+    dim__cardbacks.cardback__text,
+    dim__cardbacks.cardback__name,
+    dim__cardbacks.cardback__sort_category,
+    dim__cardbacks.cardback__slug,
+    dim__cardbacks.cardback__image_url,
+    dim__cardbacks.cardback__extracted_at,
+    dim__cardbacks.cardback__loaded_at,
+    dim__cardbacks.cardback__hash_diff,
+    dim__cardbacks.cardback__version,
+    dim__cardbacks.cardback__valid_from,
+    dim__cardbacks.cardback__valid_to,
+    dim__cardbacks.cardback__is_current_record,
     dim__cards.card__armor,
     dim__cards.card__artist_name,
     dim__cards.card__attack,
@@ -63,6 +80,35 @@ WITH fact__cards AS (
     dim__cards.card__valid_from,
     dim__cards.card__valid_to,
     dim__cards.card__is_current_record,
+    dim__classes.class_slug,
+    dim__classes.class_name,
+    dim__classes.class__extracted_at,
+    dim__classes.class__loaded_at,
+    dim__classes.class__hash_diff,
+    dim__classes.class__version,
+    dim__classes.class__valid_from,
+    dim__classes.class__valid_to,
+    dim__classes.class__is_current_record,
+    dim__minion_types.minion_type_slug,
+    dim__minion_types.minion_type_name,
+    dim__minion_types.minion_type__extracted_at,
+    dim__minion_types.minion_type__loaded_at,
+    dim__minion_types.minion_type__hash_diff,
+    dim__minion_types.minion_type__version,
+    dim__minion_types.minion_type__valid_from,
+    dim__minion_types.minion_type__valid_to,
+    dim__minion_types.minion_type__is_current_record,
+    dim__rarities.rarity_slug,
+    dim__rarities.rarity_name,
+    dim__rarities.rarity_crafting_cost,
+    dim__rarities.rarity_dust_value,
+    dim__rarities.rarity__extracted_at,
+    dim__rarities.rarity__loaded_at,
+    dim__rarities.rarity__hash_diff,
+    dim__rarities.rarity__version,
+    dim__rarities.rarity__valid_from,
+    dim__rarities.rarity__valid_to,
+    dim__rarities.rarity__is_current_record,
     dim__related_cards.related_card__armor,
     dim__related_cards.related_card__artist_name,
     dim__related_cards.related_card__attack,
@@ -84,15 +130,6 @@ WITH fact__cards AS (
     dim__related_cards.related_card__valid_from,
     dim__related_cards.related_card__valid_to,
     dim__related_cards.related_card__is_current_record,
-    dim__classes.class_slug,
-    dim__classes.class_name,
-    dim__classes.class__extracted_at,
-    dim__classes.class__loaded_at,
-    dim__classes.class__hash_diff,
-    dim__classes.class__version,
-    dim__classes.class__valid_from,
-    dim__classes.class__valid_to,
-    dim__classes.class__is_current_record,
     dim__types.type_slug,
     dim__types.type_name,
     dim__types.type__extracted_at,
@@ -102,26 +139,6 @@ WITH fact__cards AS (
     dim__types.type__valid_from,
     dim__types.type__valid_to,
     dim__types.type__is_current_record,
-    dim__minion_types.minion_type_slug,
-    dim__minion_types.minion_type_name,
-    dim__minion_types.minion_type__extracted_at,
-    dim__minion_types.minion_type__loaded_at,
-    dim__minion_types.minion_type__hash_diff,
-    dim__minion_types.minion_type__version,
-    dim__minion_types.minion_type__valid_from,
-    dim__minion_types.minion_type__valid_to,
-    dim__minion_types.minion_type__is_current_record,
-    dim__rarities.rarity_slug,
-    dim__rarities.rarity_name,
-    dim__rarities.rarity_crafting_cost,
-    dim__rarities.rarity_dust_value,
-    dim__rarities.rarity__extracted_at,
-    dim__rarities.rarity__loaded_at,
-    dim__rarities.rarity__hash_diff,
-    dim__rarities.rarity__version,
-    dim__rarities.rarity__valid_from,
-    dim__rarities.rarity__valid_to,
-    dim__rarities.rarity__is_current_record,
     fact__cards.is_zilliax_cosmetic_module,
     fact__cards.is_zilliax_functional_module,
     fact__cards.mana_cost,
@@ -136,20 +153,22 @@ WITH fact__cards AS (
     fact__cards.fact__valid_to,
     fact__cards.fact__is_current_record
   FROM fact__cards
+  LEFT JOIN dim__cardbacks
+    ON fact__cards.cardback_pit_hk = dim__cardbacks.cardback_pit_hk
   LEFT JOIN dim__cards
     ON fact__cards.card_pit_hk = dim__cards.card_pit_hk
-  LEFT JOIN link__related_cards
-    ON fact__cards.fact_record_hk = link__related_cards.fact_record_hk
-  LEFT JOIN dim__related_cards
-    ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
   LEFT JOIN dim__classes
     ON fact__cards.class_pit_hk = dim__classes.class_pit_hk
-  LEFT JOIN dim__types
-    ON fact__cards.type_pit_hk = dim__types.type_pit_hk
   LEFT JOIN dim__minion_types
     ON fact__cards.minion_type_pit_hk = dim__minion_types.minion_type_pit_hk
   LEFT JOIN dim__rarities
     ON fact__cards.rarity_pit_hk = dim__rarities.rarity_pit_hk
+  LEFT JOIN link__related_cards
+    ON fact__cards.fact_record_hk = link__related_cards.fact_record_hk
+  LEFT JOIN dim__related_cards
+    ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
+  LEFT JOIN dim__types
+    ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 )
 SELECT
   *

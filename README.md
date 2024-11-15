@@ -34,6 +34,7 @@ erDiagram
 #### gold.mart__cards.*
 ```mermaid
 erDiagram
+    fact__cards }|--|| dim__cardbacks: "cardback_pit_hk"
     fact__cards }|--|| dim__cards: "card_pit_hk"
     fact__cards }|--|| dim__classes: "class_pit_hk"
     fact__cards }|--|| dim__types: "type_pit_hk"
