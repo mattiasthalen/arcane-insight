@@ -34,9 +34,24 @@ erDiagram
 #### gold.mart__cards.*
 ```mermaid
 erDiagram
+    fact__cards }|--|| dim__cardbacks: "cardback_pit_hk"
     fact__cards }|--|| dim__cards: "card_pit_hk"
     fact__cards }|--|| dim__classes: "class_pit_hk"
+    fact__cards }|--|| dim__minion_types: "minion_type_pit_hk"
+    fact__cards }|--|| dim__rarities: "rarity_pit_hk"
+    fact__cards }|--|| dim__tourist_classes: "tourist_class_pit_hk"
+    fact__cards }|--|| dim__types: "type_pit_hk"
+    fact__cards }|--|| dim__sets: "set_pit_hk"
     
     fact__cards ||--|{ link__related_cards: "fact_record_hk"
     link__related_cards }|--|| dim__related_cards: "related_card_pit_hk"
+    
+    fact__cards ||--|{ link__related_classes: "fact_record_hk"
+    link__related_classes }|--|| dim__related_classes: "related_class_pit_hk"
+    
+    fact__cards ||--|{ link__related_types: "fact_record_hk"
+    link__related_types }|--|| dim__related_types: "related_type_pit_hk"
+    
+    fact__cards ||--|{ link__keywords: "fact_record_hk"
+    link__keywords }|--|| dim__keywords: "keyword_pit_hk"
 ```

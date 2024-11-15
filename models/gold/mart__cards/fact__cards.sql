@@ -10,6 +10,10 @@ WITH source AS (
   SELECT
     *
   FROM silver.staging.stg__hearthstone__cards
+), dim__cardbacks AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__cardbacks
 ), dim__cards AS (
   SELECT
     *
@@ -18,6 +22,22 @@ WITH source AS (
   SELECT
     *
   FROM gold.common.common_dim__classes
+), dim__minion_types AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__minion_types
+), dim__rarities AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__rarities
+), dim__sets AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__sets
+), dim__types AS (
+  SELECT
+    *
+  FROM gold.common.common_dim__types
 ), fact AS (
   SELECT
     card_id, /* Unique identifier for the card */
@@ -49,16 +69,40 @@ WITH source AS (
   FROM source
 ), dimensions AS (
   SELECT
+    dim__cardbacks.cardback_pit_hk, /* Unique identifier in time for the cardback */
     dim__cards.card_pit_hk, /* Unique identifier in time for the card */
     dim__classes.class_pit_hk, /* Unique identifier in time for the class */
+    dim__minion_types.minion_type_pit_hk, /* Unique identifier in time for the minion type */
+    dim__rarities.rarity_pit_hk, /* Unique identifier in time for the rarity */
+    dim__sets.set_pit_hk, /* Unique identifier in time for the set */
+    dim__tourist_classes.class_pit_hk as tourist_class_pit_hk, /* Unique identifier in time for the tourist class */
+    dim__types.type_pit_hk, /* Unique identifier in time for the type */
     fact.*
   FROM fact
+  LEFT JOIN dim__cardbacks
+    ON fact.card_id = dim__cardbacks.card_id
+    AND fact.fact__valid_from BETWEEN dim__cardbacks.cardback__valid_from AND dim__cardbacks.cardback__valid_to
   LEFT JOIN dim__cards
     ON fact.card_id = dim__cards.card_id
     AND fact.fact__valid_from BETWEEN dim__cards.card__valid_from AND dim__cards.card__valid_to
-    LEFT JOIN dim__classes
-      ON fact.class_id = dim__classes.class_id
-      AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
+  LEFT JOIN dim__classes
+    ON fact.class_id = dim__classes.class_id
+    AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
+  LEFT JOIN dim__classes dim__tourist_classes
+    ON fact.tourist_class_id = dim__tourist_classes.class_id
+    AND fact.fact__valid_from BETWEEN dim__tourist_classes.class__valid_from AND dim__tourist_classes.class__valid_to
+  LEFT JOIN dim__minion_types
+    ON fact.minion_type_id = dim__minion_types.minion_type_id
+    AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
+  LEFT JOIN dim__rarities
+    ON fact.rarity_id = dim__rarities.rarity_id
+    AND fact.fact__valid_from BETWEEN dim__rarities.rarity__valid_from AND dim__rarities.rarity__valid_to
+  LEFT JOIN dim__sets
+    ON fact.card_set_id = dim__sets.set_id
+    AND fact.fact__valid_from BETWEEN dim__sets.set__valid_from AND dim__sets.set__valid_to
+  LEFT JOIN dim__types
+    ON fact.card_type_id = dim__types.type_id
+    AND fact.fact__valid_from BETWEEN dim__types.type__valid_from AND dim__types.type__valid_to
 ), final AS (
   SELECT
     'cards' AS fact_name, /* Name of the fact table */
@@ -67,15 +111,18 @@ WITH source AS (
       card_relations_hk,
       card_set_id,
       card_type_id,
+      cardback_pit_hk,
       card_pit_hk,
       class_pit_hk,
+      minion_type_pit_hk,
+      rarity_pit_hk,
+      set_pit_hk,
+      tourist_class_pit_hk,
+      type_pit_hk,
       keyword_ids,
-      minion_type_id,
       multi_class_ids,
       multi_type_ids,
-      rarity_id,
-      spell_school_id,
-      tourist_class_id
+      spell_school_id
     ) AS fact_record_hk, /* Unique identifier for the fact table */
     *
   FROM dimensions
