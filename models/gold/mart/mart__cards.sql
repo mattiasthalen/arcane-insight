@@ -38,6 +38,10 @@ WITH fact__cards AS (
   SELECT
     *
   FROM gold.mart__cards.dim__rarities
+), dim__sets AS (
+  SELECT
+    *
+  FROM gold.mart__cards.dim__sets
 ), dim__types AS (
   SELECT
     *
@@ -130,6 +134,21 @@ WITH fact__cards AS (
     dim__related_cards.related_card__valid_from,
     dim__related_cards.related_card__valid_to,
     dim__related_cards.related_card__is_current_record,
+    dim__sets.set__name,
+    dim__sets.set__slug,
+    dim__sets.set__hyped,
+    dim__sets.set__type,
+    dim__sets.set__collectible_count,
+    dim__sets.set__collectible_revealed_count,
+    dim__sets.set__non_collectible_count,
+    dim__sets.set__non_collectible_revealed_count,
+    dim__sets.set__extracted_at,
+    dim__sets.set__loaded_at,
+    dim__sets.set__hash_diff,
+    dim__sets.set__version,
+    dim__sets.set__valid_from,
+    dim__sets.set__valid_to,
+    dim__sets.set__is_current_record,
     dim__types.type_slug,
     dim__types.type_name,
     dim__types.type__extracted_at,
@@ -167,6 +186,8 @@ WITH fact__cards AS (
     ON fact__cards.fact_record_hk = link__related_cards.fact_record_hk
   LEFT JOIN dim__related_cards
     ON link__related_cards.related_card_pit_hk = dim__related_cards.related_card_pit_hk
+  LEFT JOIN dim__sets
+  ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
   LEFT JOIN dim__types
     ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 )
