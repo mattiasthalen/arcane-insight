@@ -75,6 +75,7 @@ WITH source AS (
     dim__minion_types.minion_type_pit_hk, /* Unique identifier in time for the minion type */
     dim__rarities.rarity_pit_hk, /* Unique identifier in time for the rarity */
     dim__sets.set_pit_hk, /* Unique identifier in time for the set */
+    dim__tourist_classes.class_pit_hk as tourist_class_pit_hk, /* Unique identifier in time for the tourist class */
     dim__types.type_pit_hk, /* Unique identifier in time for the type */
     fact.*
   FROM fact
@@ -87,6 +88,9 @@ WITH source AS (
   LEFT JOIN dim__classes
     ON fact.class_id = dim__classes.class_id
     AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
+  LEFT JOIN dim__classes dim__tourist_classes
+    ON fact.tourist_class_id = dim__tourist_classes.class_id
+    AND fact.fact__valid_from BETWEEN dim__tourist_classes.class__valid_from AND dim__tourist_classes.class__valid_to
   LEFT JOIN dim__minion_types
     ON fact.minion_type_id = dim__minion_types.minion_type_id
     AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
@@ -113,6 +117,7 @@ WITH source AS (
       minion_type_pit_hk,
       rarity_pit_hk,
       set_pit_hk,
+      tourist_class_pit_hk,
       type_pit_hk,
       keyword_ids,
       multi_class_ids,

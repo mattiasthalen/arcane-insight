@@ -139,6 +139,15 @@ SELECT
   dim__sets.set__valid_from,
   dim__sets.set__valid_to,
   dim__sets.set__is_current_record,
+  dim__tourist_classes.tourist_class_slug,
+  dim__tourist_classes.tourist_class_name,
+  dim__tourist_classes.tourist_class__extracted_at,
+  dim__tourist_classes.tourist_class__loaded_at,
+  dim__tourist_classes.tourist_class__hash_diff,
+  dim__tourist_classes.tourist_class__version,
+  dim__tourist_classes.tourist_class__valid_from,
+  dim__tourist_classes.tourist_class__valid_to,
+  dim__tourist_classes.tourist_class__is_current_record,
   dim__types.type_slug,
   dim__types.type_name,
   dim__types.type__extracted_at,
@@ -190,6 +199,8 @@ LEFT JOIN gold.mart__cards.dim__related_types
   ON link__related_types.related_type_pit_hk = dim__related_types.related_type_pit_hk
 LEFT JOIN gold.mart__cards.dim__sets
   ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
+LEFT JOIN gold.mart__cards.dim__tourist_classes
+  ON fact__cards.tourist_class_pit_hk = dim__tourist_classes.tourist_class_pit_hk
 LEFT JOIN gold.mart__cards.dim__types
   ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 WHERE
