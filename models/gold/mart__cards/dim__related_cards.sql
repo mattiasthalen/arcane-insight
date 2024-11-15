@@ -5,7 +5,7 @@ MODEL (
 );
 
 SELECT
-    @star(common_dim__cards, prefix := 'related_')
+  @star(common_dim__cards, prefix := 'related_')
 FROM gold.common.common_dim__cards;
 
 @export_to_parquet(@this_model, "data")

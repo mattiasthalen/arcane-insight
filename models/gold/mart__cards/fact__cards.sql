@@ -66,15 +66,15 @@ WITH source AS (
   LEFT JOIN dim__cards
     ON fact.card_id = dim__cards.card_id
     AND fact.fact__valid_from BETWEEN dim__cards.card__valid_from AND dim__cards.card__valid_to
-    LEFT JOIN dim__classes
-      ON fact.class_id = dim__classes.class_id
-      AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
-    LEFT JOIN dim__types
-      ON fact.card_type_id = dim__types.type_id
-      AND fact.fact__valid_from BETWEEN dim__types.type__valid_from AND dim__types.type__valid_to
-    LEFT JOIN dim__minion_types
-      ON fact.minion_type_id = dim__minion_types.minion_type_id
-      AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
+  LEFT JOIN dim__classes
+    ON fact.class_id = dim__classes.class_id
+    AND fact.fact__valid_from BETWEEN dim__classes.class__valid_from AND dim__classes.class__valid_to
+  LEFT JOIN dim__types
+    ON fact.card_type_id = dim__types.type_id
+    AND fact.fact__valid_from BETWEEN dim__types.type__valid_from AND dim__types.type__valid_to
+  LEFT JOIN dim__minion_types
+    ON fact.minion_type_id = dim__minion_types.minion_type_id
+    AND fact.fact__valid_from BETWEEN dim__minion_types.minion_type__valid_from AND dim__minion_types.minion_type__valid_to
 ), final AS (
   SELECT
     'cards' AS fact_name, /* Name of the fact table */
