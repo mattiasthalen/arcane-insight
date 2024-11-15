@@ -122,8 +122,7 @@ WITH source AS (
       keyword_ids,
       multi_class_ids,
       multi_type_ids,
-      spell_school_id,
-      tourist_class_id
+      spell_school_id
     ) AS fact_record_hk, /* Unique identifier for the fact table */
     *
   FROM dimensions
