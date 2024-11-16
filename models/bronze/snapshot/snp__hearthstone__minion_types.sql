@@ -1,10 +1,11 @@
 /* Snapshot model of the minion types from Hearthstone */
 MODEL (
   name bronze.snapshot.snp__hearthstone__minion_types,
-  kind INCREMENTAL_BY_UNIQUE_KEY (
+  kind SCD_TYPE_2_BY_COLUMN (
     unique_key _sqlmesh__hash_diff,
-    forward_only TRUE,
-    disable_restatement TRUE
+    valid_from_name _sqlmesh__valid_from,
+    valid_to_name _sqlmesh__valid_to,
+    columns [_sqlmesh__hash_diff]
   )
 );
 
@@ -17,5 +18,4 @@ SELECT
       select_only := TRUE
     )
   ) AS _sqlmesh__hash_diff,
-  @execution_ts::TIMESTAMP AS _sqlmesh__loaded_at
 FROM bronze.raw.raw__hearthstone__minion_types
