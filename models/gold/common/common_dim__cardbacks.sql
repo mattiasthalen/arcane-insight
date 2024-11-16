@@ -3,8 +3,7 @@ MODEL (
   name gold.common.common_dim__cardbacks,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (cardback__loaded_at, '%Y-%m-%d %H:%M:%S')
-  ),
-  allow_partials TRUE
+  )
 );
 
 WITH source AS (

@@ -3,8 +3,7 @@ MODEL (
   name silver.staging.stg__hearthstone__sets,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
-  ),
-  allow_partials TRUE
+  )
 );
 
 WITH source AS (
