@@ -1,7 +1,9 @@
 /* Staging model for the Hearthstone rarities */
 MODEL (
   name silver.staging.stg__hearthstone__rarities,
-  kind FULL
+  kind INCREMENTAL_BY_TIME_RANGE (
+    time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
+  )
 );
 
 WITH source AS (
@@ -12,9 +14,8 @@ WITH source AS (
   SELECT
     *,
     ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__version,
-    LAG(_sqlmesh__loaded_at, 1, '1970-01-01 00:00:00') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__valid_from,
-    LEAD(_sqlmesh__loaded_at, 1, '9999-12-31 23:59:59') OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__valid_to,
-    _sqlmesh__valid_to = '9999-12-31 23:59:59' AS _sqlmesh__is_current_record
+    _sqlmesh__valid_to IS NULL AS _sqlmesh__is_current_record,
+    COALESCE(_sqlmesh__valid_to, '9999-12-31 23:59:59') _sqlmesh__valid_to
   FROM source
 ), casted AS (
   SELECT
@@ -39,4 +40,6 @@ WITH source AS (
 )
 SELECT
   *
-FROM final /* WHERE */ /*     _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts */
+FROM final
+WHERE
+  _sqlmesh__loaded_at::TIMESTAMP BETWEEN @start_ts AND @end_ts
