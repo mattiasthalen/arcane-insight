@@ -3,7 +3,8 @@ MODEL (
   name gold.common.common_dim__types,
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (type__loaded_at, '%Y-%m-%d %H:%M:%S')
-  )
+  ),
+  allow_partials TRUE
 );
 
 WITH source AS (

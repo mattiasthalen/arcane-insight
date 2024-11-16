@@ -2,8 +2,9 @@
 MODEL (
   name gold.mart.mart__cards,
   kind INCREMENTAL_BY_TIME_RANGE (
-    time_column (fact__valid_from, '%Y-%m-%d %H:%M:%S')
-  )
+    time_column (fact__loaded_at, '%Y-%m-%d %H:%M:%S')
+  ),
+  allow_partials TRUE
 );
 
 SELECT
@@ -204,4 +205,4 @@ LEFT JOIN gold.mart__cards.dim__tourist_classes
 LEFT JOIN gold.mart__cards.dim__types
   ON fact__cards.type_pit_hk = dim__types.type_pit_hk
 WHERE
-  fact__valid_from BETWEEN @start_ts AND @end_ts
+  fact__loaded_at BETWEEN @start_ts AND @end_ts
