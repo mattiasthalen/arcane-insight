@@ -17,5 +17,5 @@ SELECT
       exclude := _sqlmesh__extracted_at,
       select_only := TRUE
     )
-  ) AS _sqlmesh__hash_diff,
+  ) AS _sqlmesh__hash_diff
 FROM bronze.raw.raw__hearthstone__minion_types

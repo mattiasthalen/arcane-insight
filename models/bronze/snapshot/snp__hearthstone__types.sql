@@ -5,7 +5,7 @@ MODEL (
     unique_key _sqlmesh__hash_diff,
     valid_from_name _sqlmesh__valid_from,
     valid_to_name _sqlmesh__valid_to,
-    columns [_sqlmesh__hash_diff] 
+    columns [_sqlmesh__hash_diff]
   )
 );
 
