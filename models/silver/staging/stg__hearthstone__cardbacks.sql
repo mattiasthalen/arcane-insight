@@ -10,12 +10,11 @@ WITH source AS (
   SELECT
     *
   FROM bronze.snapshot.snp__hearthstone__cardbacks
-), valid_range AS (
+), snapshot_version AS (
   SELECT
     *,
     ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sqlmesh__loaded_at) AS _sqlmesh__version,
-    _sqlmesh__valid_to IS NULL AS _sqlmesh__is_current_record,
-    COALESCE(_sqlmesh__valid_to, '9999-12-31 23:59:59') _sqlmesh__valid_to
+    _sqlmesh__valid_to IS NULL AS _sqlmesh__is_current_record
   FROM source
 ), casted AS (
   SELECT
@@ -29,11 +28,11 @@ WITH source AS (
     _sqlmesh__extracted_at::TIMESTAMP,
     _sqlmesh__hash_diff::BLOB,
     _sqlmesh__loaded_at::TIMESTAMP,
-    _sqlmesh__version::INT,
     _sqlmesh__valid_from::TIMESTAMP,
-    _sqlmesh__valid_to::TIMESTAMP,
+    COALESCE(_sqlmesh__valid_to, '9999-12-31 23:59:59')::TIMESTAMP AS _sqlmesh__valid_to,
+    _sqlmesh__version::INT,
     _sqlmesh__is_current_record::BOOLEAN
-  FROM valid_range
+  FROM snapshot_version
 ), final AS (
   SELECT
     *,
