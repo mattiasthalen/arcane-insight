@@ -13,7 +13,7 @@ SELECT
   *,
   @generate_surrogate_key__sha_256(
     @star_v2(
-      relation := raw__hearthstone__sets,
+      relation := raw__hearthstone__spell_schools,
       exclude := _sqlmesh__extracted_at,
       select_only := TRUE
     )
