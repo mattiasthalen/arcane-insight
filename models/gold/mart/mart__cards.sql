@@ -139,6 +139,17 @@ SELECT
   dim__sets.set__valid_from,
   dim__sets.set__valid_to,
   dim__sets.set__is_current_record,
+  dim__spell_schools.spell_school_pit_hk,
+  dim__spell_schools.spell_school_id,
+  dim__spell_schools.spell_school__name,
+  dim__spell_schools.spell_school__slug,
+  dim__spell_schools.spell_school__extracted_at,
+  dim__spell_schools.spell_school__loaded_at,
+  dim__spell_schools.spell_school__hash_diff,
+  dim__spell_schools.spell_school__version,
+  dim__spell_schools.spell_school__valid_from,
+  dim__spell_schools.spell_school__valid_to,
+  dim__spell_schools.spell_school__is_current_record,
   dim__tourist_classes.tourist_class_slug,
   dim__tourist_classes.tourist_class_name,
   dim__tourist_classes.tourist_class__extracted_at,
@@ -199,6 +210,8 @@ LEFT JOIN gold.mart__cards.dim__related_types
   ON link__related_types.related_type_pit_hk = dim__related_types.related_type_pit_hk
 LEFT JOIN gold.mart__cards.dim__sets
   ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
+LEFT JOIN gold.mart__cards.dim__spell_schools
+ON fact__cards.spell_school_pit_hk = dim__spell_schools.spell_school_pit_hk
 LEFT JOIN gold.mart__cards.dim__tourist_classes
   ON fact__cards.tourist_class_pit_hk = dim__tourist_classes.tourist_class_pit_hk
 LEFT JOIN gold.mart__cards.dim__types
