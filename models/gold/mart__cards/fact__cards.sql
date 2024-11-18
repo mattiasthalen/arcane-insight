@@ -42,6 +42,7 @@ WITH fact AS (
     dim__minion_types.minion_type_pit_hk, /* Unique identifier in time for the minion type */
     dim__rarities.rarity_pit_hk, /* Unique identifier in time for the rarity */
     dim__sets.set_pit_hk, /* Unique identifier in time for the set */
+    dim__spell_schools.spell_school_pit_hk, /* Unique identifier in time for the spell school */
     dim__tourist_classes.tourist_class_pit_hk, /* Unique identifier in time for the tourist class */
     dim__types.type_pit_hk, /* Unique identifier in time for the type */
     fact.*
@@ -67,6 +68,9 @@ WITH fact AS (
   LEFT JOIN gold.mart__cards.dim__sets
     ON fact.card_set_id = dim__sets.set_id
     AND fact.fact__valid_from BETWEEN dim__sets.set__valid_from AND dim__sets.set__valid_to
+  LEFT JOIN gold.mart__cards.dim__spell_schools
+    ON fact.spell_school_id = dim__spell_schools.spell_school_id
+    AND fact.fact__valid_from BETWEEN dim__spell_schools.spell_school__valid_from AND dim__spell_schools.spell_school__valid_to
   LEFT JOIN gold.mart__cards.dim__types
     ON fact.card_type_id = dim__types.type_id
     AND fact.fact__valid_from BETWEEN dim__types.type__valid_from AND dim__types.type__valid_to
