@@ -23,7 +23,7 @@ MODEL (
                 right_column := id
         )
     ),
-    business_keys := (
+    derived_columns := (
             card_bk := slug||'|'||id,
             class_bk := class_slug,
             type_bk := type_slug
@@ -37,9 +37,10 @@ MODEL (
         card_hk__type_hk := (card_bk, type_bk),
         
         card__pithk := (card_bk, _sqlmesh__vaid_from)
-    )
+    ),
     source_system := 'hearthstone',
     loaded_at := _sqlmesh__loaded_at,
     valid_from := _sqlmesh__valid_from,
     valid_to := _sqlmesh__valid_to,
+    hashing_type := "SHA256"
 )
