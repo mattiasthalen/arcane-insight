@@ -20,6 +20,75 @@ def data_vault__staging(
     generate_ghost_record: bool = True,
     hash_function: exp.Literal = exp.Literal.string("MD5")
 ) -> exp.Query:
+    """
+    Prepares a staged query for a Data Vault model, incorporating transformations like lookups,
+    derived columns, ghost records, and hash calculations.
+
+    Args:
+        source (exp.Table): Source table with raw data.
+        source_system (exp.Literal): Literal representing the source system.
+        loaded_at (exp.Column): Timestamp column indicating the data load time.
+        lookup_data (exp.Tuple | None): Tuple defining lookups to enrich the source table. Each entry includes:
+            - lookup_table (exp.Table): The table to join.
+            - lookup_column (exp.Column): The column to retrieve.
+            - left_column (exp.Column): The column from the source table to join on.
+            - right_column (exp.Column): The column from the lookup table to join on.
+        derived_columns (exp.Tuple | None): Tuple defining derived columns. Each entry includes:
+            - alias (exp.Column): The name to alias the derived column as.
+            - expression (exp.Expression): The expression for the derived column.
+        hashes (exp.Tuple | None): Tuple defining hash calculations. Each entry includes:
+            - alias (exp.Column): The name of the hash column.
+            - fields (exp.Tuple): The fields to hash together.
+        valid_from (exp.Column | None): Column for the validity start timestamp.
+        valid_to (exp.Column | None): Column for the validity end timestamp.
+        generate_ghost_record (bool): Whether to generate a ghost record. Default is True.
+        hash_function (exp.Literal): The hash function to use (e.g., MD5, SHA256). Default is MD5.
+
+    Returns:
+        exp.Query: The final staged SQL query.
+
+    Example:
+        >>> from sqlglot import parse_one
+        >>> from sqlmesh.core.macros import MacroEvaluator
+        >>> sql = \"\"\"
+        ... @DATA_VAULT__STAGING(
+        ...     source := bronze.snapshot.snp__hearthstone__cards,
+        ...     lookup_data := (
+        ...       class_slug := (
+        ...         lookup_table := bronze.snapshot.snp__hearthstone__classes,
+        ...         lookup_column := slug,
+        ...         left_column := classId,
+        ...         right_column := id
+        ...       ),
+        ...       type_slug := (
+        ...         lookup_table := bronze.snapshot.snp__hearthstone__types,
+        ...         lookup_column := slug,
+        ...         left_column := cardTypeId,
+        ...         right_column := id
+        ...       )
+        ...     ),
+        ...     derived_columns := (
+        ...       card_bk := id || '|' || slug,
+        ...       class_bk := class_slug,
+        ...       type_bk := type_slug
+        ...     ),
+        ...     hashes := (
+        ...       card_hk := card_bk,
+        ...       class_hk := class_bk,
+        ...       type_hk := type_bk,
+        ...       card_hk__class_hk := (card_bk, class_bk),
+        ...       card_hk__type_hk := (card_bk, type_bk),
+        ...       card__pit_hk := (card_bk, _sqlmesh__valid_from)
+        ...     ),
+        ...     source_system := 'hearthstone',
+        ...     loaded_at := _sqlmesh__loaded_at,
+        ...     valid_from := _sqlmesh__valid_from,
+        ...     valid_to := _sqlmesh__valid_to,
+        ...     generate_ghost_record := TRUE,
+        ...     hash_function := 'SHA256'
+        ... )
+
+    """
     
     # Define final query
     sql = exp.Select().select(exp.Star())
@@ -118,11 +187,14 @@ def data_vault__staging(
         
     # Ghost record CTE
     if generate_ghost_record:
-        replace_fields = ', '.join([f"ghost_record_subquery.{col} as {col}" for col in ["source_system", "source_table", loaded_at.name, valid_from.name, valid_to.name] if col])
+        common_fields = ["source_system", "source_table", loaded_at.name]
+        
+        if valid_to and valid_from:
+            common_fields.extend([valid_from.name, valid_to.name])
+            
+        replace_fields = ', '.join(f"ghost_record_subquery.{col} as {col}" for col in common_fields)
 
-        ghost_record_cte = exp.Select().select(
-            f"{previous_table}.* REPLACE ({replace_fields})"
-        )
+        ghost_record_cte = exp.Select().select(f"{previous_table}.* REPLACE ({replace_fields})")
         
         ghost_record_subquery = (
             exp.Select()
