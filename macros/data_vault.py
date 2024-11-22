@@ -118,17 +118,10 @@ def data_vault__staging(
         
     # Ghost record CTE
     if generate_ghost_record:
-        common_fields = [col for col in ["source_system", "source_table", loaded_at.name, valid_from.name, valid_to.name] if col]
-    
+        replace_fields = ', '.join([f"ghost_record_subquery.{col} as {col}" for col in ["source_system", "source_table", loaded_at.name, valid_from.name, valid_to.name] if col])
+
         ghost_record_cte = exp.Select().select(
-            exp.Column(
-                this=exp.Star(),
-                table="ghost_record_subquery"
-            ),
-            exp.Column(
-                this=f"* EXCLUDE ({', '.join(common_fields)})",
-                table=previous_table
-            )
+            f"{previous_table}.* REPLACE ({replace_fields})"
         )
         
         ghost_record_subquery = (

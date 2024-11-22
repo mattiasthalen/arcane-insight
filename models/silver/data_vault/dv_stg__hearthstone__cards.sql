@@ -36,5 +36,6 @@ MODEL (
   loaded_at := _sqlmesh__loaded_at,
   valid_from := _sqlmesh__valid_from,
   valid_to := _sqlmesh__valid_to,
+  generate_ghost_record := TRUE,
   hash_function := 'SHA256'
 )
