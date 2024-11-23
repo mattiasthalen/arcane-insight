@@ -18,6 +18,30 @@ FROM (
         left_column := classId,
         right_column := id
       ),
+      minion_slug := (
+        lookup_table := bronze.snapshot.snp__hearthstone__minion_types,
+        lookup_column := slug,
+        left_column := minionTypeId,
+        right_column := id
+      ),
+      rarity_slug := (
+        lookup_table := bronze.snapshot.snp__hearthstone__rarities,
+        lookup_column := slug,
+        left_column := rarityId,
+        right_column := id
+      ),
+      set_slug := (
+        lookup_table := bronze.snapshot.snp__hearthstone__sets,
+        lookup_column := slug,
+        left_column := cardSetId,
+        right_column := id
+      ),
+      spell_school_slug := (
+        lookup_table := bronze.snapshot.snp__hearthstone__spell_schools,
+        lookup_column := slug,
+        left_column := spellSchoolId,
+        right_column := id
+      ),
       type_slug := (
         lookup_table := bronze.snapshot.snp__hearthstone__types,
         lookup_column := slug,
@@ -25,12 +49,28 @@ FROM (
         right_column := id
       )
     ),
-    derived_columns := (card_bk := slug, class_bk := class_slug, type_bk := type_slug),
+    derived_columns := (
+      card_bk := slug,
+      class_bk := class_slug,
+      minion_bk := minion_slug,
+      rarity_bk := rarity_slug,
+      set_bk := set_slug,
+      spell_school_bk := spell_school_slug,
+      type_bk := type_slug
+    ),
     hashes := (
       card_hk := card_bk,
       class_hk := class_bk,
+      minion_hk := minion_bk,
+      rarity_hk := rarity_bk,
+      set_hk := set_bk,
+      spell_school_hk := spell_school_bk,
       type_hk := type_bk,
       card_hk__class_hk := (card_bk, class_bk),
+      card_hk__minion_hk := (card_bk, minion_bk),
+      card_hk__rarity_hk := (card_bk, rarity_bk),
+      card_hk__set_hk := (card_bk, set_bk),
+      card_hk__spell_school_hk := (card_bk, spell_school_bk),
       card_hk__type_hk := (card_bk, type_bk),
       card__pit_hk := (card_bk, _sqlmesh__valid_from)
     ),
