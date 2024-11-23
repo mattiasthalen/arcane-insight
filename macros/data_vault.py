@@ -12,9 +12,9 @@ def data_vault__staging(
     source: exp.Table,
     source_system: exp.Literal,
     loaded_at: exp.Column,
-    lookup_data: exp.Tuple | None = None,
-    derived_columns: exp.Tuple | None = None,
-    hashes: exp.Tuple | None = None,
+    lookup_data: exp.Array | None = None,
+    derived_columns: exp.Array | None = None,
+    hashes: exp.Array | None = None,
     valid_from: exp.Column | None = None,
     valid_to: exp.Column | None = None,
     generate_ghost_record: bool = True,
@@ -28,17 +28,17 @@ def data_vault__staging(
         source (exp.Table): Source table with raw data.
         source_system (exp.Literal): Literal representing the source system.
         loaded_at (exp.Column): Timestamp column indicating the data load time.
-        lookup_data (exp.Tuple | None): Tuple defining lookups to enrich the source table. Each entry includes:
+        lookup_data (exp.Array | None): Array defining lookups to enrich the source table. Each entry includes:
             - lookup_table (exp.Table): The table to join.
             - lookup_column (exp.Column): The column to retrieve.
             - left_column (exp.Column): The column from the source table to join on.
             - right_column (exp.Column): The column from the lookup table to join on.
-        derived_columns (exp.Tuple | None): Tuple defining derived columns. Each entry includes:
+        derived_columns (exp.Array | None): Array defining derived columns. Each entry includes:
             - alias (exp.Column): The name to alias the derived column as.
             - expression (exp.Expression): The expression for the derived column.
-        hashes (exp.Tuple | None): Tuple defining hash calculations. Each entry includes:
+        hashes (exp.Array | None): Array defining hash calculations. Each entry includes:
             - alias (exp.Column): The name of the hash column.
-            - fields (exp.Tuple): The fields to hash together.
+            - fields (exp.Array): The fields to hash together.
         valid_from (exp.Column | None): Column for the validity start timestamp.
         valid_to (exp.Column | None): Column for the validity end timestamp.
         generate_ghost_record (bool): Whether to generate a ghost record. Default is True.
@@ -274,7 +274,7 @@ def data_vault__staging(
             fields_to_hash = hash.expression
             
             if isinstance(fields_to_hash, exp.Column):
-                fields_to_hash = exp.Tuple(expressions=[fields_to_hash])
+                fields_to_hash = exp.Array(expressions=[fields_to_hash])
             
             fields_to_concat: t.List[exp.Expression] = []
     
