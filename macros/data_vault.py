@@ -416,3 +416,23 @@ def data_vault__hub(
     sql = sql.from_(previous_table)
     
     return sql
+    
+@macro()
+def data_vault__link(
+    evaluator: MacroEvaluator,
+    source: exp.Array,
+    source_system: exp.Column,
+    source_table: exp.Column,
+    loaded_at: exp.Column
+) -> exp.Query | None:
+    pass
+    
+@macro()
+def data_vault__sat(
+    evaluator: MacroEvaluator,
+    source: exp.Array,
+    source_system: exp.Column,
+    source_table: exp.Column,
+    loaded_at: exp.Column
+) -> exp.Query | None:
+    pass
