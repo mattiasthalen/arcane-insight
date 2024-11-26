@@ -102,17 +102,17 @@ def data_vault__staging(
         ).from_(previous_table)
         
         for lookup in lookup_data.expressions:
-
             lookup_table = exp.Table(
                 this=lookup.expression.expressions[0].expression.this,
                 db=lookup.expression.expressions[0].expression.table,
                 catalog=lookup.expression.expressions[0].expression.db,
+                alias=lookup.name
             )
             
             lookup_column = exp.Column(
                 this=lookup.expression.expressions[1].expression.this,
-                table=lookup_table
-            )
+                table=lookup.name
+            ).as_(lookup.name)
             
             left_column = exp.Column(
                 this=lookup.expression.expressions[2].expression.this,
@@ -121,12 +121,11 @@ def data_vault__staging(
             
             right_column = exp.Column(
                 this=lookup.expression.expressions[3].expression.this,
-                table=lookup_table
+                table=lookup.name
             )
             
             # Add column alias to the SELECT
-            lookup_data_cte = lookup_data_cte.select(lookup_column.as_(lookup.name)
-            )
+            lookup_data_cte = lookup_data_cte.select(lookup_column)
     
             # Add the JOIN
             join_condition = exp.EQ(
@@ -141,12 +140,12 @@ def data_vault__staging(
                 
                 right_valid_from = exp.Column(
                     this=valid_from.this,
-                    table=lookup_table
+                    table=lookup.name
                 )
                 
                 right_valid_to = exp.Column(
                     this=valid_to.this,
-                    table=lookup_table
+                    table=lookup.name
                 )
                 
                 join_condition = join_condition.and_(
@@ -158,8 +157,12 @@ def data_vault__staging(
                 )
     
             lookup_data_cte = lookup_data_cte.join(
-                exp.Join(this=lookup_table, on=join_condition, kind="LEFT")
-            )  
+                exp.Join(
+                    this=lookup_table,
+                    on=join_condition,
+                    kind="LEFT"
+                )
+            )
         
         sql = sql.with_("lookup_data", as_=lookup_data_cte)
         previous_table = exp.Table(this="lookup_data")
