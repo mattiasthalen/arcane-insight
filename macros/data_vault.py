@@ -1,9 +1,11 @@
 import typing as t
 
+from functools import reduce
+from pandas._libs.tslibs.offsets import BusinessDay
 from pandas.core.window import common
 from sqlglot.expressions import Subquery, Timestamp
-from sqlmesh import macro
 from sqlglot import exp
+from sqlmesh import macro
 from sqlmesh.core.macros import MacroEvaluator
 
 @macro()
@@ -294,6 +296,122 @@ def data_vault__staging(
         
         sql = sql.with_("hashes", as_=hashes_cte)
         previous_table = exp.Table(this="hashes")
+    
+    sql = sql.from_(previous_table)
+    
+    return sql
+    
+@macro()
+def data_vault__hub(
+    evaluator: MacroEvaluator,
+    sources: exp.Array,
+    business_key: exp.Column,
+    source_system: exp.Column,
+    source_table: exp.Column,
+    loaded_at: exp.Column
+) -> exp.Query:
+    """Creates a Data Vault Hub entity by combining multiple source tables with priority-based deduplication.
+       
+    This macro implements a Data Vault hub loading pattern that handles multiple source systems
+    with a priority-based approach to business key selection. Sources are evaluated in order of
+    priority (first source has highest priority) when determining the authoritative version of
+    a business key.
+    
+    Args:
+       sources: Array of source configurations, where each source is defined as
+               table_reference := (column_mapping)
+       business_key: Column expression representing the hub's business key
+       source_system: Column expression for the source system identifier
+       source_table: Column expression for the source table name
+       loaded_at: Column expression for the load timestamp
+    
+    Implementation Details:
+       1. Assigns a source_id (0,1,2...) to each source based on priority order
+       2. Unions all sources with their respective source_ids
+       3. Deduplicates business keys by:
+          - Partitioning by business key
+          - Ordering by source_id (lower = higher priority) and loaded_at (earlier = preferred)
+          - Selecting the first record per partition
+    
+    Example:
+       ```sql
+       @data_vault__hub(
+           sources := [
+               silver.data_vault.dv_stg__hearthstone__cards := (
+                   card_bk,
+                   card_hk
+               ),
+               silver.data_vault.dv_stg__hearthstone__classes := (
+                   hero_power_card_bk card_bk,
+                   hero_power_card_hk card_hk
+               )
+           ],
+           business_key := card_bk,
+           source_system := source_system,
+           source_table := source_table,
+           loaded_at := *sqlmesh*_loaded_at
+       )
+       ```
+    
+    Returns:
+       exp.Query: A SQLGlot query expression that implements the hub loading logic
+    """
+    
+    # Define sql
+    sql = exp.Select().select(exp.Star())
+    
+    # Define union cte
+    selects = []
+    
+    for id, source in enumerate(sources):
+        from_table = exp.Table(
+            this=source.this.name,
+            db=source.this.table,
+            catalog=source.this.db
+        )
+        
+        source_expression = source.expression
+        
+        select = (
+            exp.Select()
+            .distinct()
+            .select(
+                exp.Column(
+                    this=exp.Int64(this=id)
+                ).as_("source_id")
+            )
+            .select(*source_expression)
+            .select(loaded_at)
+            .from_(from_table)
+        )
+        
+        selects.append(select)
+    
+    union_keys_cte = reduce(lambda x, y: x.union(y, distinct=True), selects)
+    sql = sql.with_("union_keys", as_=union_keys_cte)
+    previous_table = exp.Table(this="union_keys")
+
+    # Define deduplication cte
+    deduplicate_cte = (
+        exp.Select()
+        .select(exp.Star())
+        .from_(previous_table)
+        .qualify(
+            exp.Window(
+                this=exp.RowNumber(),
+                partition_by=[business_key],
+                order=exp.Order(
+                    expressions=[
+                        exp.Ordered(this=exp.Column(this="source_id")),
+                        exp.Ordered(this=exp.Column(this=loaded_at)),
+                    ]
+                )
+            ).eq(1)
+        )
+    )
+    
+    sql = sql.with_("deduplicate", as_=deduplicate_cte)
+    previous_table = exp.Table(this="deduplicate")
     
     sql = sql.from_(previous_table)
     
