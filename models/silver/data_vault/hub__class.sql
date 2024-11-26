@@ -1,6 +1,7 @@
 /* Hub model of the classes from Hearthstone */
 MODEL (
   name silver.data_vault.hub__class,
+  cron "*/5 * * * *",
   kind FULL
 );
 

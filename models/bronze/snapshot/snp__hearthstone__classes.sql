@@ -1,6 +1,7 @@
 /* Snapshot model of the classes from Hearthstone */
 MODEL (
   name bronze.snapshot.snp__hearthstone__classes,
+  cron "*/5 * * * *",
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key _sqlmesh__hash_diff,
     valid_from_name _sqlmesh__valid_from,

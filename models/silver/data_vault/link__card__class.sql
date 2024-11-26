@@ -2,6 +2,7 @@
 MODEL (
 enabled false,
   name silver.data_vault.link__card__class,
+  cron "*/5 * * * *",
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key card_hk__class_hk,
     columns [card_hk__class_hk],
