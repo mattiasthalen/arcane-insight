@@ -23,6 +23,7 @@ columns={
 @model(
     name='bronze.raw.raw__hearthstone__keywords',
     description='Extract & load model for the keywords endpoint from the Hearthstone API.',
+    cron="*/5 * * * *",
     kind=dict(
         name=ModelKindName.FULL,
     ),

@@ -25,6 +25,7 @@ columns={
 @model(
     name='bronze.raw.raw__hearthstone__set_groups',
     description='Extract & load model for the set groups endpoint from the Hearthstone API.',
+    cron="*/5 * * * *",
     kind=dict(
         name=ModelKindName.FULL,
     ),

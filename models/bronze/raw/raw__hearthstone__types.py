@@ -21,6 +21,7 @@ columns={
 @model(
     name='bronze.raw.raw__hearthstone__types',
     description='Extract & load model for the types endpoint from the Hearthstone API.',
+    cron="*/5 * * * *",
     kind=dict(
         name=ModelKindName.FULL,
     ),

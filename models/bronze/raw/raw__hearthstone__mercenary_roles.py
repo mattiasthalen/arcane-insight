@@ -20,6 +20,7 @@ columns={
 @model(
     name='bronze.raw.raw__hearthstone__mercenary_roles',
     description='Extract & load model for the mercenary roles endpoint from the Hearthstone API.',
+    cron="*/5 * * * *",
     kind=dict(
         name=ModelKindName.FULL,
     ),

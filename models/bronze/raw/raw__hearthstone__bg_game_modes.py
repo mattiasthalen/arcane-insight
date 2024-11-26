@@ -20,6 +20,7 @@ columns={
 @model(
     name='bronze.raw.raw__hearthstone__bg_game_modes',
     description='Extract & load model for the bg game modes endpoint from the Hearthstone API.',
+    cron="*/5 * * * *",
     kind=dict(
         name=ModelKindName.FULL,
     ),
