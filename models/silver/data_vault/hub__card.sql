@@ -1,19 +1,26 @@
 /* Hub model of the cards from Hearthstone */
 MODEL (
-    enabled false,
   name silver.data_vault.hub__card,
-  kind SCD_TYPE_2_BY_COLUMN (
-    unique_key card_bk,
-    columns [card_bk],
-    valid_from_name _sqlmesh__valid_from,
-    valid_to_name _sqlmesh__valid_to
-  )
+  kind FULL
 );
 
-SELECT
-    card_hk,
-    card_bk,
-    @execution_ts::TIMESTAMP AS _sqlmesh__loaded_at
-FROM silver.data_vault.dv_stg__hearthstone__cards
-ORDER BY
-    _sqlmesh__extracted_at
+@data_vault__hub(
+    sources := [
+        silver.data_vault.dv_stg__hearthstone__cards := (
+            card_bk,
+            card_hk
+        ),
+        silver.data_vault.dv_stg__hearthstone__classes := (
+            card_bk,
+            card_hk
+        ),
+        silver.data_vault.dv_stg__hearthstone__classes := (
+            hero_power_card_bk card_bk,
+            hero_power_card_hk card_hk
+        )
+    ],
+    business_key := card_bk,
+    source_system := source_system,
+    source_table := source_table,
+    loaded_at := _sqlmesh__loaded_at
+)
