@@ -1,6 +1,7 @@
 /* Data vault staging model for the Hearthstone cards */
 MODEL (
   name silver.data_vault.dv_stg__hearthstone__cards,
+  cron "*/5 * * * *",
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
   ),
@@ -67,7 +68,43 @@ FROM (
       card_hk__rarity_hk := (card_bk, rarity_bk),
       card_hk__set_hk := (card_bk, set_bk),
       card_hk__spell_school_hk := (card_bk, spell_school_bk),
-      card_hk__type_hk := (card_bk, type_bk)
+      card_hk__type_hk := (card_bk, type_bk),
+      
+      card_hash_diff := (
+        armor,
+        artistName,
+        attack,
+        bannedFromSideboard,
+        cardSetId,
+        cardTypeId,
+        childIds,
+        classId,
+        collectible,
+        copyOfCardId,
+        cropImage,
+        durability,
+        flavorText,
+        health,
+        id,
+        image,
+        imageGold,
+        isZilliaxCosmeticModule,
+        isZilliaxFunctionalModule,
+        keywordIds,
+        manaCost,
+        maxSideboardCards,
+        minionTypeId,
+        multiClassIds,
+        multiTypeIds,
+        name,
+        parentId,
+        rarityId,
+        runeCost,
+        slug,
+        spellSchoolId,
+        text,
+        touristClassId
+      )
     ],
     source_system := 'hearthstone',
     loaded_at := _sqlmesh__loaded_at,

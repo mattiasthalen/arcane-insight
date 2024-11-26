@@ -1,6 +1,7 @@
 /* Data vault staging model for the Hearthstone classes */
 MODEL (
   name silver.data_vault.dv_stg__hearthstone__classes,
+  cron "*/5 * * * *",
   kind INCREMENTAL_BY_TIME_RANGE (
     time_column (_sqlmesh__loaded_at, '%Y-%m-%d %H:%M:%S')
   ),
@@ -37,6 +38,15 @@ FROM (
       
       class_hk__card_hk := (class_bk, card_bk),
       class_hk__hero_power_card_hk := (class_bk, hero_power_card_bk),
+      
+      class_hash_diff := (
+        slug,
+        id,
+        name,
+        cardId,
+        heroPowerCardId,
+        alternateHeroCardIds
+      )
       
     ],
     source_system := 'hearthstone',
