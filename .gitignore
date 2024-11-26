@@ -19,3 +19,6 @@ logs/
 
 # ignore data files
 *.parquet
+
+# ignore playground
+playground/
