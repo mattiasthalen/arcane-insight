@@ -38,6 +38,8 @@ WITH source AS (
   SELECT
     *,
     @generate_surrogate_key(class_bk, hash_function := 'SHA256') AS hash_key__class_bk,
+    @generate_surrogate_key(card_bk, hash_function := 'SHA256') AS hash_key__card_bk,
+    @generate_surrogate_key(hero_power_card_bk, hash_function := 'SHA256') AS hash_key__hero_power_card_bk,
     @generate_surrogate_key(slug, id, name, hash_function := 'SHA256') AS hash_diff__class,
     @generate_surrogate_key(class_bk, card_bk, hash_function := 'SHA256') AS hash_key__class_bk__card_bk,
     @generate_surrogate_key(class_bk, hero_power_card_bk, hash_function := 'SHA256') AS hash_key__class_bk__hero_power_card_bk
