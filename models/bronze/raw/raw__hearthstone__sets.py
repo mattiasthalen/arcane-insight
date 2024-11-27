@@ -21,6 +21,7 @@ columns={
     "nonCollectibleRevealedCount": "text",
     "aliasSetIds": "text",
     
+    "_sqlmesh__record_source": "text",
     "_sqlmesh__extracted_at": "datetime"
 }
 
