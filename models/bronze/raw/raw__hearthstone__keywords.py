@@ -60,6 +60,7 @@ def execute(
     data = response.json()
     
     df = pd.DataFrame(data)
+    df["_sqlmesh__record_source"] = base_url
     df["_sqlmesh__extracted_at"] = execution_time
     
     yield df

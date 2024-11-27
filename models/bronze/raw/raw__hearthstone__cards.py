@@ -106,6 +106,7 @@ def execute(
                 print(f"Adding missing column: {column}")
                 df[column] = pd.NA
             
+            df["_sqlmesh__record_source"] = base_url
             df["_sqlmesh__extracted_at"] = execution_time
             
             yield df
