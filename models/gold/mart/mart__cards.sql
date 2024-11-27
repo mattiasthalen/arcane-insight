@@ -211,7 +211,7 @@ LEFT JOIN gold.mart__cards.dim__related_types
 LEFT JOIN gold.mart__cards.dim__sets
   ON fact__cards.set_pit_hk = dim__sets.set_pit_hk
 LEFT JOIN gold.mart__cards.dim__spell_schools
-ON fact__cards.spell_school_pit_hk = dim__spell_schools.spell_school_pit_hk
+  ON fact__cards.spell_school_pit_hk = dim__spell_schools.spell_school_pit_hk
 LEFT JOIN gold.mart__cards.dim__tourist_classes
   ON fact__cards.tourist_class_pit_hk = dim__tourist_classes.tourist_class_pit_hk
 LEFT JOIN gold.mart__cards.dim__types
