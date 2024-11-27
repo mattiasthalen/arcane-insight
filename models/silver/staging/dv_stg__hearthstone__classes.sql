@@ -7,7 +7,9 @@ MODEL (
 WITH source AS (
   SELECT
     *,
-    (@execution_ts||'+00')::TIMESTAMPTZ AS _sqlmesh__loaded_at
+    (
+      @execution_ts || '+00'
+    )::TIMESTAMPTZ AS _sqlmesh__loaded_at
   FROM bronze.raw.raw__hearthstone__classes
 ), keys AS (
   SELECT
@@ -16,31 +18,24 @@ WITH source AS (
     cardId::TEXT AS card_bk,
     heroPowerCardId::TEXT AS hero_power_card_bk
   FROM source
-  ), ghost_record AS (
-      SELECT
-          keys.*
-          REPLACE(
-              ghost.class_bk AS class_bk,
-              ghost._sqlmesh__record_source AS _sqlmesh__record_source,
-              ghost._sqlmesh__loaded_at AS _sqlmesh__loaded_at
-          )
-      
-      FROM
-          (
-              SELECT
-                  'GHOST' AS class_bk,
-                  'GHOST_RECORD' AS _sqlmesh__record_source,
-                  '-infinity'::TIMESTAMPTZ AS _sqlmesh__loaded_at
-          ) AS ghost
-          
-          LEFT JOIN keys
-              ON ghost.class_bk = keys.class_bk
-              AND ghost._sqlmesh__record_source = keys._sqlmesh__record_source
-              AND ghost._sqlmesh__loaded_at = keys._sqlmesh__loaded_at
-      
-      UNION ALL
-      
-      SELECT * FROM keys
+), ghost_record AS (
+  SELECT
+    keys.*
+    REPLACE (ghost.class_bk AS class_bk, ghost._sqlmesh__record_source AS _sqlmesh__record_source, ghost._sqlmesh__loaded_at AS _sqlmesh__loaded_at)
+  FROM (
+    SELECT
+      'GHOST' AS class_bk,
+      'GHOST_RECORD' AS _sqlmesh__record_source,
+      '-infinity'::TIMESTAMPTZ AS _sqlmesh__loaded_at
+  ) AS ghost
+  LEFT JOIN keys
+    ON ghost.class_bk = keys.class_bk
+    AND ghost._sqlmesh__record_source = keys._sqlmesh__record_source
+    AND ghost._sqlmesh__loaded_at = keys._sqlmesh__loaded_at
+  UNION ALL
+  SELECT
+    *
+  FROM keys
 ), hashes AS (
   SELECT
     *,
