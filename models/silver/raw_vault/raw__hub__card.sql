@@ -1,6 +1,6 @@
 /* Data vault hub model for the Hearthstone cards */
 MODEL (
-  name silver.raw_vault.raw__hub__cards,
+  name silver.raw_vault.raw__hub__card,
   kind FULL
 );
 
