@@ -18,7 +18,7 @@ columns={
     "alternateHeroCardIds": "text",
     
     "_sqlmesh__record_source": "text",
-    "_sqlmesh__extracted_at": "datetime"
+    "_sqlmesh__extracted_at": "timestamptz"
 }
 
 @model(
