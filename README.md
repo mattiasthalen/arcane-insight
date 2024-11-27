@@ -41,6 +41,17 @@ erDiagram
     raw__hearthstone__types ||--|{ raw__hearthstone__game_modes: "gameModes > id"
 ```
 
+### Silver
+#### silver.raw_vault.*
+```mermaid
+erDiagram
+    raw__hub__card ||--|{ raw__sat__card: ""
+    raw__hub__class ||--|{ raw__sat__class: ""
+    
+    raw__link__card__class }|--|| raw__hub__card: ""
+    raw__link__card__class }|--|| raw__hub__class: ""
+```
+
 ### Gold
 #### gold.mart__cards.*
 ```mermaid
