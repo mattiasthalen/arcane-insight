@@ -14,7 +14,7 @@ WITH business_keys AS (
   FROM silver.staging.dv_stg__hearthstone__classes
   UNION ALL
   SELECT
-    1 AS source,
+    1 AS primary_source,
     id::TEXT AS class_bk,
     @generate_surrogate_key(id::TEXT, hash_function := 'SHA256') AS hash_key__class_bk,
     _sqlmesh__record_source,
@@ -22,7 +22,7 @@ WITH business_keys AS (
   FROM silver.staging.dv_stg__hearthstone__classes
   UNION ALL
   SELECT
-      2 AS source,
+      1 AS primary_source,
       class_bk,
       hash_key__class_bk,
       _sqlmesh__record_source,

@@ -22,7 +22,7 @@ WITH business_keys AS (
   FROM silver.staging.dv_stg__hearthstone__cards
   UNION ALL
   SELECT
-    2 AS source,
+    1 AS source,
     card_bk,
     hash_key__card_bk,
     _sqlmesh__record_source,
