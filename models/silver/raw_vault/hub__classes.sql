@@ -22,12 +22,12 @@ WITH business_keys AS (
   FROM silver.staging.dv_stg__hearthstone__classes
   UNION ALL
   SELECT
-      1 AS primary_source,
-      class_bk,
-      hash_key__class_bk,
-      _sqlmesh__record_source,
-      _sqlmesh__loaded_at
-    FROM silver.staging.dv_stg__hearthstone__cards
+    1 AS primary_source,
+    class_bk,
+    hash_key__class_bk,
+    _sqlmesh__record_source,
+    _sqlmesh__loaded_at
+  FROM silver.staging.dv_stg__hearthstone__cards
 ), deduplicated AS (
   SELECT
     *
