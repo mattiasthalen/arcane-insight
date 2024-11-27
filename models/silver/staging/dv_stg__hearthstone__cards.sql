@@ -14,6 +14,7 @@ WITH source AS (
 ), keys AS (
   SELECT
     *,
+    id::TEXT AS card_id,
     slug::TEXT AS card_bk,
     parentId::TEXT AS parent_card_bk,
     cardSetId::TEXT AS card_set_bk,
@@ -42,6 +43,7 @@ WITH source AS (
 ), hashes AS (
   SELECT
     *,
+    @generate_surrogate_key(card_id, hash_function := 'SHA256') AS hash_key__card_id,
     @generate_surrogate_key(card_bk, hash_function := 'SHA256') AS hash_key__card_bk,
     @generate_surrogate_key(
       card_bk,

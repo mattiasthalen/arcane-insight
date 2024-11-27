@@ -14,6 +14,7 @@ WITH source AS (
 ), keys AS (
   SELECT
     *,
+    id::TEXT AS class_id,
     slug::TEXT AS class_bk,
     cardId::TEXT AS card_bk,
     heroPowerCardId::TEXT AS hero_power_card_bk
@@ -37,6 +38,7 @@ WITH source AS (
 ), hashes AS (
   SELECT
     *,
+    @generate_surrogate_key(class_id, hash_function := 'SHA256') AS hash_key__class_id,
     @generate_surrogate_key(class_bk, hash_function := 'SHA256') AS hash_key__class_bk,
     @generate_surrogate_key(card_bk, hash_function := 'SHA256') AS hash_key__card_bk,
     @generate_surrogate_key(hero_power_card_bk, hash_function := 'SHA256') AS hash_key__hero_power_card_bk,

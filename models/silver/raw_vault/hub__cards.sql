@@ -15,8 +15,8 @@ WITH business_keys AS (
   UNION ALL
   SELECT
     1 AS source,
-    id::TEXT AS card_bk,
-    @generate_surrogate_key(id::TEXT, hash_function := 'SHA256') AS hash_key__card_bk,
+    card_id AS card_bk,
+    hash_key__card_id AS hash_key__card_bk,
     _sqlmesh__record_source,
     _sqlmesh__loaded_at
   FROM silver.staging.dv_stg__hearthstone__cards
