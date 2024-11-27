@@ -42,8 +42,9 @@ config = Config(
         },
     default_gateway="local",
     model_defaults=ModelDefaultsConfig(
-        dialect="duckdb",
-        start="2024-11-01"
+        dialect="duckdb,normalization_strategy=case_sensitive",
+        start="2024-11-01",
+        cron="*/5 * * * *"
     ),
     model_naming=NameInferenceConfig(
         infer_names=True
