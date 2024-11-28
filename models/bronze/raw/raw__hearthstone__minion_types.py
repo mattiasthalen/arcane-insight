@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import requests
-import time
 import typing as t
 
 from datetime import datetime
