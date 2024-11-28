@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import requests
-import time
 import typing as t
 
 from datetime import datetime
@@ -21,7 +20,8 @@ columns={
     "nonCollectibleRevealedCount": "text",
     "aliasSetIds": "text",
     
-    "_sqlmesh__extracted_at": "datetime"
+    "_sqlmesh__record_source": "text",
+    "_sqlmesh__extracted_at": "timestamp"
 }
 
 @model(
@@ -64,6 +64,7 @@ def execute(
     data = response.json()
     
     df = pd.DataFrame(data)
-    df["_sqlmesh__extracted_at"] = execution_time
+    df["_sqlmesh__record_source"] = base_url
+    df["_sqlmesh__extracted_at"] = execution_time.replace(tzinfo=None)
     
     yield df
