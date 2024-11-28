@@ -19,7 +19,7 @@ columns={
     "image": "text",
     
     "_sqlmesh__record_source": "text",
-    "_sqlmesh__extracted_at": "timestamptz"
+    "_sqlmesh__extracted_at": "timestamp"
 }
 
 @model(
@@ -84,7 +84,7 @@ def execute(
                 df[column] = pd.NA
             
             df["_sqlmesh__record_source"] = base_url
-            df["_sqlmesh__extracted_at"] = execution_time
+            df["_sqlmesh__extracted_at"] = execution_time.replace(tzinfo=None)
             
             yield df
             

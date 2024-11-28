@@ -7,9 +7,7 @@ MODEL (
 WITH source AS (
   SELECT
     *,
-    (
-      @execution_ts || '+00:00'
-    )::TIMESTAMPTZ AS _sqlmesh__loaded_at
+    @execution_ts::TIMESTAMP AS _sqlmesh__loaded_at
   FROM bronze.raw.raw__hearthstone__cards
 ), keys AS (
   SELECT
@@ -31,7 +29,7 @@ WITH source AS (
   FROM (
     SELECT
       'GHOST_RECORD' AS _sqlmesh__record_source,
-      '0001-01-01 00:00:00+00:00'::TIMESTAMPTZ AS _sqlmesh__loaded_at
+      '0001-01-01 00:00:00'::TIMESTAMP AS _sqlmesh__loaded_at
   ) AS ghost
   LEFT JOIN keys
     ON ghost._sqlmesh__record_source = keys._sqlmesh__record_source
