@@ -5,6 +5,11 @@ on:
     types:
       - synchronize
       - opened
+  pull_request_review:
+    types:
+    - edited
+    - submitted
+    - dismissed
 # The latest commit is the one that will be used to create the PR environment and deploy to production
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}

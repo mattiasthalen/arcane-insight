@@ -10,6 +10,7 @@ from sqlmesh.core.config import (
     PlanConfig,
     AutoCategorizationMode
 )
+from sqlmesh.core.user import User, UserRole
 from sqlmesh.integrations.github.cicd.config import GithubCICDBotConfig, MergeMethod
 
 def get_current_branch():
@@ -59,5 +60,12 @@ config = Config(
     ),
     cicd_bot=GithubCICDBotConfig(
         merge_method=MergeMethod.MERGE
-    )
+    ),
+    users=[
+        User(
+            username="mattiasthalen",
+            github_username="mattiasthalen",
+            roles=[UserRole.REQUIRED_APPROVER],
+        )
+    ]
 )
