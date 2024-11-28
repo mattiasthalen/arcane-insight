@@ -10,6 +10,7 @@ from sqlmesh.core.config import (
     PlanConfig,
     AutoCategorizationMode
 )
+from sqlmesh.integrations.github.cicd.config import GithubCICDBotConfig, MergeMethod
 
 def get_current_branch():
     try:
@@ -54,5 +55,8 @@ config = Config(
             sql=AutoCategorizationMode.FULL,
             seed=AutoCategorizationMode.FULL
         )
+    ),
+    cicd_bot=GithubCICDBotConfig(
+        merge_method=MergeMethod.MERGE
     )
 )
