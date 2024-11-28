@@ -40,6 +40,7 @@ WITH source AS (
     *,
     @generate_surrogate_key(class_id, hash_function := 'SHA256') AS hash_key__class_id,
     @generate_surrogate_key(class_bk, hash_function := 'SHA256') AS hash_key__class_bk,
+    @generate_surrogate_key(class_bk, slug, id, name, hash_function := 'SHA256') AS _sqlmesh__hash_diff,
     @generate_surrogate_key(card_bk, hash_function := 'SHA256') AS hash_key__card_bk,
     @generate_surrogate_key(hero_power_card_bk, hash_function := 'SHA256') AS hash_key__hero_power_card_bk,
     @generate_surrogate_key(slug, id, name, hash_function := 'SHA256') AS hash_diff__class,

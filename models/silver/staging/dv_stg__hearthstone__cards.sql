@@ -68,7 +68,7 @@ WITH source AS (
       slug,
       text,
       hash_function := 'SHA256'
-    ) AS hash_diff__card,
+    ) AS _sqlmesh__hash_diff,
     @generate_surrogate_key(parent_card_bk, hash_function := 'SHA256') AS hash_key__parent_card_bk,
     @generate_surrogate_key(card_set_bk, hash_function := 'SHA256') AS hash_key__card_set_bk,
     @generate_surrogate_key(card_type_bk, hash_function := 'SHA256') AS hash_key__card_type_bk,
