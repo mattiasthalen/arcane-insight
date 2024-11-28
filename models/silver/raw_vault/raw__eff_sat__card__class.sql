@@ -4,8 +4,8 @@ MODEL (
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key hash_key__card_bk__class_bk,
     columns [hash_key__card_bk__class_bk],
-    valid_to_name _sqlmesh__effective_to,
-    valid_from_name _sqlmesh__effective_from
+    valid_to_name _sqlmesh__valid_to,
+    valid_from_name _sqlmesh__valid_from
   ),
   allow_partials TRUE
 );
