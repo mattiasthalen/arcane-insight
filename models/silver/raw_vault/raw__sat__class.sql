@@ -1,3 +1,4 @@
+/* Data vault satellite model for the Hearthstone classes */
 MODEL (
   name silver.raw_vault.raw__sat__class,
   kind SCD_TYPE_2_BY_COLUMN (
