@@ -13,11 +13,10 @@ MODEL (
 );
 
 SELECT
-    hash_key__card_bk__class_bk
-,   hash_key__card_bk
-,   hash_key__class_bk
-,   _sqlmesh__record_source
-,   _sqlmesh__extracted_at
-,   _sqlmesh__loaded_at
-
+  hash_key__card_bk__class_bk,
+  hash_key__card_bk,
+  hash_key__class_bk,
+  _sqlmesh__record_source,
+  _sqlmesh__extracted_at,
+  _sqlmesh__loaded_at
 FROM silver.staging.dv_stg__hearthstone__cards
