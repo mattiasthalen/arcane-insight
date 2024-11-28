@@ -18,6 +18,7 @@ WITH business_keys AS (
     card_bk,
     hash_key__card_bk,
     _sqlmesh__record_source,
+    _sqlmesh__extracted_at,
     _sqlmesh__loaded_at
   FROM silver.staging.dv_stg__hearthstone__cards
   UNION ALL
@@ -26,6 +27,7 @@ WITH business_keys AS (
     card_id AS card_bk,
     hash_key__card_id AS hash_key__card_bk,
     _sqlmesh__record_source,
+    _sqlmesh__extracted_at,
     _sqlmesh__loaded_at
   FROM silver.staging.dv_stg__hearthstone__cards
   UNION ALL
@@ -34,6 +36,7 @@ WITH business_keys AS (
     card_bk,
     hash_key__card_bk,
     _sqlmesh__record_source,
+    _sqlmesh__extracted_at,
     _sqlmesh__loaded_at
   FROM silver.staging.dv_stg__hearthstone__classes
 ), deduplicated AS (
