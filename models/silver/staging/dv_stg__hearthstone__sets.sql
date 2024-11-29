@@ -37,17 +37,17 @@ WITH source AS (
     @generate_surrogate_key(card_set_id, hash_function := 'SHA256') AS hash_key__card_set_id,
     @generate_surrogate_key(card_set_bk, hash_function := 'SHA256') AS hash_key__card_set_bk,
     @generate_surrogate_key(
-        card_set_bk,
-        id,
-        name,
-        slug,
-        hyped,
-        type,
-        collectibleCount,
-        collectibleRevealedCount,
-        nonCollectibleCount,
-        nonCollectibleRevealedCount,
-        hash_function := 'SHA256'
+      card_set_bk,
+      id,
+      name,
+      slug,
+      hyped,
+      type,
+      collectibleCount,
+      collectibleRevealedCount,
+      nonCollectibleCount,
+      nonCollectibleRevealedCount,
+      hash_function := 'SHA256'
     ) AS _sqlmesh__hash_diff
   FROM ghost_record
 )
