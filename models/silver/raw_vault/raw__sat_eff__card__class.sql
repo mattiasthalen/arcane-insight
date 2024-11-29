@@ -1,6 +1,6 @@
 /* Data vault effectivity satellite model for the Hearthstone cards & classes */
 MODEL (
-  name silver.raw_vault.raw__eff_sat__card__class,
+  name silver.raw_vault.raw__sat_eff__card__class,
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key hash_key__card_bk__class_bk,
     columns [hash_key__card_bk__class_bk],

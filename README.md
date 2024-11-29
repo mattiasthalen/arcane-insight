@@ -50,7 +50,7 @@ erDiagram
     
     raw__link__card__class }|--|| raw__hub__card: ""
     raw__link__card__class }|--|| raw__hub__class: ""
-    raw__link__card__class ||--|{ raw__eff_sat__card__class: ""
+    raw__link__card__class ||--|{ raw__sat_eff__card__class: ""
 ```
 
 ### Gold
