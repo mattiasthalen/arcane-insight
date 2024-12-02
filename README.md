@@ -49,6 +49,7 @@ erDiagram
     raw__hub__card_set ||--|{ raw__sat__card_set: ""
     raw__hub__card_type ||--|{ raw__sat__card_type: ""
     raw__hub__class ||--|{ raw__sat__class: ""
+    raw__hub__rarity ||--|{ raw__sat__rarity: ""
     raw__hub__spell_school ||--|{ raw__sat__spell_school: ""
     
     raw__link__card__card_set }|--|| raw__hub__card: ""
@@ -62,6 +63,10 @@ erDiagram
     raw__link__card__class }|--|| raw__hub__card: ""
     raw__link__card__class }|--|| raw__hub__class: ""
     raw__link__card__class ||--|{ raw__sat_eff__card__class: ""
+    
+    raw__link__card__rarity }|--|| raw__hub__card: ""
+    raw__link__card__rarity }|--|| raw__hub__rarity: ""
+    raw__link__card__rarity ||--|{ raw__sat_eff__card__rarity: ""
     
     raw__link__card__spell_school }|--|| raw__hub__card: ""
     raw__link__card__spell_school }|--|| raw__hub__spell_school: ""
