@@ -19,4 +19,4 @@ SELECT
   _sqlmesh__record_source,
   _sqlmesh__extracted_at,
   _sqlmesh__loaded_at
-FROM silver.staging.dv_stg__hearthstone__cards
+FROM silver.staging.dv_stg__hearthstone__classes
