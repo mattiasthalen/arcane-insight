@@ -29,10 +29,12 @@ WITH source AS (
   FROM (
     SELECT
       'GHOST_RECORD' AS _sqlmesh__record_source,
+      '0001-01-01 00:00:00'::TIMESTAMP AS _sqlmesh__extracted_at,
       '0001-01-01 00:00:00'::TIMESTAMP AS _sqlmesh__loaded_at
   ) AS ghost
   LEFT JOIN keys
     ON ghost._sqlmesh__record_source = keys._sqlmesh__record_source
+    AND ghost._sqlmesh__extracted_at = keys._sqlmesh__extracted_at
     AND ghost._sqlmesh__loaded_at = keys._sqlmesh__loaded_at
   UNION ALL
   SELECT
