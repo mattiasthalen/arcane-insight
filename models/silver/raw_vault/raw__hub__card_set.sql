@@ -51,4 +51,5 @@ WITH business_keys AS (
 SELECT
   *
 FROM deduplicated
-LEFT ANTI JOIN silver.raw_vault.raw__hub__card_set USING (hash_key__card_set_bk)
+ANTI JOIN silver.raw_vault.raw__hub__card_set
+  USING (hash_key__card_set_bk)
