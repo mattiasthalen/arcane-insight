@@ -39,13 +39,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
-      - name: Install Poetry
-        run: pip install poetry~=1.8.4
+      - name: Install UV
+        run: pip install uv
         shell: bash
       - name: Install SQLMesh + Dependencies
-        run: poetry install
+        run: uv sync
         shell: bash
       - name: Run CI/CD Bot
         run: |
-          poetry run sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+          uv run sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
         shell: bash
