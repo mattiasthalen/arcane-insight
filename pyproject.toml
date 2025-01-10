@@ -1,0 +1,9 @@
+[project]
+name = "arcane-insight"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "duckcli>=0.2.1",
+    "sqlmesh[github,web]>=0.144.0",
+]
