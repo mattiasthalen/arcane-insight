@@ -9,7 +9,7 @@ MODEL (
 SELECT
   fact__cards.fact_name,
   fact__cards.fact_record_hk,
-  dim__cardbacks.cardback_category,
+  --dim__cardbacks.cardback_category,
   dim__cardbacks.cardback__text,
   dim__cardbacks.cardback__name,
   dim__cardbacks.cardback__sort_category,

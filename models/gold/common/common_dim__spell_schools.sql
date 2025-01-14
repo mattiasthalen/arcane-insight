@@ -16,13 +16,13 @@ WITH source AS (
     spell_school_id, /* Unique identifier for the spell school */
     name AS spell_school__name, /* Name of the spell school */
     slug AS spell_school__slug, /* Slug of the spell school */
-    _sqlmesh__extracted_at AS spell_school__extracted_at, /* Timestamp when the spell school was extracted */
-    _sqlmesh__loaded_at AS spell_school__loaded_at, /* Timestamp when the spell school was loaded */
-    _sqlmesh__hash_diff AS spell_school__hash_diff, /* Hash diff of the spell school */
-    _sqlmesh__version AS spell_school__version, /* Record version of the spell school */
-    _sqlmesh__valid_from AS spell_school__valid_from, /* Spell school valid from timestamp */
-    _sqlmesh__valid_to AS spell_school__valid_to, /* Spell school valid to timestamp */
-    _sqlmesh__is_current_record AS spell_school__is_current_record /* Whether the spell school is current */
+    _dlt_extracted_at AS spell_school__extracted_at, /* Timestamp when the spell school was extracted */
+    _sqlmesh_loaded_at AS spell_school__loaded_at, /* Timestamp when the spell school was loaded */
+    _sqlmesh_hash_diff AS spell_school__hash_diff, /* Hash diff of the spell school */
+    _sqlmesh_version AS spell_school__version, /* Record version of the spell school */
+    _sqlmesh_valid_from AS spell_school__valid_from, /* Spell school valid from timestamp */
+    _sqlmesh_valid_to AS spell_school__valid_to, /* Spell school valid to timestamp */
+    _sqlmesh_is_current_record AS spell_school__is_current_record /* Whether the spell school is current */
   FROM source
 )
 SELECT

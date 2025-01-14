@@ -1,9 +1,38 @@
 # Arcane Insight
-<img src="https://blz-contentstack-images.akamaized.net/v3/assets/bltc965041283bac56c/bltce748775e32f8c04/5f0769f35d2ae808119fb2dd/homepage_logo.png" height="50" alt="Hearthstone Logo" style="vertical-align: middle"> <img src="https://github.com/TobikoData/sqlmesh/blob/main/docs/readme/sqlmesh.png?raw=true" height="50" alt="SQLmesh" style="vertical-align: middle"> <img src="https://duckdb.org/images/logo-dl/DuckDB_Logo-horizontal.svg" height="50" alt="DuckDB" style="vertical-align: middle">
+<img src="https://blz-contentstack-images.akamaized.net/v3/assets/bltc965041283bac56c/bltce748775e32f8c04/5f0769f35d2ae808119fb2dd/homepage_logo.png" height="50" alt="Hearthstone Logo" style="vertical-align: middle"> <img src="https://cdn.sanity.io/images/nsq559ov/production/7f85e56e715b847c5519848b7198db73f793448d-82x25.svg?w=2000&auto=format" height="50" alt="dltHub" style="vertical-align: middle"> <img src="https://github.com/TobikoData/sqlmesh/blob/main/docs/readme/sqlmesh.png?raw=true" height="50" alt="SQLmesh" style="vertical-align: middle"> <img src="https://duckdb.org/images/logo-dl/DuckDB_Logo-horizontal.svg" height="50" alt="DuckDB" style="vertical-align: middle">
 
 Arcane Insight is a data analytics project designed to harness the power of SQLMesh & DuckDB to collect, transform, and analyze data from [Blizzard's Hearthstone API](https://develop.battle.net/documentation/hearthstone).
 
 Focused on card statistics and attributes, this project reveals detailed insights into card mechanics, strengths, and trends to support BI and strategic analysis.
+
+## Architecture
+```mermaid
+architecture-beta
+    service battle_net(cloud)[Battle Net API]
+
+    group duckdb(disk)[DuckDB]
+        group bronze(disk)[Bronze] in duckdb
+            service raw(database)[Raw] in bronze
+            service snapshot(database)[Snapshot] in bronze
+
+        group silver(disk)[Silver] in duckdb
+            service staging(database)[Staging] in silver
+            service raw_vault(database)[Raw Vault] in silver
+            service business_vault(database)[Business Vault] in silver
+
+        group gold(disk)[Gold] in duckdb
+            service marts(database)[Marts] in gold
+
+    service bi(internet)[BI]
+
+    battle_net:R --> L:raw
+    raw:R --> L:snapshot
+    snapshot:R --> L:staging
+    staging:R --> L:raw_vault
+    raw_vault:R --> L:business_vault
+    business_vault:R --> L:marts
+    marts:R --> L:bi
+```
 
 ## ERDs
 ### Bronze

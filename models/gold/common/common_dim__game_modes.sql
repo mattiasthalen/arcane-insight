@@ -16,13 +16,13 @@ WITH source AS (
     game_mode_id, /* Unique identifier for the game mode */
     name AS game_mode__name, /* Name of the game mode */
     slug AS game_mode__slug, /* Slug of the game mode */
-    _sqlmesh__extracted_at AS game_mode__extracted_at, /* Timestamp when the game mode was extracted */
-    _sqlmesh__loaded_at AS game_mode__loaded_at, /* Timestamp when the game mode was loaded */
-    _sqlmesh__hash_diff AS game_mode__hash_diff, /* Hash diff of the game mode */
-    _sqlmesh__version AS game_mode__version, /* Record version of the game mode */
-    _sqlmesh__valid_from AS game_mode__valid_from, /* Game mode valid from timestamp */
-    _sqlmesh__valid_to AS game_mode__valid_to, /* Game mode valid to timestamp */
-    _sqlmesh__is_current_record AS game_mode__is_current_record /* Whether the game mode is current */
+    _dlt_extracted_at AS game_mode__extracted_at, /* Timestamp when the game mode was extracted */
+    _sqlmesh_loaded_at AS game_mode__loaded_at, /* Timestamp when the game mode was loaded */
+    _sqlmesh_hash_diff AS game_mode__hash_diff, /* Hash diff of the game mode */
+    _sqlmesh_version AS game_mode__version, /* Record version of the game mode */
+    _sqlmesh_valid_from AS game_mode__valid_from, /* Game mode valid from timestamp */
+    _sqlmesh_valid_to AS game_mode__valid_to, /* Game mode valid to timestamp */
+    _sqlmesh_is_current_record AS game_mode__is_current_record /* Whether the game mode is current */
   FROM source
 )
 SELECT

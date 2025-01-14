@@ -14,19 +14,19 @@ WITH source AS (
   SELECT
     cardback_pit_hk, /* Unique identifier in time for the cardback */
     card_id, /* Unique identifier for the card */
-    cardback_category, /* Category of the cardback */
+    --cardback_category, /* Category of the cardback */
     text AS cardback__text, /* Text of the cardback */
     name AS cardback__name, /* Name of the cardback */
     sort_category AS cardback__sort_category, /* Sort category of the cardback */
     slug AS cardback__slug, /* Slug of the cardback */
     image_url AS cardback__image_url, /* Image of the cardback */
-    _sqlmesh__extracted_at AS cardback__extracted_at, /* Timestamp when the card was extracted */
-    _sqlmesh__loaded_at AS cardback__loaded_at, /* Timestamp when the card was loaded */
-    _sqlmesh__hash_diff AS cardback__hash_diff, /* Hash diff of the card */
-    _sqlmesh__version AS cardback__version, /* Record version of the card */
-    _sqlmesh__valid_from AS cardback__valid_from, /* Card valid from timestamp */
-    _sqlmesh__valid_to AS cardback__valid_to, /* Card valid to timestamp */
-    _sqlmesh__is_current_record AS cardback__is_current_record /* Whether the card is current */
+    _dlt_extracted_at AS cardback__extracted_at, /* Timestamp when the card was extracted */
+    _sqlmesh_loaded_at AS cardback__loaded_at, /* Timestamp when the card was loaded */
+    _sqlmesh_hash_diff AS cardback__hash_diff, /* Hash diff of the card */
+    _sqlmesh_version AS cardback__version, /* Record version of the card */
+    _sqlmesh_valid_from AS cardback__valid_from, /* Card valid from timestamp */
+    _sqlmesh_valid_to AS cardback__valid_to, /* Card valid to timestamp */
+    _sqlmesh_is_current_record AS cardback__is_current_record /* Whether the card is current */
   FROM source
 )
 SELECT

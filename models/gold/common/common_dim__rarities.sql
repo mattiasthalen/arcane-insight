@@ -18,13 +18,13 @@ WITH source AS (
     rarity_name, /* Name of the rarity */
     crafting_cost AS rarity_crafting_cost, /* Crafting cost of the rarity */
     dust_value AS rarity_dust_value, /* Dust value of the rarity */
-    _sqlmesh__extracted_at AS rarity__extracted_at, /* Timestamp when the rarity was extracted */
-    _sqlmesh__loaded_at AS rarity__loaded_at, /* Timestamp when the rarity was loaded */
-    _sqlmesh__hash_diff AS rarity__hash_diff, /* Hash diff of the rarity */
-    _sqlmesh__version AS rarity__version, /* Record version of the rarity */
-    _sqlmesh__valid_from AS rarity__valid_from, /* Type valid from timestamp */
-    _sqlmesh__valid_to AS rarity__valid_to, /* Type valid to timestamp */
-    _sqlmesh__is_current_record AS rarity__is_current_record /* Whether the rarity is current */
+    _dlt_extracted_at AS rarity__extracted_at, /* Timestamp when the rarity was extracted */
+    _sqlmesh_loaded_at AS rarity__loaded_at, /* Timestamp when the rarity was loaded */
+    _sqlmesh_hash_diff AS rarity__hash_diff, /* Hash diff of the rarity */
+    _sqlmesh_version AS rarity__version, /* Record version of the rarity */
+    _sqlmesh_valid_from AS rarity__valid_from, /* Type valid from timestamp */
+    _sqlmesh_valid_to AS rarity__valid_to, /* Type valid to timestamp */
+    _sqlmesh_is_current_record AS rarity__is_current_record /* Whether the rarity is current */
   FROM source
 )
 SELECT
