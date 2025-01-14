@@ -22,13 +22,13 @@ WITH source AS (
     collectible_revealed_count AS set__collectible_revealed_count, /* Count of collectible cards revealed in the set */
     non_collectible_count AS set__non_collectible_count, /* Non-collectible cards in the set */
     non_collectible_revealed_count AS set__non_collectible_revealed_count, /* Non-collectible cards revealed in the set */
-    _sqlmesh__extracted_at AS set__extracted_at, /* Timestamp when the set was extracted */
-    _sqlmesh__loaded_at AS set__loaded_at, /* Timestamp when the set was loaded */
-    _sqlmesh__hash_diff AS set__hash_diff, /* Hash diff of the set */
-    _sqlmesh__version AS set__version, /* Record version of the set */
-    _sqlmesh__valid_from AS set__valid_from, /* Card valid from timestamp */
-    _sqlmesh__valid_to AS set__valid_to, /* Card valid to timestamp */
-    _sqlmesh__is_current_record AS set__is_current_record /* Whether the set is current */
+    _dlt_extracted_at AS set__extracted_at, /* Timestamp when the set was extracted */
+    _sqlmesh_loaded_at AS set__loaded_at, /* Timestamp when the set was loaded */
+    _sqlmesh_hash_diff AS set__hash_diff, /* Hash diff of the set */
+    _sqlmesh_version AS set__version, /* Record version of the set */
+    _sqlmesh_valid_from AS set__valid_from, /* Card valid from timestamp */
+    _sqlmesh_valid_to AS set__valid_to, /* Card valid to timestamp */
+    _sqlmesh_is_current_record AS set__is_current_record /* Whether the set is current */
   FROM source
 )
 SELECT

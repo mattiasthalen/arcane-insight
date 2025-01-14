@@ -6,8 +6,8 @@ MODEL (
     columns [hash_key__card_bk__rarity_bk],
     execution_time_as_valid_from TRUE,
     disable_restatement FALSE,
-    valid_to_name _sqlmesh__valid_to,
-    valid_from_name _sqlmesh__valid_from
+    valid_to_name _sqlmesh_valid_to,
+    valid_from_name _sqlmesh_valid_from
   ),
   allow_partials TRUE
 );
@@ -16,7 +16,7 @@ SELECT
   hash_key__card_bk__rarity_bk,
   hash_key__card_bk,
   hash_key__rarity_bk,
-  _sqlmesh__record_source,
-  _sqlmesh__extracted_at,
-  _sqlmesh__loaded_at
+  _sqlmesh_record_source,
+  _dlt_extracted_at,
+  _sqlmesh_loaded_at
 FROM silver.staging.dv_stg__hearthstone__cards

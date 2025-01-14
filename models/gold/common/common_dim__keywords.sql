@@ -19,13 +19,13 @@ WITH source AS (
     ref_text AS keyword__ref_text, /* Reference text of the keyword */
     text AS keyword__text, /* Text of the keyword */
     game_modes AS keyword__game_modes, /* Game modes of the keyword */
-    _sqlmesh__extracted_at AS keyword__extracted_at, /* Timestamp when the keyword was extracted */
-    _sqlmesh__loaded_at AS keyword__loaded_at, /* Timestamp when the keyword was loaded */
-    _sqlmesh__hash_diff AS keyword__hash_diff, /* Hash diff of the keyword */
-    _sqlmesh__version AS keyword__version, /* Record version of the keyword */
-    _sqlmesh__valid_from AS keyword__valid_from, /* Card valid from timestamp */
-    _sqlmesh__valid_to AS keyword__valid_to, /* Card valid to timestamp */
-    _sqlmesh__is_current_record AS keyword__is_current_record /* Whether the keyword is current */
+    _dlt_extracted_at AS keyword__extracted_at, /* Timestamp when the keyword was extracted */
+    _sqlmesh_loaded_at AS keyword__loaded_at, /* Timestamp when the keyword was loaded */
+    _sqlmesh_hash_diff AS keyword__hash_diff, /* Hash diff of the keyword */
+    _sqlmesh_version AS keyword__version, /* Record version of the keyword */
+    _sqlmesh_valid_from AS keyword__valid_from, /* Card valid from timestamp */
+    _sqlmesh_valid_to AS keyword__valid_to, /* Card valid to timestamp */
+    _sqlmesh_is_current_record AS keyword__is_current_record /* Whether the keyword is current */
   FROM source
 )
 SELECT

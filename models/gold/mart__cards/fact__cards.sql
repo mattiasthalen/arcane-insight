@@ -27,12 +27,12 @@ WITH fact AS (
     rune_cost['frost'] AS frost_rune_cost, /* Frost rune cost of the card */
     rune_cost['unholy'] AS unholy_rune_cost, /* Unholy rune cost of the card */
     blood_rune_cost + frost_rune_cost + unholy_rune_cost AS total_rune_cost, /* Total rune cost of the card */
-    _sqlmesh__extracted_at AS fact__extracted_at, /* Timestamp when the record was extracted */
-    _sqlmesh__loaded_at AS fact__loaded_at, /* Timestamp when the record was loaded */
-    _sqlmesh__version AS fact__version, /* Version of the record */
-    _sqlmesh__valid_from AS fact__valid_from, /* Timestamp when the record is valid from */
-    _sqlmesh__valid_to AS fact__valid_to, /* Timestamp when the record is valid to */
-    _sqlmesh__is_current_record AS fact__is_current_record /* Flag for the current record */
+    _dlt_extracted_at AS fact__extracted_at, /* Timestamp when the record was extracted */
+    _sqlmesh_loaded_at AS fact__loaded_at, /* Timestamp when the record was loaded */
+    _sqlmesh_version AS fact__version, /* Version of the record */
+    _sqlmesh_valid_from AS fact__valid_from, /* Timestamp when the record is valid from */
+    _sqlmesh_valid_to AS fact__valid_to, /* Timestamp when the record is valid to */
+    _sqlmesh_is_current_record AS fact__is_current_record /* Flag for the current record */
   FROM silver.staging.stg__hearthstone__cards
 ), dimensions AS (
   SELECT

@@ -4,15 +4,15 @@ MODEL (
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key hash_key__card_bk__card_type_bk,
     columns [hash_key__card_bk__card_type_bk],
-    valid_to_name _sqlmesh__valid_to,
-    valid_from_name _sqlmesh__valid_from
+    valid_to_name _sqlmesh_valid_to,
+    valid_from_name _sqlmesh_valid_from
   ),
   allow_partials TRUE
 );
 
 SELECT
   hash_key__card_bk__card_type_bk,
-  _sqlmesh__record_source,
-  _sqlmesh__extracted_at,
-  _sqlmesh__loaded_at
+  _sqlmesh_record_source,
+  _dlt_extracted_at,
+  _sqlmesh_loaded_at
 FROM silver.staging.dv_stg__hearthstone__cards
