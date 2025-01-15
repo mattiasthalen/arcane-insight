@@ -168,8 +168,88 @@ def battle_net__load() -> None:
         dev_mode=True
     )
     
-    load_info = pipeline.run(battle_net__source())
-    print(load_info)
+    source = battle_net__source()
+    
+    # if pipeline.first_run:
+    #     print("First run")
+        
+    #     load_info = pipeline.run(source)
+    #     print(load_info)
+    #     return None
+    
+    resources = source.resources
+    
+    for resource_name, resource_object in resources.items():
+        print(f"Processing resource: {resource_name}")
+        
+        incoming_data = 
+        print(list(resource_object))
+        
+        resource = pipeline.dataset()[resource_name]
+        print(resource)
+    
+    #
+
+def process_resource_data_with_cdc(data: list, resource_name: str) -> list:
+    """
+    Process resource data with CDC logic.
+    It only appends new, updated, or deleted rows.
+    """
+    current_pipeline = dlt.current.pipeline()
+    transformed_data = []  # List to hold transformed records (insert, update, delete)
+    deleted_ids = set()  # To track deleted IDs
+    active_ids = set()  # To track active IDs
+    existing_ids = set()  # To track existing IDs (all ids from the destination)
+
+    # Check if it's the first run or not
+    if not current_pipeline.first_run:
+        # Query the destination dataset for the most recent cdc_action for each id
+        resource_table = current_pipeline.dataset().get(resource_name)
+
+        if resource_table:  # Only proceed if the table exists in the destination
+            # Sort by _dlt_load_id DESC and select the first record for each id
+            latest_cdc_df = resource_table.select("id", "_dlt_load_id", "cdc_action") \
+                .sort("_dlt_load_id", ascending=False)
+
+            # For each id, get the most recent cdc_action
+            latest_cdc_df = latest_cdc_df.groupby("id").agg(dlt.first("cdc_action").alias("latest_action")).df()
+
+            # All IDs present in the destination
+            existing_ids = set(latest_cdc_df["id"])
+
+            # Determine active IDs (IDs where latest cdc_action != 'delete')
+            active_ids = set(latest_cdc_df[latest_cdc_df["latest_action"] != "delete"]["id"])
+
+            # Calculate deleted_ids as IDs that exist in the destination but are not in the incoming data
+            incoming_ids = set(record["id"] for record in data)  # Get active ids from incoming data
+            deleted_ids = existing_ids - incoming_ids
+
+            # Handle deletions (IDs that are missing in the new data but exist in the destination)
+            # Filter the resource table to get all the records that need to be flagged as deleted
+            deleted_records = resource_table.filter(resource_table["id"].isin(deleted_ids)).df()
+            deleted_records["cdc_action"] = "delete"
+
+            # Append all deleted records to the transformed data
+            transformed_data.extend(deleted_records.to_dict(orient="records"))
+
+    # Process the incoming data (new or updated records)
+    for record in data:
+        pk = record["id"]
+
+        if pk in deleted_ids:
+            # It was deleted previously, so treat it as an insert now
+            record["cdc_action"] = "insert"
+            transformed_data.append(record)
+        elif pk in active_ids:
+            # Existing active record, flag as an update
+            record["cdc_action"] = "update"
+            transformed_data.append(record)
+        else:
+            # New record, append to the list
+            record["cdc_action"] = "insert"
+            transformed_data.append(record)
+
+    return transformed_data
 
 if __name__ == "__main__":
     load_dotenv()
