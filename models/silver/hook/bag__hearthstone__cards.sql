@@ -61,16 +61,15 @@ WITH source AS (
   FROM snapshot_version
 ), hook_keys AS (
   SELECT
-    @generate_hook_key(1, card_id) AS HK__CARD__ID,
-    @generate_hook_key(2, card_slug) AS HK__CARD__SLUG,
-    @generate_hook_key(3, card_set_id) AS HK__CARD_SET__ID,
-    @generate_hook_key(4, card_type_id) AS HK__CARD_TYPE__ID,
-    @generate_hook_key(5, class_id) AS HK__CLASS__ID,
-    @generate_hook_key(1, copy_of_card_id) AS HK__CARD__ID__COPY,
-    @generate_hook_key(6, minion_type_id) AS HK__MINION_TYPE__ID,
-    @generate_hook_key(1, parent_card_id) AS HK__CARD__ID__PARENT,
-    @generate_hook_key(7, spell_school_id) AS HK__SPELL_SCHOOL__ID,
-    @generate_hook_key(5, tourist_class_id) AS HK__CLASS__ID__TOURIST,
+    @generate_hook_key(1, card_id) AS hook__card__id,
+    @generate_hook_key(1, copy_of_card_id) AS hook__card__id__copy,
+    @generate_hook_key(1, parent_card_id) AS hook__card__id__parent,
+    @generate_hook_key(2, card_set_id) AS hook__card_set__id,
+    @generate_hook_key(3, card_type_id) AS hook__card_type__id,
+    @generate_hook_key(4, class_id) AS hook__class__id,
+    @generate_hook_key(4, tourist_class_id) AS hook__class__id__tourist,
+    @generate_hook_key(5, minion_type_id) AS hook__minion_type__id,
+    @generate_hook_key(6, spell_school_id) AS hook__spell_school__id,
     *
   FROM casted
 )
