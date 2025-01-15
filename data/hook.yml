@@ -61,25 +61,36 @@ business_concepts:
 
 keysets:
   - id: 1
-    business_term: "Card"
+    name: "Hearthstone Card ID"
+    business_concept: "Card"
     source_system: "Battle.Net"
     
   - id: 2
-    business_term: "Card Set"
+    name: "Hearthstone Card Set ID"
+    business_concept: "Card Set"
     source_system: "Battle.Net"
+    description:
     
   - id: 3
-    business_term: "Card Type"
+    name: "Hearthstone Card Type ID"
+    business_concept: "Card Type"
     source_system: "Battle.Net"
+    description:
     
   - id: 4
-    business_term: "Class"
+    name: "Hearthstone Class ID"
+    business_concept: "Class"
     source_system: "Battle.Net"
+    description:
     
   - id: 5
-    business_term: "Minion Type"
+    name: "Hearthstone Minion Type ID"
+    business_concept: "Minion Type"
     source_system: "Battle.Net"
+    description:
     
   - id: 6
-    business_term: "Spell School"
+    name: "Hearthstone Spell School ID"
+    business_concept: "Spell School"
     source_system: "Battle.Net"
+    description:
