@@ -265,6 +265,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 
 def battle_net__load() -> None:
     print_script_name()
+    load_dotenv()
     
     pipeline = dlt.pipeline(
         pipeline_name="battle_net",
@@ -286,11 +287,12 @@ def battle_net__load() -> None:
     
     for resource_name, resource_object in resources.items():
         print(f"Processing resource: {resource_name}")
+
+        source_df = pl.DataFrame(resource_object)
         
-        print(list(resource_object))
-        
-        resource = pipeline.dataset()[resource_name]
-        print(resource)
+        # Need flag to see if the resource has been loaded before
+        destination_df = pl.from_pandas(pipeline.dataset()[resource_name].df())
+        print(destination_df.head())
         
         """
         df = generate_cdc_delta(
@@ -304,5 +306,4 @@ def battle_net__load() -> None:
         """
     
 if __name__ == "__main__":
-    load_dotenv()
     battle_net__load()
