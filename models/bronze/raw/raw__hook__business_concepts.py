@@ -15,13 +15,14 @@ from sqlmesh.core.model.kind import ModelKindName
     ),
     columns={
         "name": "text",
+        "core_concept": "bool",
+        "enabled": "bool",
+        "owner": "text",
         "definition": "text",
-        "type": "Core concept" "text",
         "examples": "text",
         "business_rules": "text",
         "taxonomy": "text",
         "synonyms": "text",
-        "owner": "text",
         "_sqlmesh__record_source": "text",
         "_sqlmesh_extracted_at": "timestamp"
     }
