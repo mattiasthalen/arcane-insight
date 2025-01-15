@@ -1,57 +1,63 @@
 business_concepts:
   - name: "Card"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
     
   - name: "Card Set"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
     
   - name: "Card Type"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
     
   - name: "Class"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
     
   - name: "Minion Type"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
 
   - name: "Spell School"
+    core_concept: True
+    enabled: True
+    owner:
     definition:
-    type: "Core concept"
     examples:
     business_rules:
     taxonomy:
     synonyms:
-    owner:
 
 keysets:
   - id: 1
