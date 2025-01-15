@@ -1,12 +1,117 @@
 import dlt
 import os
 
+import polars as pl
+
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 from typing import Any, Optional
 from dotenv import load_dotenv
 
 def print_script_name() -> None:
     print(f"Running script: {os.path.basename(__file__)}")
+    
+def add_hash_to_rows(df: pl.DataFrame, label: str = "hash") -> pl.DataFrame:
+    return df.with_columns(pl.struct(pl.all()).hash().alias(label))
+
+def collect_set(df: pl.DataFrame, column: str) -> set:
+    return set(df.select(column).to_series().to_list())
+
+def set_cdc_action(df: pl.DataFrame, action: str) -> pl.DataFrame:
+    return df.with_columns(_cdc_action=pl.lit(action))
+    
+def collect_rows_to_insert(
+    source_df: pl.DataFrame,
+    key_name: str,
+    source_keys: set,
+    destination_keys
+) -> pl.DataFrame:
+    
+    keys = source_keys-destination_keys
+    filter = pl.col(key_name).is_in(keys)
+    filtered_df = source_df.filter(filter)
+    df = set_cdc_action(filtered_df, "insert")
+    
+    return df
+    
+def collect_rows_to_reinsert(
+    source_df: pl.DataFrame,
+    destination_df: pl.DataFrame,
+    key_name: str
+) -> pl.DataFrame:
+    
+    keys = collect_set(destination_df.filter(pl.col("_cdc_action") == "delete"), key_name)
+    filter = pl.col(key_name).is_in(keys)
+    filtered_df = source_df.filter(filter)
+    df = set_cdc_action(filtered_df, "reinsert")
+    
+    return df
+
+def collect_rows_to_update(
+    source_df: pl.DataFrame,
+    key_name: str,
+    source_keys: set,
+    destination_keys: set,
+    source_hashes: set,
+    destination_hashes: set,
+    reinsert_hashes: set
+) -> pl.DataFrame:
+    
+    updated_pks = source_keys.intersection(destination_keys)
+    updated_hashes = source_hashes - destination_hashes - reinsert_hashes
+    filter = pl.col(key_name).is_in(updated_pks) & pl.col("_cdc_hash").is_in(updated_hashes)
+    filtered_df = source_df.filter(filter)
+    df = set_cdc_action(filtered_df, "update")
+    
+    return df
+
+def collect_rows_to_delete(
+    destination_df: pl.DataFrame,
+    key_name: str,
+    source_keys: set,
+    destination_keys,
+    cdc_action_name: str = "_cdc_action"
+) -> pl.DataFrame:
+    
+    deleted_pks = destination_keys-source_keys
+    filter = pl.col(key_name).is_in(deleted_pks) & ~(pl.col(cdc_action_name) == "delete")
+    filtered_df = destination_df.filter(filter)
+    df = set_cdc_action(filtered_df, "delete")
+    
+    return df
+    
+def generate_cdc_delta(
+    source_df: pl.DataFrame,
+    destination_df: pl.DataFrame,
+    primary_key: str = "id"
+) -> pl.DataFrame:
+    
+    # Add hash to source rows
+    hashed_source_df = add_hash_to_rows(source_df, "_cdc_hash")
+    
+    # Collect primary keys & hashes
+    source_pks = collect_set(hashed_source_df, primary_key)
+    destination_pks = collect_set(destination_df, primary_key)
+    source_hashes = collect_set(hashed_source_df, "_cdc_hash")
+    destination_hashes = collect_set(destination_df, "_cdc_hash")
+    
+    # Create delta dataframe
+    insert_df = collect_rows_to_insert(hashed_source_df, primary_key, source_pks, destination_pks)
+    reinsert_df = collect_rows_to_reinsert(hashed_source_df, destination_df, primary_key)
+    delete_df = collect_rows_to_delete(destination_df, primary_key, source_pks, destination_pks, "_cdc_action")
+    
+    update_df = collect_rows_to_update(
+        hashed_source_df,
+        primary_key,
+        source_pks,
+        destination_pks,
+        source_hashes,
+        destination_hashes,
+        collect_set(reinsert_df, "_cdc_hash")
+    )
+    
+    delta_df = pl.concat([insert_df, reinsert_df, update_df, delete_df])
+    
+    return delta_df
 
 @dlt.source(name="battle_net")
 def battle_net__source(credentials = dlt.secrets.value) -> Any:
@@ -182,75 +287,22 @@ def battle_net__load() -> None:
     for resource_name, resource_object in resources.items():
         print(f"Processing resource: {resource_name}")
         
-        incoming_data = 
         print(list(resource_object))
         
         resource = pipeline.dataset()[resource_name]
         print(resource)
+        
+        """
+        df = generate_cdc_delta(
+            source_df: pl.DataFrame,
+            destination_df: pl.DataFrame,
+            primary_key: str = "id"
+        )
+        
+        #resource_object = df
+        yield df
+        """
     
-    #
-
-def process_resource_data_with_cdc(data: list, resource_name: str) -> list:
-    """
-    Process resource data with CDC logic.
-    It only appends new, updated, or deleted rows.
-    """
-    current_pipeline = dlt.current.pipeline()
-    transformed_data = []  # List to hold transformed records (insert, update, delete)
-    deleted_ids = set()  # To track deleted IDs
-    active_ids = set()  # To track active IDs
-    existing_ids = set()  # To track existing IDs (all ids from the destination)
-
-    # Check if it's the first run or not
-    if not current_pipeline.first_run:
-        # Query the destination dataset for the most recent cdc_action for each id
-        resource_table = current_pipeline.dataset().get(resource_name)
-
-        if resource_table:  # Only proceed if the table exists in the destination
-            # Sort by _dlt_load_id DESC and select the first record for each id
-            latest_cdc_df = resource_table.select("id", "_dlt_load_id", "cdc_action") \
-                .sort("_dlt_load_id", ascending=False)
-
-            # For each id, get the most recent cdc_action
-            latest_cdc_df = latest_cdc_df.groupby("id").agg(dlt.first("cdc_action").alias("latest_action")).df()
-
-            # All IDs present in the destination
-            existing_ids = set(latest_cdc_df["id"])
-
-            # Determine active IDs (IDs where latest cdc_action != 'delete')
-            active_ids = set(latest_cdc_df[latest_cdc_df["latest_action"] != "delete"]["id"])
-
-            # Calculate deleted_ids as IDs that exist in the destination but are not in the incoming data
-            incoming_ids = set(record["id"] for record in data)  # Get active ids from incoming data
-            deleted_ids = existing_ids - incoming_ids
-
-            # Handle deletions (IDs that are missing in the new data but exist in the destination)
-            # Filter the resource table to get all the records that need to be flagged as deleted
-            deleted_records = resource_table.filter(resource_table["id"].isin(deleted_ids)).df()
-            deleted_records["cdc_action"] = "delete"
-
-            # Append all deleted records to the transformed data
-            transformed_data.extend(deleted_records.to_dict(orient="records"))
-
-    # Process the incoming data (new or updated records)
-    for record in data:
-        pk = record["id"]
-
-        if pk in deleted_ids:
-            # It was deleted previously, so treat it as an insert now
-            record["cdc_action"] = "insert"
-            transformed_data.append(record)
-        elif pk in active_ids:
-            # Existing active record, flag as an update
-            record["cdc_action"] = "update"
-            transformed_data.append(record)
-        else:
-            # New record, append to the list
-            record["cdc_action"] = "insert"
-            transformed_data.append(record)
-
-    return transformed_data
-
 if __name__ == "__main__":
     load_dotenv()
     battle_net__load()
