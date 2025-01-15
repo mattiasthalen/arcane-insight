@@ -1,8 +1,12 @@
 import dlt
+import os
 
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 from typing import Any, Optional
 from dotenv import load_dotenv
+
+def print_script_name() -> None:
+    print(f"Running script: {os.path.basename(__file__)}")
 
 @dlt.source(name="battle_net")
 def battle_net__source(credentials = dlt.secrets.value) -> Any:
@@ -112,13 +116,13 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                     "paginator": "single_page",
                 },
             },
-            {
-                "name": "raw__hearthstone__bg_game_modes",
-                "endpoint": {
-                    "path": "hearthstone/metadata/bgGameModes",
-                    "paginator": "single_page",
-                },
-            },
+            # {
+            #     "name": "raw__hearthstone__bg_game_modes",
+            #     "endpoint": {
+            #         "path": "hearthstone/metadata/bgGameModes",
+            #         "paginator": "single_page",
+            #     },
+            # },
             {
                 "name": "raw__hearthstone__cardback_categories",
                 "endpoint": {
@@ -155,13 +159,15 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
     yield from rest_api_resources(config)
 
 def battle_net__load() -> None:
+    print_script_name()
+    
     pipeline = dlt.pipeline(
         pipeline_name="battle_net",
         destination=dlt.destinations.duckdb("./data/bronze.duckdb"),
         dataset_name="raw",
         dev_mode=True
     )
-
+    
     load_info = pipeline.run(battle_net__source())
     print(load_info)
 
