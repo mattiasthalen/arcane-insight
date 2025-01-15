@@ -16,7 +16,7 @@ from sqlmesh.core.model.kind import ModelKindName
     columns={
         "id": "int",
         "business_term": "text",
-        "source": "text",
+        "source_system": "text",
         "_sqlmesh__record_source": "text",
         "_sqlmesh_extracted_at": "timestamp"
     }
