@@ -1,26 +1,56 @@
-common_business_terms:
-  - business_term: "Card"
-    description:
+business_concepts:
+  - name: "Card"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
     
-  - business_term: "Card Set"
-    description:
+  - name: "Card Set"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
     
-  - business_term: "Card Type"
-    description:
+  - name: "Card Type"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
     
-  - business_term: "Class"
-    description:
+  - name: "Class"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
     
-  - business_term: "Minion Type"
-    description:
+  - name: "Minion Type"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
-    
-  - business_term: "Spell School"
-    description:
+
+  - name: "Spell School"
+    definition:
+    type: "Core concept"
+    examples:
+    business_rules:
+    taxonomy:
+    synonyms:
     owner:
 
 keysets:
