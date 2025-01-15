@@ -159,6 +159,7 @@ def battle_net__load() -> None:
         pipeline_name="battle_net",
         destination=dlt.destinations.duckdb("./data/bronze.duckdb"),
         dataset_name="raw",
+        dev_mode=True
     )
 
     load_info = pipeline.run(battle_net__source())
