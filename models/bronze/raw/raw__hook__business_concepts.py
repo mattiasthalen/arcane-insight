@@ -8,14 +8,19 @@ from sqlmesh import ExecutionContext, model
 from sqlmesh.core.model.kind import ModelKindName
 
 @model(
-    name='bronze.raw.raw__hook__common_business_terms',
-    description='Extract & load model for the common business terms in hook yaml.',
+    name='bronze.raw.raw__hook__business_concepts',
+    description='Extract & load model for the business concepts in hook yaml.',
     kind=dict(
         name=ModelKindName.FULL,
     ),
     columns={
-        "business_term": "int",
-        "description": "text",
+        "name": "text",
+        "definition": "text",
+        "type": "Core concept" "text",
+        "examples": "text",
+        "business_rules": "text",
+        "taxonomy": "text",
+        "synonyms": "text",
         "owner": "text",
         "_sqlmesh__record_source": "text",
         "_sqlmesh_extracted_at": "timestamp"
@@ -37,11 +42,11 @@ def execute(
     with open(absolute_path, 'r') as file:
         data = yaml.safe_load(file)
 
-    # Extract the 'common_business_terms' data
-    common_business_terms = data.get('common_business_terms', [])
+    # Extract the 'business_concepts' data
+    business_concepts = data.get('business_concepts', [])
 
     # Convert the list of dictionaries into a DataFrame
-    df = pd.DataFrame(common_business_terms)
+    df = pd.DataFrame(business_concepts)
     
     df["_sqlmesh__record_source"] = relative_path
     df["_sqlmesh_extracted_at"] = execution_time.replace(tzinfo=None)
