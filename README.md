@@ -11,26 +11,26 @@ architecture-beta
     service battle_net(cloud)[Battle Net API]
 
     group duckdb(disk)[DuckDB]
-        group bronze(disk)[Bronze] in duckdb
-            service raw(database)[Raw] in bronze
-            service snapshot(database)[Snapshot] in bronze
+        group dlt(server)[dltHub] in duckdb
+            group bronze(disk)[Bronze] in dlt
+                service raw(database)[Raw] in bronze
 
-        group silver(disk)[Silver] in duckdb
-            service staging(database)[Staging] in silver
-            service raw_vault(database)[Raw Vault] in silver
-            service business_vault(database)[Business Vault] in silver
+        group sqlmesh(server)[SQLMesh] in duckdb
+            group bronze__sql(disk)[Bronze] in sqlmesh
+                service snapshot(database)[Snapshot] in bronze__sql
 
-        group gold(disk)[Gold] in duckdb
-            service marts(database)[Marts] in gold
+            group silver(disk)[Silver] in sqlmesh
+                service hook(database)[Hook] in silver
+
+            group gold(disk)[Gold] in sqlmesh
+                service marts(database)[Marts] in gold
 
     service bi(internet)[BI]
 
     battle_net:R --> L:raw
     raw:R --> L:snapshot
-    snapshot:R --> L:staging
-    staging:R --> L:raw_vault
-    raw_vault:R --> L:business_vault
-    business_vault:R --> L:marts
+    snapshot:R --> L:hook
+    hook:R --> L:marts
     marts:R --> L:bi
 ```
 
