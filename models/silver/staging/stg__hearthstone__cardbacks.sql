@@ -19,8 +19,7 @@ WITH source AS (
 ), casted AS (
   SELECT
     id::TEXT AS card_id,
-    --cardback_category::TEXT AS cardback_category,
-    text::TEXT AS text,
+    text /* cardback_category::TEXT AS cardback_category, */::TEXT AS text,
     name::TEXT AS name,
     sort_category::TEXT AS sort_category,
     slug::TEXT AS slug,

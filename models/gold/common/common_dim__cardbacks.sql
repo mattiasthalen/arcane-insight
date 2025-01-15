@@ -14,8 +14,7 @@ WITH source AS (
   SELECT
     cardback_pit_hk, /* Unique identifier in time for the cardback */
     card_id, /* Unique identifier for the card */
-    --cardback_category, /* Category of the cardback */
-    text AS cardback__text, /* Text of the cardback */
+    text AS cardback__text, /* cardback_category, /* Category of the cardback */ */ /* Text of the cardback */
     name AS cardback__name, /* Name of the cardback */
     sort_category AS cardback__sort_category, /* Sort category of the cardback */
     slug AS cardback__slug, /* Slug of the cardback */

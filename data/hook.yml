@@ -1,0 +1,40 @@
+keysets:
+  - id: 1
+    source_key: card_id
+    hook_key: HK__CARD__ID
+    
+  - id: 1
+    source_key: copy_of_card_id
+    hook_key: HK__CARD__ID__COPY
+    
+  - id: 1
+    source_key: parent_card_id
+    hook_key: HK__CARD__ID__PARENT
+    
+  - id: 2
+    source_key: card_slug
+    hook_key: HK__CARD__SLUG
+    
+  - id: 3
+    source_key: card_set_id
+    hook_key: HK__CARD_SET__ID
+    
+  - id: 4
+    source_key: card_type_id
+    hook_key: HK__CARD_TYPE__ID
+    
+  - id: 5
+    source_key: class_id
+    hook_key: HK__CLASS__ID
+    
+  - id: 5
+    source_key: tourist_class_id
+    hook_key: HK__CLASS__ID__TOURIST
+    
+  - id: 6
+    source_key: minion_type_id
+    hook_key: HK__MINION_TYPE__ID
+    
+  - id: 7
+    source_key: spell_school_id
+    hook_key: HK__SPELL_SCHOOL__ID
