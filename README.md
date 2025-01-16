@@ -5,7 +5,8 @@ Arcane Insight is a data analytics project designed to harness the power of SQLM
 
 Focused on card statistics and attributes, this project reveals detailed insights into card mechanics, strengths, and trends to support BI and strategic analysis.
 
-## Architecture
+## Diagrams
+### Architecture
 ```mermaid
 architecture-beta
     service battle_net(cloud)[Battle Net API]
@@ -34,7 +35,6 @@ architecture-beta
     marts:R --> L:bi
 ```
 
-## ERDs
 ### Bronze
 #### bronze.raw.*
 ```mermaid
@@ -71,35 +71,81 @@ erDiagram
 ```
 
 ### Silver
-#### silver.raw_vault.*
+#### silver.hook.*
 ```mermaid
-erDiagram
-    raw__hub__card ||--|{ raw__sat__card: ""
-    raw__hub__card_set ||--|{ raw__sat__card_set: ""
-    raw__hub__card_type ||--|{ raw__sat__card_type: ""
-    raw__hub__class ||--|{ raw__sat__class: ""
-    raw__hub__rarity ||--|{ raw__sat__rarity: ""
-    raw__hub__spell_school ||--|{ raw__sat__spell_school: ""
-    
-    raw__link__card__card_set }|--|| raw__hub__card: ""
-    raw__link__card__card_set }|--|| raw__hub__card_set: ""
-    raw__link__card__card_set ||--|{ raw__sat_eff__card__card_set: ""
-    
-    raw__link__card__card_type }|--|| raw__hub__card: ""
-    raw__link__card__card_type }|--|| raw__hub__card_type: ""
-    raw__link__card__card_type ||--|{ raw__sat_eff__card__card_type: ""
-    
-    raw__link__card__class }|--|| raw__hub__card: ""
-    raw__link__card__class }|--|| raw__hub__class: ""
-    raw__link__card__class ||--|{ raw__sat_eff__card__class: ""
-    
-    raw__link__card__rarity }|--|| raw__hub__card: ""
-    raw__link__card__rarity }|--|| raw__hub__rarity: ""
-    raw__link__card__rarity ||--|{ raw__sat_eff__card__rarity: ""
-    
-    raw__link__card__spell_school }|--|| raw__hub__card: ""
-    raw__link__card__spell_school }|--|| raw__hub__spell_school: ""
-    raw__link__card__spell_school ||--|{ raw__sat_eff__card__spell_school: ""
+graph LR
+    %% Concepts & Hooks
+    subgraph concept__card["Card"]
+        hook__card__id(["hook__card__id"])
+        hook__card__slug(["hook__card__slug"])
+
+        hook__card__id__copy(["hook__card__id__copy"])
+        hook__card__id__parent(["hook__card__id__parent"])
+    end
+
+    subgraph concept__card_set["Card Set"]
+        hook__card_set__id(["hook__card_set__id"])
+        hook__card_set__slug(["hook__card_set__slug"])
+    end
+
+    subgraph concept__card_type["Card Type"]
+        hook__card_type__id(["hook__card_type__id"])
+        hook__card_type__slug(["hook__card_type__slug"])
+    end
+
+    subgraph concept__class["Class"]
+        hook__class__id(["hook__class__id"])
+        hook__class__slug(["hook__class__slug"])
+
+        hook__class__id__tourist(["hook__class__id__tourist"])
+    end
+
+    subgraph concept__minion_type["Minion Type"]
+        hook__minion_type__id(["hook__minion_type__id"])
+        hook__minion_type__slug(["hook__minion_type__slug"])
+    end
+
+    subgraph concept__spell_school["Spell School"]
+        hook__spell_school__id(["hook__spell_school__id"])
+        hook__spell_school__slug(["hook__spell_school__slug"])
+    end 
+
+    %% Bags
+    subgraph bags["Bags"]
+        cards[(bag__hearthstone__cards)]
+        card_sets[(bag__hearthstone__card_sets)]
+        card_types[(bag__hearthstone__card_types)]
+        classes[(bag__hearthstone__classes)]
+        minion_types[(bag__hearthstone__minion_types)]
+        spell_schools[(bag__hearthstone__spell_schools)]
+    end
+
+    %% Connections
+    hook__card__id --> cards
+    hook__card__slug --> cards
+    hook__card__id__copy --> cards
+    hook__card__id__parent --> cards
+
+    hook__card_set__id --> card_sets
+    hook__card_set__slug --> card_sets
+    hook__card_set__id --> cards
+
+    hook__card_type__id --> card_types
+    hook__card_type__slug --> card_types
+    hook__card_type__id --> cards
+
+    hook__class__id --> classes
+    hook__class__slug --> classes
+    hook__class__id --> cards
+    hook__class__id__tourist --> cards
+
+    hook__minion_type__id --> minion_types
+    hook__minion_type__slug --> minion_types
+    hook__minion_type__id --> cards
+
+    hook__spell_school__id --> spell_schools
+    hook__spell_school__slug --> spell_schools
+    hook__spell_school__id --> cards
 ```
 
 ### Gold
