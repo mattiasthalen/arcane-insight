@@ -4,7 +4,7 @@ import numpy as np
 
 def test_add_hash_to_rows():
     hash_label = "hash"
-    df = pl.DataFrame([{"a": 1, "b": 2, "c": 3}])
+    df = pl.DataFrame([{"a": 1, "b": [1, 2, 3], "c": {"x": 1, "y": 2}}])
     
     hashed_df = cdc.add_hash_to_rows(df, df.columns, hash_label)
     

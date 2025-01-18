@@ -22,6 +22,7 @@ def add_hash_to_rows(
     hash_label: str = CDC_HASH_LABEL
 ) -> pl.DataFrame:
     
+    # TODO: move concatenation and hash to seperate functions
     hashed_df = df.with_columns(
         pl.concat_str(
             pl.col(hash_columns),
