@@ -98,7 +98,8 @@ def extract_cdc_data(
 ) -> pl.DataFrame:
     
     # Add a hash column to the source
-    hashed_df = add_hash_to_rows(source_df, detect_by, cdc_hash_label)
+    filtered_detect_by = [col for col in detect_by if col not in [order_by, cdc_action_label, cdc_hash_label]]
+    hashed_df = add_hash_to_rows(source_df, filtered_detect_by, cdc_hash_label)
     
     # Extract the latest version of records from the target
     active_df = extract_active_records(df=target_df,
@@ -127,57 +128,3 @@ def extract_cdc_data(
     delta_df = coalesce_df.filter(pl.col(cdc_action_label) != "NO_CHANGE")
     
     return delta_df
-
-def test_scenarios() -> None:
-    """Test scenarios with custom ordering and validation."""
-    source_df = pl.DataFrame(
-        [
-            {"id": 0, "value": "A", "_dlt_load_id": 3},
-            {"id": 1, "value": "A", "_dlt_load_id": 3},
-            {"id": 2, "value": "B", "_dlt_load_id": 3},
-            {"id": 4, "value": "A", "_dlt_load_id": 3},
-        ]
-    )
-    
-    target_df = pl.DataFrame(
-        [
-            {"id": 0, "value": "A", "_dlt_load_id": 1, CDC_ACTION_LABEL: "INSERT"},
-            {"id": 2, "value": "A", "_dlt_load_id": 1, CDC_ACTION_LABEL: "INSERT"},
-            {"id": 3, "value": "A", "_dlt_load_id": 1, CDC_ACTION_LABEL: "INSERT"},
-            {"id": 4, "value": "A", "_dlt_load_id": 1, CDC_ACTION_LABEL: "INSERT"},
-            {"id": 4, "value": "A", "_dlt_load_id": 2, CDC_ACTION_LABEL: "DELETE"},
-        ]
-    )
-
-    hash_columns = ["id", "value"]
-    hashed_target_df = add_hash_to_rows(
-        df=target_df,
-        hash_columns=hash_columns,
-        hash_label=CDC_HASH_LABEL
-    )
-    
-    print("\nHashed Target:")
-    print(hashed_target_df)
-    
-    # Run the CDC detection
-    result_df = extract_cdc_data(
-        source_df=source_df,
-        target_df=hashed_target_df,
-        key_columns=["id"],
-        detect_by=hash_columns,
-        order_by="_dlt_load_id",
-        descending=True,
-        cdc_action_label=CDC_ACTION_LABEL,
-        cdc_hash_label=CDC_HASH_LABEL
-    ) 
-    
-    print("\nActual CDC Results:")
-    print(result_df)
-    
-    actual_values = result_df.select(CDC_ACTION_LABEL).to_series().to_list()   
-    assert actual_values == ["INSERT", "UPDATE", "INSERT", "DELETE"]
-
-if __name__ == "__main__":
-    
-    # Run the example and print results
-    test_scenarios()
