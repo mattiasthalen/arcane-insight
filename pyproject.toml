@@ -6,5 +6,6 @@ requires-python = ">=3.12, <3.13"
 dependencies = [
     "dlt[duckdb]>=1.5.0",
     "duckcli>=0.2.1",
+    "pytest>=8.3.4",
     "sqlmesh[github,web]>=0.144.0",
 ]
