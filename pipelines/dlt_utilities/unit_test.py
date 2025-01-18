@@ -10,7 +10,7 @@ def test_add_hash_to_rows():
     
     assert hash_label in hashed_df.columns
     assert hashed_df[hash_label].dtype == pl.Int64
-    assert np.max(hashed_df[hash_label].to_list()) < np.int64(10e15)
+    assert np.max(hashed_df[hash_label].to_list()) < np.int64(2**63 - 1)
 
 def test_extract_cdc_data():
     

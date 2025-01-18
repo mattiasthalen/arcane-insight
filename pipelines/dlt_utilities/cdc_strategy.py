@@ -1,5 +1,6 @@
 import polars as pl
 import typing as t
+import hashlib
 
 CDC_ACTION_LABEL = "_cdc_action"
 CDC_HASH_LABEL = "_cdc_hash"
@@ -22,16 +23,11 @@ def add_hash_to_rows(
     hash_label: str = CDC_HASH_LABEL
 ) -> pl.DataFrame:
     
-    # TODO: move concatenation and hash to seperate functions
     hashed_df = df.with_columns(
-        pl.concat_str(
-            pl.col(hash_columns),
-            separator="|",
-            ignore_nulls=True
-        )
+        pl.struct(hash_columns)
+        .struct.json_encode()
         .hash()
-        .cast(pl.String)
-        .str.slice(0, 16)
+        .mod(2**63)
         .cast(pl.Int64)
         .alias(hash_label)
     )
@@ -97,6 +93,8 @@ def extract_cdc_data(
     cdc_action_label: str = CDC_ACTION_LABEL,
     cdc_hash_label: str = CDC_HASH_LABEL
 ) -> pl.DataFrame:
+    
+    print(cdc_hash_label)
     
     # Add a hash column to the source
     filtered_detect_by = [col for col in detect_by if col not in [order_by, cdc_action_label, cdc_hash_label]]
