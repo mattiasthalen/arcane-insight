@@ -4,10 +4,12 @@ import os
 import polars as pl
 import polars.selectors as cs
 
-import dlt_utilities.cdc_strategy as cdc
+import dlt_utilities.cdc_strategy as dlt_cdc
+import dlt_utilities.helpers as dlt_helpers
 
-from dlt.common.pipeline import current_pipeline, resource_state
 from dlt.sources.helpers.transform import add_row_hash_to_table
+from dlt.common.pipeline import current_pipeline, resource_state
+from dlt.common.schema.typing import DLT_NAME_PREFIX
 from dlt.sources.rest_api import RESTAPIConfig, rest_api_resources
 
 from typing import Any, Optional
@@ -27,7 +29,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
                 "client_id": credentials["client_id"],
                 "client_secret": credentials["client_secret"],
             },
-
+    
         },
         "resource_defaults": {
             "primary_key": "id",
@@ -163,7 +165,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
             
         ]
     }
-
+    
     yield from rest_api_resources(config)
 
 def battle_net__load() -> None:
@@ -177,46 +179,57 @@ def battle_net__load() -> None:
         #dev_mode=True
     )
     
-    primary_key = "id"
+    cdc_hash_label = "_dlt_cdc_hash"
+    cdc_action_label = "_dlt_cdc_action"
     source = battle_net__source()
     resources = source.resources
     
+    # Iterate through the resources
     for resource in resources.items():
         resource_name, resource_object = resource
         print(f"\nProcessing resource: {resource_name}")
         
+        # Get the primary key
+        primary_key = "id"
+        
+        # Load the source data
+        source_df = pl.DataFrame(resource_object)
+        
+        print("\nSource schema:")
+        dlt_helpers.print_schema(source_df.schema)
+        
         # Try and load the destination data
+        destination_df = pl.DataFrame()
+        
         try:
             destination_df = pl.DataFrame(pipeline.dataset()[resource_name].df())
-            destination_exists = True
-        
+            
         except dlt.destinations.exceptions.DatabaseUndefinedRelation:
-            destination_df = pl.DataFrame()
-            destination_exists = False
+            print(f"Destination data not found for {resource_name}, assuming first run.")
         
-        if pipeline.first_run or not destination_exists:
-            print("Mode: Full load")
-            source_df = pl.DataFrame(resource_object)
-            load_df = cdc.add_hash_to_rows(source_df, source_df.columns)
-            
-        else:
-            print("Mode: CDC detection")
+        finally:
+            print("\nDestination schema:")
+            dlt_helpers.print_schema(destination_df.schema)
+        
+        #source_df.columns = [col for col in destination_df.columns if col not in ["_dlt_load_id", "_dlt_id", cdc_hash_label]]
+        
+        return None
+        
+        load_df = dlt_cdc.extract_cdc_data(
+            source_df=source_df,
+            target_df=destination_df,
+            key_columns=[primary_key],
+            order_by="_dlt_load_id",
+            detect_by=source_df.columns,
+            descending=True,
+            cdc_action_label=cdc_action_label,
+            cdc_hash_label=cdc_hash_label
+        )
+        
+        print("\nLoad schema:")
+        dlt_helpers.print_schema(load_df.schema)
 
-            source_df = pl.DataFrame(resource_object)
-            source_df.columns = destination_df.columns
-            
-            load_df = cdc.extract_cdc_data(              
-                source_df=source_df,
-                target_df=destination_df,
-                key_columns=[primary_key],
-                order_by="_dlt_load_id",
-                detect_by=source_df.columns,
-                descending=True,
-                cdc_action_label="_dlt_cdc_action",
-                cdc_hash_label="_dlt_cdc_hash"
-            )
-
-        load_info = pipeline.run(load_df.to_arrow(), table_name=resource_name)
+        load_info = pipeline.run(load_df.to_dicts(), table_name=resource_name)
         print(f"\n{load_info}")
     
 if __name__ == "__main__":

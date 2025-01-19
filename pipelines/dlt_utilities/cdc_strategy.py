@@ -74,7 +74,7 @@ def detect_action(
 
 def coalesce_rows(
     df: pl.DataFrame,
-    ignore_columns: list
+    ignore_columns: t.List[str]
 ) -> pl.DataFrame:
     
     coalesce_df = df.select(
@@ -94,36 +94,41 @@ def extract_cdc_data(
     cdc_hash_label: str = CDC_HASH_LABEL
 ) -> pl.DataFrame:
     
-    print(cdc_hash_label)
-    
     # Add a hash column to the source
-    filtered_detect_by = [col for col in detect_by if col not in [order_by, cdc_action_label, cdc_hash_label]]
+    skip_columns = [order_by, cdc_action_label, cdc_hash_label, "_dlt_load_id", "_dlt_id"]
+    filtered_detect_by = [col for col in detect_by if col not in skip_columns]
     hashed_df = add_hash_to_rows(source_df, filtered_detect_by, cdc_hash_label)
     
-    # Extract the latest version of records from the target
-    active_df = extract_active_records(df=target_df,
-        partition_by=key_columns,
-        order_by=order_by,
-        descending=True
-    )
+    # Skip handling target_df if it is empty
+    if target_df.shape[0] == 0:
+        delta_df = hashed_df.with_columns(pl.lit("INSERT").alias(cdc_action_label))
     
-    # Combine the source and latest data for comparison
-    joined_df = hashed_df.join(
-        active_df,
-        on=key_columns,
-        how="full"
-    )
+    else:
+        # Extract the latest version of records from the target
+        active_df = extract_active_records(df=target_df,
+            partition_by=key_columns,
+            order_by=order_by,
+            descending=True,
+            cdc_action_label=cdc_action_label
+        )
+        
+        # Combine the source and latest data for comparison
+        joined_df = hashed_df.join(
+            active_df,
+            on=key_columns,
+            how="full"
+        )
+        
+        # Detect the changes between the source and target
+        action_df = detect_action(joined_df, cdc_hash_label, cdc_action_label)
+        
+        # Coalesce the source and target data
+        coalesce_df = coalesce_rows(
+            df=action_df,
+            ignore_columns=[cdc_action_label]
+        )
     
-    # Detect the changes between the source and target
-    action_df = detect_action(joined_df, cdc_hash_label, cdc_action_label)
-    
-    # Coalesce the source and target data
-    coalesce_df = coalesce_rows(
-        df=action_df,
-        ignore_columns=[cdc_action_label]
-    )
-
-    # Remove records that are the same in the source and target
-    delta_df = coalesce_df.filter(pl.col(cdc_action_label) != "NO_CHANGE")
+        # Remove records that are the same in the source and target
+        delta_df = coalesce_df.filter(pl.col(cdc_action_label) != "NO_CHANGE")
     
     return delta_df

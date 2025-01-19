@@ -1,0 +1,3 @@
+[normalize.parquet_normalizer]
+add_dlt_load_id = true
+add_dlt_id = true
