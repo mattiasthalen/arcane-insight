@@ -18,6 +18,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
 
         },
         "resource_defaults": {
+            "primary_key": "id",
             "write_disposition": "replace",
             "max_table_nesting": 0,
             "endpoint": {
@@ -29,7 +30,6 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
         "resources": [
             {
                 "name": "raw__hearthstone__cards",
-                "primary_key": "id",
                 "endpoint": {
                     "path": "hearthstone/cards",
                     "params": {
@@ -65,6 +65,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
             },
             {
                 "name": "raw__hearthstone__set_groups",
+                "primary_key": None,
                 "endpoint": {
                     "path": "hearthstone/metadata/setGroups",
                     "paginator": "single_page",
@@ -108,7 +109,7 @@ def battle_net__source(credentials = dlt.secrets.value) -> Any:
             {
                 "name": "raw__hearthstone__game_modes",
                 "endpoint": {
-                    "path": "hearthstone/metadata/game_modes",
+                    "path": "hearthstone/metadata/gameModes",
                     "paginator": "single_page",
                 },
             },
